@@ -4,12 +4,13 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <link href="defaultStyle.css" rel="stylesheet" />
+    <title>What a waste of time</title>
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            <asp:TextBox ID="displayBox" runat="server"></asp:TextBox>
+        <div id="divider">
+            <asp:Label ID="displayBox" runat="server" Text="Label"></asp:Label>
         </div>
     </form>
 </body>

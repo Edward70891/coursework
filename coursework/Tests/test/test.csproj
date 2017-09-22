@@ -74,6 +74,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="defaultStyle.css" />
     <Content Include="Web.config" />
     <Content Include="home.aspx" />
   </ItemGroup>
