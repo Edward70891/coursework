@@ -10,7 +10,9 @@
 <body>
     <form id="form1" runat="server">
         <div id="divider">
-            <asp:Label ID="displayBox" runat="server" Text="Label"></asp:Label>
+            <asp:Label ID="namesBox" runat="server" Text="Label"></asp:Label>
+            <p></p>
+            <asp:Label ID="productBox" runat="server"><</asp:Label>
         </div>
     </form>
 </body>

@@ -15,15 +15,18 @@ namespace test
         {
             OleDbConnection testShop = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=W:\Repos\coursework\Tests\test\Shop.accdb");
             testShop.Open();
-            string query1 = "SELECT First_Name, Second_Name FROM Customer";
+            string query1 = "SELECT * FROM Customer, Orders";
             OleDbCommand command = new OleDbCommand(query1, testShop);
             OleDbDataReader reader = command.ExecuteReader();
             string names = "";
+            string dates = "";
             while (reader.Read())
             {
                 names = names + (string)reader["First_Name"] + " " + (string)reader["Second_Name"] + ", ";
+                dates = dates + (string)reader["Date_Ordered"] + ", ";
             }
-            displayBox.Text = names;
+            namesBox.Text = names;
+            productBox.Text = dates;
 
         }
     }
