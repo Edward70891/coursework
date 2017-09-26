@@ -23,11 +23,11 @@ namespace test
             while (reader.Read())
             {
                 names = names + (string)reader["First_Name"] + " " + (string)reader["Second_Name"] + ", ";
-                dates = dates + (string)reader["Date_Ordered"] + ", ";
+                dates = dates + (DateTime)reader["Date_Ordered"] + ", ";
             }
             namesBox.Text = names;
             productBox.Text = dates;
 
         }
     }
-}
+}///s'all fine. 

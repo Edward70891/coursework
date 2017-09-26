@@ -1,0 +1,8 @@
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\bin\Debug\ConsoleAddItem.exe.config
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\bin\Debug\ConsoleAddItem.exe
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\bin\Debug\ConsoleAddItem.pdb
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\bin\Debug\eBay.Service.dll
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\bin\Debug\eBay.Service.xml
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\obj\Debug\ConsoleAddItem.csprojResolveAssemblyReference.cache
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\obj\Debug\ConsoleAddItem.exe
+C:\Program Files (x86)\eBay\eBay .NET SDK v1027 Release\Samples\C#\ConsoleAddItem\obj\Debug\ConsoleAddItem.pdb
