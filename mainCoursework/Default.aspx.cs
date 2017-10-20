@@ -35,49 +35,47 @@ namespace mainCoursework
 			}
 		}
 
-
-		//Attempting login
-		public int attemptLogin(string submittedUsername, string submittedPassword, OleDbConnection connection)
-		{
-			connection.Open();
-			var acceptable = new List<loginCredentials>();
-			using (OleDbCommand getUserCredentials = new OleDbCommand(@"SELECT * FROM users", connection))
-			{
-				using (var reader = getUserCredentials.ExecuteReader())
-				{
-					while (reader.Read())
-					{
-						acceptable.Add(new loginCredentials { username = reader.GetString(0), password = reader.GetString(1), accessLevel = reader.GetInt32(2) });
-					}
-				}
-			}
-			foreach (loginCredentials check in acceptable)
-			{
-				if (submittedUsername == check.username)
-				{
-					if (submittedPassword == check.password)
-					{
-						return 0;
-					}
-					else
-					{
-						return 2;
-					}
-				}
-				else
-				{
-					return 1;
-				}
-			}
-			return 3;
-		}
-	}
-
-	//Custom login credentials class for checking en masse
-	public class loginCredentials
-	{
-		public string username;
-		public string password;
-		public int accessLevel;
-	}
+        //Attempting login
+        public int attemptLogin(string submittedUsername, string submittedPassword, OleDbConnection connection)
+        {
+            connection.Open();
+            var acceptable = new List<loginCredentials>();
+            using (OleDbCommand getUserCredentials = new OleDbCommand(@"SELECT * FROM users", connection))
+            {
+                using (var reader = getUserCredentials.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        acceptable.Add(new loginCredentials { username = reader.GetString(0), password = reader.GetString(1), accessLevel = reader.GetInt32(2) });
+                    }
+                }
+            }
+            foreach (loginCredentials check in acceptable)
+            {
+                if (submittedUsername == check.username)
+                {
+                    if (submittedPassword == check.password)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 2;
+                    }
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            return 3;
+        }
+        //Custom login credentials class for checking en masse
+        public class loginCredentials
+        {
+            public string username;
+            public string password;
+            public int accessLevel;
+        }
+    }
 }
