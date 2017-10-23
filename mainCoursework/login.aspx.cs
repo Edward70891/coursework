@@ -18,7 +18,7 @@ namespace mainCoursework
 
         protected void submitCredentialsButton_Click(object sender, EventArgs e)
         {
-            switch (attemptLogin(usernameBox.Text, passwordBox.Text, new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=main.accdb")))
+            switch (attemptLogin(usernameBox.Text, passwordBox.Text, new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\main.accdb; Persist Security Info = True")))
             {
                 case 0:
                     returnLabel.Text = "Correct!";
