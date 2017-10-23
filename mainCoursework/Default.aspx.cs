@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Threading;
 using System.Web.UI;
 using System.Data.OleDb;
 using System.Web.UI.WebControls;
@@ -17,20 +18,16 @@ namespace mainCoursework
 
 		protected void submitCredentialsButton_Click(object sender, EventArgs e)
 		{
-			switch (attemptLogin(usernameBox.Text, passwordBox.Text, new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=W:\Repos\mainCoursework\main.accdb")))
+			switch (attemptLogin(usernameBox.Text, passwordBox.Text, new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=main.accdb")))
 			{
 				case 0:
 					returnLabel.Text = "Correct!";
-					//Sessions code goes here
+					Session["loggedState"] = 1;
+					Thread.Sleep(1000);
+					Server.Transfer("Contact.aspx", true);
 					break;
 				case 1:
-					returnLabel.Text = "Incorrect Username";
-					break;
-				case 2:
-					returnLabel.Text = "Incorrect Password";
-					break;
-				case 3:
-					returnLabel.Text = "There a problem with the login checking, this shouldn't happen";
+					returnLabel.Text = "The Username or Password is incorrect.";
 					break;
 			}
 		}
@@ -40,44 +37,49 @@ namespace mainCoursework
 		public int attemptLogin(string submittedUsername, string submittedPassword, OleDbConnection connection)
 		{
 			connection.Open();
-			var acceptable = new List<loginCredentials>();
-			using (OleDbCommand getUserCredentials = new OleDbCommand(@"SELECT * FROM users", connection))
+			using (OleDbCommand getUserCredentials = new OleDbCommand(@"SELECT * FROM users WHERE username=@username AND password=@password", connection))
 			{
-				using (var reader = getUserCredentials.ExecuteReader())
+				getUserCredentials.Parameters.AddWithValue("@username", submittedUsername);
+				getUserCredentials.Parameters.AddWithValue("@password", submittedPassword);
+				int check = Convert.ToInt32(getUserCredentials.ExecuteScalar());
+				if (check > 0)
 				{
-					while (reader.Read())
-					{
-						acceptable.Add(new loginCredentials { username = reader.GetString(0), password = reader.GetString(1), accessLevel = reader.GetInt32(2) });
-					}
-				}
-			}
-			foreach (loginCredentials check in acceptable)
-			{
-				if (submittedUsername == check.username)
-				{
-					if (submittedPassword == check.password)
-					{
-						return 0;
-					}
-					else
-					{
-						return 2;
-					}
+					return 0;
 				}
 				else
 				{
 					return 1;
 				}
 			}
-			return 3;
+
+			//var acceptable = new List<loginCredentials>();
+			//foreach (loginCredentials check in acceptable)
+			//{
+			//	if (submittedUsername == check.username)
+			//	{
+			//		if (submittedPassword == check.password)
+			//		{
+			//			return 0;
+			//		}
+			//		else
+			//		{
+			//			return 2;
+			//		}
+			//	}
+			//	else
+			//	{
+			//		return 1;
+			//	}
+			//}
+			//return 3;
 		}
 	}
 
 	//Custom login credentials class for checking en masse
-	public class loginCredentials
-	{
-		public string username;
-		public string password;
-		public int accessLevel;
-	}
+	//public class loginCredentials
+	//{
+	//	public string username;
+	//	public string password;
+	//	public int accessLevel;
+	//}
 }

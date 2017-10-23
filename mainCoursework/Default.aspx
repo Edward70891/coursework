@@ -10,9 +10,8 @@
 		<p>User Name:</p>
 		<asp:TextBox ID="usernameBox" runat="server"></asp:TextBox>
 		<p>Password:</p>
-		<asp:TextBox ID="passwordBox" runat="server"></asp:TextBox>
-		<p>
-			<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label></p>
+		<asp:TextBox ID="passwordBox" runat="server" TextMode="Password"></asp:TextBox>
+		<p><asp:Label ID="returnLabel" runat="server" Text=""></asp:Label></p>
 		<asp:Button ID="submitCredentialsButton" runat="server" Text="Log In" OnClick="submitCredentialsButton_Click"/>
 	</div>
 
