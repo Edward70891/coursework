@@ -12,9 +12,9 @@ namespace mainCoursework
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			int loggedCheck = Convert.ToInt32(Session["loggedState"]);
-			if (loggedCheck == 1)
+			if (loggedCheck == 0)
 			{
-				Server.Transfer("Default.aspx", true);
+				Server.Transfer("Default.aspx", false);
 			}
 		}
 	}
