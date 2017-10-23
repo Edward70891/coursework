@@ -24,6 +24,7 @@ namespace mainCoursework
         {
             while (true)
             {
+                //Check and format the name for both display and storage/reference purposes
                 string displayName = productNameBox.Text;
                 if (displayName.All(Char.IsLetterOrDigit) == false)
                 {
@@ -35,16 +36,36 @@ namespace mainCoursework
                 TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
                 productName = cultInfo.ToTitleCase(productName);
                 productName = productName.Replace(" ", "");
+				productName[0] = char.ToLower(productName[0]); //Ask about this
 
-                OleDbConnection connection = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\main.accdb; Persist Security Info = True");
-                connection.Open();
-                using (OleDbCommand addProduct = new OleDbCommand(@"insert into products(productName, price, displayName)values(@submittedProductName, @submittedPrice, @submittedDisplayName)", connection))
+                //Check and format the price to ensure 2dp accuracy and only digits content
+                decimal price;
+                if (decimal.TryParse(productPrice.Text, out price) == false)
                 {
-                    addProduct.Parameters.AddWithValue("@submittedProductName", productName);
-                    addProduct.Parameters.AddWithValue("@submittedPrice"); //Needs a price box
-                    addProduct.Parameters.AddWithValue("@submittedDisplayName", displayName);
-
+                    productPrice.Text = "";
+                    returnMessage.Text = "Please input prices in the format X.XX";
+                    break;
                 }
+                decimal priceCheck = price * 100;
+                if (priceCheck != Math.Floor(priceCheck))
+                {
+					productPrice.Text = "";
+					returnMessage.Text = "Please input prices in the format X.XX";
+					break;
+				}
+
+				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
+                //Input formatted values into DB
+                //OleDbConnection connection = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\main.accdb; Persist Security Info = True");
+                //connection.Open();
+                //using (OleDbCommand addProduct = new OleDbCommand(@"insert into products(productName, price, displayName)values(@submittedProductName, @submittedPrice, @submittedDisplayName)", connection))
+                //{
+                //    addProduct.Parameters.AddWithValue("@submittedProductName", productName);
+                //    addProduct.Parameters.AddWithValue("@submittedPrice", price);
+                //    addProduct.Parameters.AddWithValue("@submittedDisplayName", displayName);
+                //}
+
+                break;
             }
         }
     }
