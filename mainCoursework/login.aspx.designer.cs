@@ -10,7 +10,7 @@
 namespace mainCoursework {
     
     
-    public partial class _Default {
+    public partial class login {
         
         /// <summary>
         /// usernameBox control.
