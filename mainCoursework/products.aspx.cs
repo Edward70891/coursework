@@ -36,10 +36,10 @@ namespace mainCoursework
                 TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
                 productName = cultInfo.ToTitleCase(productName);
                 productName = productName.Replace(" ", "");
-				productName[0] = char.ToLower(productName[0]); //Ask about this
+				productName = char.ToLower(productName[0]) + productName.Substring(1);
 
-                //Check and format the price to ensure 2dp accuracy and only digits content
-                decimal price;
+				//Check and format the price to ensure 2dp accuracy and only digits content
+				decimal price;
                 if (decimal.TryParse(productPrice.Text, out price) == false)
                 {
                     productPrice.Text = "";
@@ -55,6 +55,7 @@ namespace mainCoursework
 				}
 
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
+				
                 //Input formatted values into DB
                 //OleDbConnection connection = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\main.accdb; Persist Security Info = True");
                 //connection.Open();
