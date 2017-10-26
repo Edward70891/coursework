@@ -26,20 +26,17 @@ namespace mainCoursework
             {
                 //Check and format the name for both display and storage/reference purposes
                 string displayName = productNameBox.Text;
-				string productName = displayName;
-				//Capitalize all words
-				TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
-				productName = cultInfo.ToTitleCase(productName);
-				//Remove spaces
-				productName = productName.Replace(" ", "");
-				if (productName.All(Char.IsLetterOrDigit) == false)
+                if (displayName.All(Char.IsLetterOrDigit) == false)
                 {
                     productNameBox.Text = "";
-                    returnMessage.Text = "Please only use letters, numbers and spaces in the product name";
+                    returnMessage.Text = "Please only use numbers and letters in the product name";
                     break;
                 }
-				//Decapitalize first letter
-				productName = Char.ToLowerInvariant(productName[0]) + productName.Substring(1);
+                string productName = displayName;
+                TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
+                productName = cultInfo.ToTitleCase(productName);
+                productName = productName.Replace(" ", "");
+				productName = char.ToLower(productName[0]) + productName.Substring(1);
 
 				//Check and format the price to ensure 2dp accuracy and only digits content
 				decimal price;
@@ -58,6 +55,7 @@ namespace mainCoursework
 				}
 
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
+				
                 //Input formatted values into DB
                 //OleDbConnection connection = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\main.accdb; Persist Security Info = True");
                 //connection.Open();
