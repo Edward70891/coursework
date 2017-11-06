@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Data.OleDb;
 using System.Threading;
+using commonClasses;
 using System.Web.UI.WebControls;
 
 namespace mainCoursework
@@ -18,17 +19,20 @@ namespace mainCoursework
 
         protected void submitCredentialsButton_Click(object sender, EventArgs e)
         {
-            switch (attemptLogin(usernameBox.Text, passwordBox.Text, new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = |Datadirectory|main.accdb; Persist Security Info = True")))
+			String attemptedName = usernameBox.Text;
+			switch (attemptLogin(attemptedName, passwordBox.Text, new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = |Datadirectory|main.accdb; Persist Security Info = True")))
             {
                 case 0:
                     returnLabel.Text = "Correct!";
                     Session["loggedState"] = 1;
                     Thread.Sleep(1000);
+					customLogging.newUserEntry(attemptedName + "logged in");
                     Server.Transfer("overview.aspx", true);
                     break;
                 case 1:
                     returnLabel.Text = "The Username or Password is incorrect.";
-                    break;
+					customLogging.newUserEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect");
+					break;
             }
         }
 

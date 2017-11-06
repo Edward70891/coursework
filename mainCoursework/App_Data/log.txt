@@ -1,0 +1,2 @@
+USR [06/11/2017 14:10:34] testlogged in
+USR [06/11/2017 14:15:49] Someone attempted to login with username 'incorrectname' but the credentials were incorrect
