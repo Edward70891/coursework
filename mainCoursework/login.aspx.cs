@@ -26,12 +26,12 @@ namespace mainCoursework
                     returnLabel.Text = "Correct!";
                     Session["loggedState"] = 1;
                     Thread.Sleep(1000);
-					customLogging.newUserEntry(attemptedName + "logged in");
+					customLogging.newEntry(attemptedName + "logged in", "user");
                     Server.Transfer("overview.aspx", true);
                     break;
                 case 1:
                     returnLabel.Text = "The Username or Password is incorrect.";
-					customLogging.newUserEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect");
+					customLogging.newEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect", "user");
 					break;
             }
         }
