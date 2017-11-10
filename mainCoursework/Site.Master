@@ -53,6 +53,7 @@
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/overview">Overview</a></li>
                         <li><a runat="server" href="~/products">Products</a></li>
+						<li><a runat="server" href="~/configuration">Config</a></li>
                     </ul>
                 </div>
             </div>
@@ -63,6 +64,7 @@
             <hr />
             <footer>
                 <p>&copy; <%: DateTime.Now.Year %></p>
+				<asp:Label ID="connectionTestLabel" runat="server" Text=""></asp:Label>
             </footer>
         </div>
 

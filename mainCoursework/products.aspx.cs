@@ -69,8 +69,6 @@ namespace mainCoursework
 				{
 					addProductAdapter.addProduct(productName, price, displayName, typeDropdown.SelectedValue);
 				}
-
-					break;
             }
         }
     }

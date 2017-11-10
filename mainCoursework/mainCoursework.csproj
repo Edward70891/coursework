@@ -129,6 +129,7 @@
   <ItemGroup>
     <Content Include="App_Data\log.txt" />
     <Content Include="App_Data\main.accdb" />
+    <Content Include="configuration.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -194,6 +195,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="commonClasses.cs" />
+    <Compile Include="configuration.aspx.cs">
+      <DependentUpon>configuration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="configuration.aspx.designer.cs">
+      <DependentUpon>configuration.aspx</DependentUpon>
+    </Compile>
     <Compile Include="defaultDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
