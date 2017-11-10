@@ -13,8 +13,7 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            var checkLogin = Convert.ToInt32(Session["loggedState"]);
-            if (checkLogin == 0)
+            if (Convert.ToBoolean(Session["loggedState"]) != true)
             {
                 Server.Transfer("login.aspx", true);
             }
@@ -55,18 +54,23 @@ namespace mainCoursework
 				}
 
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
-				
-                //Input formatted values into DB
-                //OleDbConnection connection = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\main.accdb; Persist Security Info = True");
-                //connection.Open();
-                //using (OleDbCommand addProduct = new OleDbCommand(@"insert into products(productName, price, displayName)values(@submittedProductName, @submittedPrice, @submittedDisplayName)", connection))
-                //{
-                //    addProduct.Parameters.AddWithValue("@submittedProductName", productName);
-                //    addProduct.Parameters.AddWithValue("@submittedPrice", price);
-                //    addProduct.Parameters.AddWithValue("@submittedDisplayName", displayName);
-                //}
 
-                break;
+				//Input formatted values into DB
+				//OleDbConnection connection = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\main.accdb; Persist Security Info = True");
+				//connection.Open();
+				//using (OleDbCommand addProduct = new OleDbCommand(@"insert into products(productName, price, displayName)values(@submittedProductName, @submittedPrice, @submittedDisplayName)", connection))
+				//{
+				//	addProduct.Parameters.AddWithValue("@submittedProductName", productName);
+				//	addProduct.Parameters.AddWithValue("@submittedPrice", price);
+				//	addProduct.Parameters.AddWithValue("@submittedDisplayName", displayName);
+				//}
+
+				using (var addProductAdapter = new defaultDataSetTableAdapters.productsTableAdapter())
+				{
+					addProductAdapter.addProduct(productName, price, displayName, typeDropdown.SelectedValue);
+				}
+
+					break;
             }
         }
     }

@@ -4,7 +4,7 @@ namespace commonClasses
 {
 	public class customLogging
 	{
-		public string getTimestamp()
+		string getTimestamp()
 		{
 			string timestamp;
 			timestamp = "[" + Convert.ToString(DateTime.Now) + "] ";
@@ -13,7 +13,7 @@ namespace commonClasses
 
 		/// <summary> 
 		/// <para>Write a timestamped entry to the logfile with the provided text</para>
-		/// <para>Type must be "user" or "other" so far</para>
+		/// <para>Type must be "system", "user" or "other" so far</para>
 		/// </summary>
 		public static void newEntry(string entryText, string type)
 		{
@@ -26,8 +26,11 @@ namespace commonClasses
 				case "other":
 					result = "OTR";
 					break;
+				case "system":
+					result = "SYS";
+					break;
 				default:
-					throw new ArgumentException("Type must be 'user' or 'other'");
+					throw new ArgumentException("Type must be 'system', 'user' or 'other'");
 			}
 			result += "[" + Convert.ToString(DateTime.Now) + "] " + entryText;
 			using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert\2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true)) //Look this up; it won't work on different computers

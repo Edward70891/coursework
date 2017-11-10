@@ -14,7 +14,7 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+			customLogging.newEntry("Session started", "system");
         }
 
         protected void submitCredentialsButton_Click(object sender, EventArgs e)
@@ -24,7 +24,7 @@ namespace mainCoursework
             {
                 case 0:
                     returnLabel.Text = "Correct!";
-                    Session["loggedState"] = 1;
+                    Session["loggedState"] = true;
                     Thread.Sleep(1000);
 					customLogging.newEntry(attemptedName + "logged in", "user");
                     Server.Transfer("overview.aspx", true);

@@ -1,2 +1,15 @@
 USR [06/11/2017 14:10:34] testlogged in
 USR [06/11/2017 14:15:49] Someone attempted to login with username 'incorrectname' but the credentials were incorrect
+SYS[10/11/2017 09:16:28] Session started
+SYS[10/11/2017 09:16:56] Session started
+SYS[10/11/2017 09:17:02] Session started
+USR[10/11/2017 09:17:04] adminlogged in
+SYS[10/11/2017 09:19:07] Session started
+SYS[10/11/2017 09:19:13] Session started
+USR[10/11/2017 09:19:14] adminlogged in
+SYS[10/11/2017 09:39:42] Session started
+SYS[10/11/2017 09:39:51] Session started
+SYS[10/11/2017 09:39:56] Session started
+USR[10/11/2017 09:39:56] Someone attempted to login with username 'admin' but the credentials were incorrect
+SYS[10/11/2017 09:40:02] Session started
+USR[10/11/2017 09:40:03] adminlogged in
