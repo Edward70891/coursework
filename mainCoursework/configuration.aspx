@@ -18,7 +18,7 @@
 		</Columns>
 	</asp:GridView>
 
-	<asp:TextBox ID="passwordBox" runat="server"></asp:TextBox>
+	<asp:TextBox ID="passwordBox" runat="server" Text ="Password Box"></asp:TextBox>
 	<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
 	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT [username], [clearanceLevel] FROM [users]"></asp:AccessDataSource>
 	<br />
