@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.OleDb;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -22,5 +23,11 @@ namespace mainCoursework
 				connectionTestLabel.Text = "DB Connection bad!";
 			}
 		}
-    }
+
+		protected void signOut_Click(object sender, EventArgs e)
+		{
+			FormsAuthentication.SignOut();
+			FormsAuthentication.RedirectToLoginPage();
+		}
+	}
 }

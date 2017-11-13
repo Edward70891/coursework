@@ -15,7 +15,7 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			customLogging.newSession();
+			
         }
 
 		protected void submitCredentialsButton_Click(object sender, EventArgs e)
