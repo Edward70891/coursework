@@ -11,6 +11,20 @@ namespace commonClasses
 			return timestamp;
 		}
 
+		/// <summary>
+		/// <para>Write a timestamped session divider to the logfile</para>
+		/// </summary>
+		public static void newSession()
+		{
+			string result;
+			result = "-------------------------" + "[" + Convert.ToString(DateTime.Now) + "]" + "-------------------------";
+			using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert\2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true)) //Look this up; it won't work on different computers
+			{
+				logFile.WriteLine("");
+				logFile.WriteLine(result);
+			}
+		}
+
 		/// <summary> 
 		/// <para>Write a timestamped entry to the logfile with the provided text</para>
 		/// <para>Type must be "system", "user" or "other" so far</para>

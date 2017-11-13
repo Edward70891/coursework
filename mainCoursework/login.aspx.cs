@@ -14,7 +14,7 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			customLogging.newEntry("Session started", "system");
+			customLogging.newSession();
         }
 
 		protected void submitCredentialsButton_Click(object sender, EventArgs e)
