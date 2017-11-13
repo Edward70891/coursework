@@ -2,27 +2,40 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 	
 
-	<asp:GridView ID="usersDisplayTable" runat="server" AutoGenerateColumns="False" DataSourceID="usersDataSource" EmptyDataText="There are no data records to display." CellPadding="4" ForeColor="#333333" GridLines="None">
-		<AlternatingRowStyle BackColor="White" />
+	Configure Users<br />
+	
+
+	<asp:GridView ID="usersDisplayTable" runat="server" AutoGenerateColumns="False" DataSourceID="usersDataSource" EmptyDataText="There are no data records to display." onrowcommand="usersDisplayTable_RowCommand">
 		<Columns>
 			<asp:BoundField DataField="username" HeaderText="User Name" SortExpression="username" />
 			<asp:BoundField DataField="clearanceLevel" HeaderText="Access Level" SortExpression="clearanceLevel" />
-			<asp:ButtonField ButtonType="Button" Text="Delete" CommandName="deleteUser" />
-			<asp:ButtonField ButtonType="Button" Text="Change Password" CommandName="changeUserPassword" />
+			<asp:TemplateField>
+            <ItemTemplate>
+                <asp:Button ID="deleteButton" ButtonType="Button" CommandName="deleteUser" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Delete" runat="server" />
+				<asp:Button ID="passwordChange" ButtonType="Button" CommandName="changeUserPassword" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Change Password" runat="server" />
+            </ItemTemplate>
+        </asp:TemplateField>
 		</Columns>
-		<EditRowStyle BackColor="#2461BF" />
-		<FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-		<HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-		<PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
-		<RowStyle BackColor="#EFF3FB" />
-		<SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-		<SortedAscendingCellStyle BackColor="#F5F7FB" />
-		<SortedAscendingHeaderStyle BackColor="#6D95E1" />
-		<SortedDescendingCellStyle BackColor="#E9EBEF" />
-		<SortedDescendingHeaderStyle BackColor="#4870BE" />
 	</asp:GridView>
 
+	<asp:TextBox ID="passwordBox" runat="server"></asp:TextBox>
 	<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
-	<asp:Button ID="deleteConfirm" runat="server" Text="Comfirm Deletion" Visible="False" />
 	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT [username], [clearanceLevel] FROM [users]"></asp:AccessDataSource>
+	<br />
+	Register a New User:<br />
+	<br />
+	Username<br />
+	<asp:TextBox ID="submittedUsernameBox" runat="server"></asp:TextBox>
+	<br />
+	<br />
+	Password<br />
+	<asp:TextBox ID="submittedPasswordBox" runat="server"></asp:TextBox>
+	<br />
+	<br />
+	Clearance Level<br />
+	<asp:TextBox ID="submittedAccessLevelBox" runat="server"></asp:TextBox>
+	<br />
+	<br />
+	<asp:Button ID="newUser" runat="server" Text="Register New User" OnClick="newUser_Click" />
+	<asp:Label ID="registerReturn" runat="server" Text=""></asp:Label>
 </asp:Content>

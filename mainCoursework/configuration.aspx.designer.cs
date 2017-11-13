@@ -22,6 +22,15 @@ namespace mainCoursework {
         protected global::System.Web.UI.WebControls.GridView usersDisplayTable;
         
         /// <summary>
+        /// passwordBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox passwordBox;
+        
+        /// <summary>
         /// returnLabel control.
         /// </summary>
         /// <remarks>
@@ -31,15 +40,6 @@ namespace mainCoursework {
         protected global::System.Web.UI.WebControls.Label returnLabel;
         
         /// <summary>
-        /// deleteConfirm control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button deleteConfirm;
-        
-        /// <summary>
         /// usersDataSource control.
         /// </summary>
         /// <remarks>
@@ -47,5 +47,50 @@ namespace mainCoursework {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.AccessDataSource usersDataSource;
+        
+        /// <summary>
+        /// submittedUsernameBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox submittedUsernameBox;
+        
+        /// <summary>
+        /// submittedPasswordBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox submittedPasswordBox;
+        
+        /// <summary>
+        /// submittedAccessLevelBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox submittedAccessLevelBox;
+        
+        /// <summary>
+        /// newUser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button newUser;
+        
+        /// <summary>
+        /// registerReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label registerReturn;
     }
 }
