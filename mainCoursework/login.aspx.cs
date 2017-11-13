@@ -22,17 +22,17 @@ namespace mainCoursework
 			string attemptedName = usernameBox.Text;
 			using (var checkCredentials = new defaultDataSetTableAdapters.usersTableAdapter())
 			{
-					if (checkCredentials.searchCredentials(attemptedName, passwordBox.Text) != null)
-					{
-						Session["loggedState"] = true;
-						customLogging.newEntry(attemptedName + " logged in", "user");
-						Server.Transfer("overview.aspx", true);
-					}
-					else
-					{
-						returnLabel.Text = "The Username or Password is incorrect.";
-						customLogging.newEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect", "user");
-					}
+				if (checkCredentials.searchCredentials(attemptedName, passwordBox.Text) != null)
+				{
+					Session["loggedState"] = true;
+					customLogging.newEntry(attemptedName + " logged in", "user");
+					Server.Transfer("overview.aspx", true);
+				}
+				else
+				{
+					returnLabel.Text = "The Username or Password is incorrect.";
+					customLogging.newEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect", "user");
+				}
 			}
 		}
     }

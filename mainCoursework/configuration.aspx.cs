@@ -32,6 +32,7 @@ namespace mainCoursework
 					else
 					{
 						returnLabel.Text = "Do you really want to delete the account '" + Convert.ToString(usersDisplayTable.RowHeaderColumn) +"?";
+						deleteConfirm.Visible = true;
 					}
 					break;
 				case "changeUserPassword":

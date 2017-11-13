@@ -23,6 +23,6 @@
 	</asp:GridView>
 
 	<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
-
+	<asp:Button ID="deleteConfirm" runat="server" Text="Comfirm Deletion" Visible="False" />
 	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT [username], [clearanceLevel] FROM [users]"></asp:AccessDataSource>
 </asp:Content>
