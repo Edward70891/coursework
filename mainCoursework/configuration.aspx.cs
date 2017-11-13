@@ -31,7 +31,7 @@ namespace mainCoursework
 					//Prompts them to delete the account
 					else
 					{
-						returnLabel.Text = "Do you really want to delete";
+						returnLabel.Text = "Do you really want to delete the account '" + Convert.ToString(usersDisplayTable.RowHeaderColumn) +"?";
 					}
 					break;
 				case "changeUserPassword":

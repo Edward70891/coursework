@@ -25,7 +25,7 @@ namespace mainCoursework
 					if (checkCredentials.searchCredentials(attemptedName, passwordBox.Text) != null)
 					{
 						Session["loggedState"] = true;
-						customLogging.newEntry(attemptedName + "logged in", "user");
+						customLogging.newEntry(attemptedName + " logged in", "user");
 						Server.Transfer("overview.aspx", true);
 					}
 					else

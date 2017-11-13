@@ -17,12 +17,10 @@ namespace commonClasses
 		public static void newSession()
 		{
 			string result;
-			result = "-------------------------" + "[" + Convert.ToString(DateTime.Now) + "]" + "-------------------------";
-			using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert \2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true)) //Look this up; it won't work on different computers
-			{
-				logFile.WriteLine("");
-				logFile.WriteLine(result);
-			}
+			string dividerASCII = "------------------------------------------";
+			result = dividerASCII + generateTimestamp() + dividerASCII;
+			writeEntry("");
+			writeEntry(result);
 		}
 
 		/// <summary> 
@@ -46,11 +44,34 @@ namespace commonClasses
 				default:
 					throw new ArgumentException("Type must be 'system', 'user' or 'other'");
 			}
-			result += "[" + Convert.ToString(DateTime.Now) + "] " + entryText;
-			using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert\2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true)) //Look this up; it won't work on different computers
+			result += generateTimestamp() + " " + entryText;
+			writeEntry(entryText);
+		}
+
+		//Fix me!
+		private static void writeEntry(string entryText)
+		{
+			try
 			{
-				logFile.WriteLine(result);
+				using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert \2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true))
+				{
+					logFile.WriteLine(entryText);
+				}
 			}
+			catch (System.IO.IOException)
+			{
+				using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\log.txt", true))
+				{
+					logFile.WriteLine(entryText);
+				}
+			}
+		}
+
+
+		private static string generateTimestamp()
+		{
+			string output = "[" + Convert.ToString(DateTime.Now) + "]";
+			return output;
 		}
 	}
 }
