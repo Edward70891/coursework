@@ -17,5 +17,28 @@ namespace mainCoursework
 				Server.Transfer("login.aspx", true);
 			}
 		}
+
+		protected void usersDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
+		{
+			switch (e.CommandName)
+			{
+				case "deleteUser":
+					//Checks if they're trying to delete the admin account
+					if (Convert.ToInt32(usersDisplayTable.Rows[Convert.ToInt32(e.CommandArgument)]) == 0)
+					{
+						returnLabel.Text = "You can't delete the central admin account";
+					}
+					//Prompts them to delete the account
+					else
+					{
+						returnLabel.Text = "Do you really want to delete";
+					}
+					break;
+				case "changeUserPassword":
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }

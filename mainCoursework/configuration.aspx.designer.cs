@@ -11,5 +11,32 @@ namespace mainCoursework {
     
     
     public partial class configuration {
+        
+        /// <summary>
+        /// usersDisplayTable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView usersDisplayTable;
+        
+        /// <summary>
+        /// returnLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label returnLabel;
+        
+        /// <summary>
+        /// usersDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.AccessDataSource usersDataSource;
     }
 }

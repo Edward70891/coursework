@@ -18,7 +18,7 @@ namespace commonClasses
 		{
 			string result;
 			result = "-------------------------" + "[" + Convert.ToString(DateTime.Now) + "]" + "-------------------------";
-			using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert\2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true)) //Look this up; it won't work on different computers
+			using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert \2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true)) //Look this up; it won't work on different computers
 			{
 				logFile.WriteLine("");
 				logFile.WriteLine(result);
