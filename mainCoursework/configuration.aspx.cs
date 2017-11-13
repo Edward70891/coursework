@@ -11,11 +11,7 @@ namespace mainCoursework
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			var checkLogin = Convert.ToBoolean(Session["loggedState"]);
-			if (checkLogin == false)
-			{
-				Server.Transfer("login.aspx", true);
-			}
+			
 		}
 
 		protected void usersDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -28,6 +24,7 @@ namespace mainCoursework
 					{
 						returnLabel.Text = "You can't delete the central admin account";
 					}
+
 					//Prompts them to delete the account
 					else
 					{
@@ -36,8 +33,6 @@ namespace mainCoursework
 					}
 					break;
 				case "changeUserPassword":
-					break;
-				default:
 					break;
 			}
 		}

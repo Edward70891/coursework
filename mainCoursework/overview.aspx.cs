@@ -11,11 +11,7 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            var checkLogin = Convert.ToBoolean(Session["loggedState"]);
-            if (checkLogin == false)
-            {
-                Server.Transfer("login.aspx", true);
-            }
+            
         }
     }
 }

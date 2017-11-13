@@ -13,10 +13,7 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Convert.ToBoolean(Session["loggedState"]) != true)
-            {
-                Server.Transfer("login.aspx", true);
-            }
+            
         }
 
         protected void productAddButton_Click(object sender, EventArgs e)

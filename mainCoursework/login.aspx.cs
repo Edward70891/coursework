@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Data.OleDb;
 using System.Threading;
@@ -24,9 +25,10 @@ namespace mainCoursework
 			{
 				if (checkCredentials.searchCredentials(attemptedName, passwordBox.Text) != null)
 				{
-					Session["loggedState"] = true;
-					customLogging.newEntry(attemptedName + " logged in", "user");
-					Server.Transfer("overview.aspx", true);
+					FormsAuthentication.RedirectFromLoginPage(attemptedName,false);
+					//Session["loggedState"] = true;
+					//customLogging.newEntry(attemptedName + " logged in", "user");
+					//Server.Transfer("overview.aspx", true);
 				}
 				else
 				{
