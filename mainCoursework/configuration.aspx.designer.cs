@@ -67,6 +67,15 @@ namespace mainCoursework {
         protected global::System.Web.UI.WebControls.TextBox submittedPasswordBox;
         
         /// <summary>
+        /// confirmPasswordBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox confirmPasswordBox;
+        
+        /// <summary>
         /// submittedAccessLevelBox control.
         /// </summary>
         /// <remarks>

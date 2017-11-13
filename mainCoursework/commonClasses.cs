@@ -23,6 +23,11 @@ namespace commonClasses
 			writeEntry(result);
 		}
 
+		public static void endSession()
+		{
+			string entryText = generateTimestamp() + "Session ended";
+		}
+
 		/// <summary> 
 		/// <para>Write a timestamped entry to the logfile with the provided text</para>
 		/// <para>Type must be "system", "user" or "other" so far</para>
@@ -48,7 +53,7 @@ namespace commonClasses
 			writeEntry(entryText);
 		}
 
-		//Fix me!
+		//Fix me better!
 		private static void writeEntry(string entryText)
 		{
 			try

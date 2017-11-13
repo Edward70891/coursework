@@ -10,11 +10,11 @@
 			<asp:BoundField DataField="username" HeaderText="User Name" SortExpression="username" />
 			<asp:BoundField DataField="clearanceLevel" HeaderText="Access Level" SortExpression="clearanceLevel" />
 			<asp:TemplateField>
-            <ItemTemplate>
-                <asp:Button ID="deleteButton" ButtonType="Button" CommandName="deleteUser" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Delete" runat="server" />
-				<asp:Button ID="passwordChange" ButtonType="Button" CommandName="changeUserPassword" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Change Password" runat="server" />
-            </ItemTemplate>
-        </asp:TemplateField>
+				<ItemTemplate>
+					<asp:Button ID="deleteButton" ButtonType="Button" CommandName="deleteUser" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Delete" runat="server" />
+					<asp:Button ID="passwordChange" ButtonType="Button" CommandName="changeUserPassword" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Change Password" runat="server" />
+				</ItemTemplate>
+			</asp:TemplateField>
 		</Columns>
 	</asp:GridView>
 
@@ -27,10 +27,11 @@
 	Username<br />
 	<asp:TextBox ID="submittedUsernameBox" runat="server"></asp:TextBox>
 	<br />
-	<br />
 	Password<br />
-	<asp:TextBox ID="submittedPasswordBox" runat="server"></asp:TextBox>
+	<asp:TextBox ID="submittedPasswordBox" runat="server" TextMode="Password"></asp:TextBox>
 	<br />
+	Confirm Password<br />
+	<asp:TextBox ID="confirmPasswordBox" runat="server" TextMode="Password"></asp:TextBox>
 	<br />
 	Clearance Level<br />
 	<asp:TextBox ID="submittedAccessLevelBox" runat="server"></asp:TextBox>

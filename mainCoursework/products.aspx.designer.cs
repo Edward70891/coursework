@@ -13,6 +13,33 @@ namespace mainCoursework {
     public partial class products {
         
         /// <summary>
+        /// productsTable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView productsTable;
+        
+        /// <summary>
+        /// productsDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.AccessDataSource productsDataSource;
+        
+        /// <summary>
+        /// returnLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label returnLabel;
+        
+        /// <summary>
         /// productNameBox control.
         /// </summary>
         /// <remarks>

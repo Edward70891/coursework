@@ -19,5 +19,10 @@ namespace mainCoursework
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 			customLogging.newSession();
 		}
+
+		~Global()
+		{
+			customLogging.endSession();
+		}
 	}
 }
