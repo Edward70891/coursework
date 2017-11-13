@@ -16,20 +16,25 @@ namespace mainCoursework
 
 		protected void usersDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
 		{
+			string username = usersDisplayTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].ToString();
 			switch (e.CommandName)
 			{
 				case "deleteUser":
 					//Checks if they're trying to delete the admin account
-					if (Convert.ToInt32(usersDisplayTable.Rows[Convert.ToInt32(e.CommandArgument)]) == 0)
+					if (username == "admin")
 					{
-						returnLabel.Text = "You can't delete the central admin account";
+						returnLabel.Text = "You can't delete the root admin account!";
 					}
 
 					//Prompts them to delete the account
 					else
 					{
-						returnLabel.Text = "Do you really want to delete the account '" + Convert.ToString(usersDisplayTable.RowHeaderColumn) +"?";
+						returnLabel.Text = "Do you really want to delete the account '" + username +"?";
 						deleteConfirm.Visible = true;
+						//using (var deleteUser = new defaultDataSetTableAdapters.usersTableAdapter())
+						//{
+						//	deleteUser.deleteUser(username);
+						//}
 					}
 					break;
 				case "changeUserPassword":
