@@ -48,7 +48,7 @@
 		<asp:TextBox ID="productNameBox" runat="server"></asp:TextBox>
 		<br />
 		Product Price<br />
-		<asp:TextBox ID="productPrice" runat="server"></asp:TextBox>
+		<asp:TextBox ID="productPrice" runat="server" TextMode="Number"></asp:TextBox>
 		<br />
 		Product Type<br />
 		<asp:DropDownList ID="typeDropdown" runat="server">

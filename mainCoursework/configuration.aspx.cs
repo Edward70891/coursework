@@ -129,7 +129,7 @@ namespace mainCoursework
 								using (var addUser = new defaultDataSetTableAdapters.usersTableAdapter())
 								{
 									//Adds the user to the database, posts and refreshes the table then logs the addition
-									addUser.newUser(submittedUsername, submittedPassword, submittedAccessLevel);
+									addUser.newUser(submittedUsername, submittedPassword, submittedAccessLevel, HttpContext.Current.User.Identity.Name);
 									registerReturn.Text = "New user created";
 									usersDisplayTable.DataBind();
 									customLogging.newEntry("A user created the account " + username, "user");

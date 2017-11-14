@@ -56,35 +56,26 @@ namespace mainCoursework
         protected void productAddButton_Click(object sender, EventArgs e)
         {
 			//A while loop that is broken at the end or prematurely if conditions are not met
-            while (true)
+            do
             {
                 //Check and format the name for both display and storage/reference purposes
                 string displayName = productNameBox.Text;
-                if (displayName.All(Char.IsLetterOrDigit) == false)
-                {
-                    productNameBox.Text = "";
-                    returnMessage.Text = "Please only use numbers and letters in the product name";
-                    break;
-                }
                 string productName = displayName;
                 TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
                 productName = cultInfo.ToTitleCase(productName);
                 productName = productName.Replace(" ", "");
 				productName = char.ToLower(productName[0]) + productName.Substring(1);
+				if (productName.All(Char.IsLetterOrDigit) == false)
+				{
+					returnMessage.Text = "Please only use numbers and letters in the product name!";
+					break;
+				}
 
 				//Check and format the price to ensure 2dp accuracy and only digits content
-				decimal price;
-                if (decimal.TryParse(productPrice.Text, out price) == false)
+				double price = Convert.ToDouble(productPrice.Text);
+                if (((price * 100) % 1.0) != 0)
                 {
-                    productPrice.Text = "";
-                    returnMessage.Text = "Please input prices in the format X.XX";
-                    break;
-                }
-                decimal priceCheck = price * 100;
-                if (priceCheck != Math.Floor(priceCheck))
-                {
-					productPrice.Text = "";
-					returnMessage.Text = "Please input prices in the format X.XX";
+					returnMessage.Text = "Please input prices to two decimal places!";
 					break;
 				}
 				using (var checkProductName = new defaultDataSetTableAdapters.productsTableAdapter())
@@ -100,12 +91,11 @@ namespace mainCoursework
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
 				using (var addProductAdapter = new defaultDataSetTableAdapters.productsTableAdapter())
 				{
-					addProductAdapter.addProduct(productName, price, displayName, typeDropdown.SelectedValue);
+					addProductAdapter.addProduct(productName, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, HttpContext.Current.User.Identity.Name);
 				}
 				customLogging.newEntry("A user created the product " + displayName, "user");
 				productsTable.DataBind();
-				break;
-            }
+            } while (false) ;
         }
     }
 
