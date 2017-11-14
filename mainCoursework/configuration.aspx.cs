@@ -28,7 +28,7 @@ namespace mainCoursework
 					//Checks if they're trying to delete the admin account
 					if (username == "admin")
 					{
-						returnLabel.Text = "You can't delete the root admin account!";
+						returnLabel.Text = "fuck you!";
 						deletingUsersPersistent.deleting = false;
 					}
 
