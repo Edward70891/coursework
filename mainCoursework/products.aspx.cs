@@ -35,6 +35,7 @@ namespace mainCoursework
 							deleteProduct.deleteProduct(displayName);
 							returnLabel.Text = "Product deleted";
 							customLogging.newEntry("A user deleted the product " + displayName, "user");
+							productsTable.DataBind();
 							System.Threading.Thread.Sleep(2000);
 							returnLabel.Text = "";
 						}

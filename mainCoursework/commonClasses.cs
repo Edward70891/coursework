@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace commonClasses
 {
@@ -58,14 +59,14 @@ namespace commonClasses
 		{
 			try
 			{
-				using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"\\albert \2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true))
+				using (StreamWriter logFile = new StreamWriter(@"\\albert \2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true))
 				{
 					logFile.WriteLine(entryText);
 				}
 			}
-			catch (System.IO.IOException)
+			catch (IOException)
 			{
-				using (System.IO.StreamWriter logFile = new System.IO.StreamWriter(@"C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\log.txt", true))
+				using (StreamWriter logFile = new StreamWriter(@"C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\log.txt", true))
 				{
 					logFile.WriteLine(entryText);
 				}

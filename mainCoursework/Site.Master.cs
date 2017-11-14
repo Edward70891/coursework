@@ -13,14 +13,18 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			try
+			//Check if anyone is logged in
+			if (HttpContext.Current.User.Identity.Name == "")
 			{
-				var testConnection = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|Datadirectory|main.accdb;Persist Security Info=True");
-				connectionTestLabel.Text = "DB Connection OK";
+				// Show no one is logged in
+				usernameLabel.Text = "No user logged in";
+				signOut.Visible = false;
 			}
-			catch (System.ArgumentException)
+			else
 			{
-				connectionTestLabel.Text = "DB Connection bad!";
+				//Show who is logged in and make sure the sign out button is visible
+				usernameLabel.Text = "Welcome, " + HttpContext.Current.User.Identity.Name + "!";
+				signOut.Visible = true;
 			}
 		}
 
