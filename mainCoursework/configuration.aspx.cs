@@ -104,34 +104,19 @@ namespace mainCoursework
 		protected void newUser_Click(object sender, EventArgs e)
 		{
 			//Checks all boxes have a value
-			if (submittedUsernameBox.Text != "" && submittedPasswordBox.Text != "" && submittedAccessLevelBox.Text != "")
+			if (submittedUsernameBox.Text != "" && submittedPasswordBox.Text != "" && submittedConfirmPasswordBox.Text != "" && submittedAccessLevelBox.Text != "")
 			{
 				//Pulls values from boxes
 				string submittedUsername = submittedUsernameBox.Text;
 				string submittedPassword = submittedPasswordBox.Text;
 				string passwordConfirmation = submittedConfirmPasswordBox.Text;
-				bool allNumeric = true;
-				//Checks if the Access Level box only has numbers in it
-				foreach (char c in submittedAccessLevelBox.Text)
+				
+				if (submittedPassword == passwordConfirmation)
 				{
-					if (Char.IsNumber(c) == false)
+					int submittedAccessLevel = Convert.ToInt32(submittedAccessLevelBox.Text);
+					using (var searchUsername = new defaultDataSetTableAdapters.usersTableAdapter())
 					{
-						allNumeric = false;
-						break;
-					}
-				}
-				//Stops and posts if the box contains things other than numbers
-				if (allNumeric == false)
-				{
-					registerReturn.Text = "The clearance level must be a numeric value!";
-					System.Threading.Thread.Sleep(750);
-				}
-				else
-				{
-					if (submittedPassword == passwordConfirmation)
-					{
-						int submittedAccessLevel = Convert.ToInt32(submittedAccessLevelBox.Text);
-						using (var searchUsername = new defaultDataSetTableAdapters.usersTableAdapter())
+						if (submittedUsername.All(Char.IsLetterOrDigit) == false)
 						{
 							//Checks if there's any existing users with the given username
 							if (searchUsername.checkUsername(submittedUsername) == null)
@@ -156,18 +141,23 @@ namespace mainCoursework
 								registerReturn.Text = "";
 							}
 						}
+						else
+						{
+
+						}
+						}
 					}
-					else
-					{
-						//Posts that the given passwords don't match
-						registerReturn.Text = "The passwords don't match!";
-						System.Threading.Thread.Sleep(750);
-						registerReturn.Text = "";
-					}
+				}
+				else
+				{
+					//Posts that the given passwords don't match
+					registerReturn.Text = "The passwords don't match!";
+					System.Threading.Thread.Sleep(750);
+					registerReturn.Text = "";
+				}
 				}
 			}
 		}
-	}
 
 	//Custom class for managing deletions outside of the button click event
 	static class deletingUsersPersistent
