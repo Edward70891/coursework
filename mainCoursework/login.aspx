@@ -5,10 +5,9 @@
     </div>
 
 	<div class="login">
-		<p>User Name:</p>
-		<asp:TextBox ID="usernameBox" runat="server"></asp:TextBox>
-		<p>Password:</p>
-		<asp:TextBox ID="passwordBox" runat="server" TextMode="Password"></asp:TextBox>
+		<asp:TextBox ID="usernameBox" runat="server" placeholder ="Username"></asp:TextBox>
+		<br />
+		<asp:TextBox ID="passwordBox" runat="server" TextMode="Password" placeholder ="Password"></asp:TextBox>
 		<p><asp:Label ID="returnLabel" runat="server" Text=""></asp:Label></p>
 		<asp:Button ID="submitCredentialsButton" runat="server" Text="Log In" OnClick="submitCredentialsButton_Click"/>
 	</div>

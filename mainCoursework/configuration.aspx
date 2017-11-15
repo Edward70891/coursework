@@ -9,6 +9,7 @@
 		<Columns>
 			<asp:BoundField DataField="username" HeaderText="User Name" SortExpression="username" />
 			<asp:BoundField DataField="clearanceLevel" HeaderText="Access Level" SortExpression="clearanceLevel" />
+			<asp:BoundField DataField="creator" HeaderText="Created By" />
 			<asp:TemplateField>
 				<ItemTemplate>
 					<asp:Button ID="deleteButton" ButtonType="Button" CommandName="deleteUser" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Delete" runat="server" />
@@ -18,23 +19,26 @@
 		</Columns>
 	</asp:GridView>
 
-	<asp:TextBox ID="passwordBox" runat="server" Text ="Password Box"></asp:TextBox>
+	<asp:TextBox ID="passwordBox" runat="server" TextType ="" placeholder ="New Password" TextMode="Password"></asp:TextBox>
+	<br />
+	<asp:TextBox ID="confirmPassword" runat="server" TextMode="Password" placeholder="Confirm Password"></asp:TextBox>
+	<br />
 	<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
-	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT [username], [clearanceLevel] FROM [users]"></asp:AccessDataSource>
+	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT [username], [clearanceLevel], [creator] FROM [users]"></asp:AccessDataSource>
+	<br />
 	<br />
 	Register a New User:<br />
 	<br />
-	Username<br />
-	<asp:TextBox ID="submittedUsernameBox" runat="server"></asp:TextBox>
+	<asp:TextBox ID="submittedUsernameBox" runat="server" placeholder = "Username"></asp:TextBox>
 	<br />
-	Password<br />
-	<asp:TextBox ID="submittedPasswordBox" runat="server" TextMode="Password"></asp:TextBox>
 	<br />
-	Confirm Password<br />
-	<asp:TextBox ID="confirmPasswordBox" runat="server" TextMode="Password"></asp:TextBox>
+	<asp:TextBox ID="submittedPasswordBox" runat="server" TextMode="Password" placeholder ="Password"></asp:TextBox>
 	<br />
-	Clearance Level<br />
-	<asp:TextBox ID="submittedAccessLevelBox" runat="server"></asp:TextBox>
+	<br />
+	<asp:TextBox ID="submittedConfirmPasswordBox" runat="server" TextMode="Password" placeholder ="Confirm Password"></asp:TextBox>
+	<br />
+	<br />
+	<asp:TextBox ID="submittedAccessLevelBox" runat="server" placeholder ="Access Level" TextMode ="Number"></asp:TextBox>
 	<br />
 	<br />
 	<asp:Button ID="newUser" runat="server" Text="Register New User" OnClick="newUser_Click" />

@@ -28,7 +28,7 @@ namespace mainCoursework
 					//Checks if they're trying to delete the admin account
 					if (username == "admin")
 					{
-						returnLabel.Text = "fuck you!";
+						returnLabel.Text = "You can't delete the admin account!";
 						deletingUsersPersistent.deleting = false;
 					}
 
@@ -46,7 +46,7 @@ namespace mainCoursework
 								deleteUser.deleteUser(username);
 							}
 							//Log the deletetion, refresh the table and wait, then clear the post box
-							customLogging.newEntry("A user deleted the user " + username + ".", "user");
+							customLogging.newEntry("A user deleted the user " + username + ".");
 							usersDisplayTable.DataBind();
 							System.Threading.Thread.Sleep(750);
 							returnLabel.Text = "";
@@ -69,21 +69,31 @@ namespace mainCoursework
 					//Disables second click coding
 					deletingUsersPersistent.deleting = false;
 					//Checks there is a value entered in the box
-					if (passwordBox.Text != "")
+					if (passwordBox.Text != "" || confirmPassword.Text != "")
 					{
-						using (var changePassword = new defaultDataSetTableAdapters.usersTableAdapter())
+						if (passwordBox.Text == confirmPassword.Text)
 						{
-							//Changes the password in the DB
-							changePassword.changePassword(passwordBox.Text, username);
+							using (var changePassword = new defaultDataSetTableAdapters.usersTableAdapter())
+							{
+								//Changes the password in the DB
+								changePassword.changePassword(passwordBox.Text, username);
+							}
+							//Posts that the password has been changed and logs it
+							customLogging.newEntry("A user changed " + username + "'s password");
+							returnLabel.Text = "User " + username + "'s password was changed to " + passwordBox.Text + ".";
 						}
-						//Posts that the password has been changed and logs it
-						customLogging.newEntry("A user changed " + username + "'s password", "user");
-						returnLabel.Text = "User " + username + "'s password was changed to " + passwordBox.Text + ".";
+						else
+						{
+							//Runs if the passwords don't match, notifies the user
+							returnLabel.Text = "The passwords do not match!";
+							System.Threading.Thread.Sleep(750);
+							returnLabel.Text = "";
+						}
 					}
 					else
 					{
 						//Prompts the user to fill the box
-						returnLabel.Text = "<-- You must enter something in this box!";
+						returnLabel.Text = "You must fill both boxes!";
 						System.Threading.Thread.Sleep(750);
 						returnLabel.Text = "";
 					}
@@ -99,7 +109,7 @@ namespace mainCoursework
 				//Pulls values from boxes
 				string submittedUsername = submittedUsernameBox.Text;
 				string submittedPassword = submittedPasswordBox.Text;
-				string passwordConfirmation = confirmPasswordBox.Text;
+				string passwordConfirmation = submittedConfirmPasswordBox.Text;
 				bool allNumeric = true;
 				//Checks if the Access Level box only has numbers in it
 				foreach (char c in submittedAccessLevelBox.Text)
@@ -132,7 +142,7 @@ namespace mainCoursework
 									addUser.newUser(submittedUsername, submittedPassword, submittedAccessLevel, HttpContext.Current.User.Identity.Name);
 									registerReturn.Text = "New user created";
 									usersDisplayTable.DataBind();
-									customLogging.newEntry("A user created the account " + username, "user");
+									customLogging.newEntry("A user created the account " + username);
 									//Waits then clears the postbox
 									System.Threading.Thread.Sleep(2000);
 									registerReturn.Text = "";

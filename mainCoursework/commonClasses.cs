@@ -5,16 +5,7 @@ namespace commonClasses
 {
 	public class customLogging
 	{
-		string getTimestamp()
-		{
-			string timestamp;
-			timestamp = "[" + Convert.ToString(DateTime.Now) + "] ";
-			return timestamp;
-		}
-
-		/// <summary>
-		/// <para>Write a timestamped session divider to the logfile</para>
-		/// </summary>
+		//Logs the creation of a new session when the program starts
 		public static void newSession()
 		{
 			string result;
@@ -24,37 +15,15 @@ namespace commonClasses
 			writeEntry(result);
 		}
 
-		public static void endSession()
-		{
-			string entryText = generateTimestamp() + "Session ended";
-		}
-
-		/// <summary> 
-		/// <para>Write a timestamped entry to the logfile with the provided text</para>
-		/// <para>Type must be "system", "user" or "other" so far</para>
-		/// </summary>
-		public static void newEntry(string entryText, string type)
+		//Writes a timestamped new entry to the logfile
+		public static void newEntry(string entryText)
 		{
 			string result;
-			switch (type)
-			{
-				case "user":
-					result = "USR";
-					break;
-				case "other":
-					result = "OTR";
-					break;
-				case "system":
-					result = "SYS";
-					break;
-				default:
-					throw new ArgumentException("Type must be 'system', 'user' or 'other'");
-			}
-			result += generateTimestamp() + " " + entryText;
+			result = generateTimestamp() + " " + entryText;
 			writeEntry(entryText);
 		}
 
-		//Fix me better!
+		//Checks both possible locations for the logfile (this needs a better solution) then writes the given text to them
 		private static void writeEntry(string entryText)
 		{
 			try
@@ -73,7 +42,7 @@ namespace commonClasses
 			}
 		}
 
-
+		//Generates a timestamp string in square bracketss
 		private static string generateTimestamp()
 		{
 			string output = "[" + Convert.ToString(DateTime.Now) + "]";

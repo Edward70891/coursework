@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="products.aspx.cs" Inherits="mainCoursework.products" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div>
+	<div>
 		Products<br />
 		<asp:GridView ID="productsTable" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="productsDataSource" EmptyDataText="There are no data records to display." onrowcommand="productsTable_RowCommand">
 			<Columns>
@@ -44,13 +44,11 @@
 		<br />
 		Add Product<br />
 		<br />
-		Product Name<br />
-		<asp:TextBox ID="productNameBox" runat="server"></asp:TextBox>
+		<asp:TextBox ID="productNameBox" runat="server" placeholder="Product Name"></asp:TextBox>
 		<br />
-		Product Price<br />
-		<asp:TextBox ID="productPrice" runat="server" TextMode="Number"></asp:TextBox>
+		<asp:TextBox ID="productPrice" runat="server" TextMode="Number" placeholder ="Product Price"></asp:TextBox>
 		<br />
-		Product Type<br />
+		Product Type:<br />
 		<asp:DropDownList ID="typeDropdown" runat="server">
 			<asp:ListItem Selected="True" Value="coaster">Coaster</asp:ListItem>
 			<asp:ListItem Value="clock">Clock</asp:ListItem>

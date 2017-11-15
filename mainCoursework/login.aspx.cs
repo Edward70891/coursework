@@ -33,7 +33,7 @@ namespace mainCoursework
 				else
 				{
 					returnLabel.Text = "The Username or Password is incorrect.";
-					customLogging.newEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect", "user");
+					customLogging.newEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect");
 				}
 			}
 		}
