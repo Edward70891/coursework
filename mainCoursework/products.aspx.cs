@@ -34,7 +34,7 @@ namespace mainCoursework
 							//Deletes the product, logs the action, posts the result to the box then clears it
 							deleteProduct.deleteProduct(displayName);
 							returnLabel.Text = "Product deleted";
-							customLogging.newEntry("A user deleted the product " + displayName);
+							customLogging.newEntry("The product " + displayName + " was deleted");
 							productsTable.DataBind();
 							System.Threading.Thread.Sleep(2000);
 							returnLabel.Text = "";
@@ -93,7 +93,7 @@ namespace mainCoursework
 				{
 					addProductAdapter.addProduct(productName, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, HttpContext.Current.User.Identity.Name);
 				}
-				customLogging.newEntry("A user created the product " + displayName);
+				customLogging.newEntry("The product " + displayName + " was created");
 				productsTable.DataBind();
             } while (false) ;
         }

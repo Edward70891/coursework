@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Web;
+using System.Web.UI;
 using System.IO;
 
 namespace commonClasses
@@ -19,7 +21,14 @@ namespace commonClasses
 		public static void newEntry(string entryText)
 		{
 			string result;
-			result = generateTimestamp() + " " + entryText;
+			if (HttpContext.Current.User.Identity.Name == "")
+			{
+				result = generateTimestamp() + " " + entryText;
+			}
+			else
+			{
+				result = generateTimestamp() + " " + entryText + "; Logged user is " + HttpContext.Current.User.Identity.Name;
+			}
 			writeEntry(entryText);
 		}
 

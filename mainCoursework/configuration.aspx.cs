@@ -46,7 +46,7 @@ namespace mainCoursework
 								deleteUser.deleteUser(username);
 							}
 							//Log the deletetion, refresh the table and wait, then clear the post box
-							customLogging.newEntry("A user deleted the user " + username + ".");
+							customLogging.newEntry("User " + username + " was deleted");
 							usersDisplayTable.DataBind();
 							System.Threading.Thread.Sleep(750);
 							returnLabel.Text = "";
@@ -79,7 +79,7 @@ namespace mainCoursework
 								changePassword.changePassword(passwordBox.Text, username);
 							}
 							//Posts that the password has been changed and logs it
-							customLogging.newEntry("A user changed " + username + "'s password");
+							customLogging.newEntry("User " + username + "'s password changed");
 							returnLabel.Text = "User " + username + "'s password was changed to " + passwordBox.Text + ".";
 						}
 						else
@@ -142,7 +142,7 @@ namespace mainCoursework
 									addUser.newUser(submittedUsername, submittedPassword, submittedAccessLevel, HttpContext.Current.User.Identity.Name);
 									registerReturn.Text = "New user created";
 									usersDisplayTable.DataBind();
-									customLogging.newEntry("A user created the account " + username);
+									customLogging.newEntry("Account " + username + " created");
 									//Waits then clears the postbox
 									System.Threading.Thread.Sleep(2000);
 									registerReturn.Text = "";

@@ -26,9 +26,7 @@ namespace mainCoursework
 				if (checkCredentials.searchCredentials(attemptedName, passwordBox.Text) != null)
 				{
 					FormsAuthentication.RedirectFromLoginPage(attemptedName,false);
-					//Session["loggedState"] = true;
-					//customLogging.newEntry(attemptedName + " logged in", "user");
-					//Server.Transfer("overview.aspx", true);
+					customLogging.newEntry(attemptedName + " logged in");
 				}
 				else
 				{
