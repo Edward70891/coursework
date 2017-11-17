@@ -111,7 +111,7 @@ namespace mainCoursework
 					int submittedAccessLevel = Convert.ToInt32(submittedAccessLevelBox.Text);
 					using (var searchUsername = new defaultDataSetTableAdapters.usersTableAdapter())
 					{
-						if (submittedUsername.All(Char.IsLetterOrDigit) == false)
+						if (submittedUsername.All(Char.IsLetterOrDigit) == true)
 						{
 							//Checks if there's any existing users with the given username
 							if (searchUsername.checkUsername(submittedUsername) == null)
@@ -135,7 +135,10 @@ namespace mainCoursework
 						}
 						else
 						{
-
+							//Returns that the username isn't alphanum only
+							registerReturn.Text = "The username must numbers and letters only!";
+							System.Threading.Thread.Sleep(750);
+							registerReturn.Text = "";
 						}
 					}
 				}

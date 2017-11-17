@@ -31,13 +31,13 @@ namespace mainCoursework
 					{
 						//Returns that the product has been deleted
 						returnLabel.Text = "Product " + displayName + " was deleted";
-							//Deletes the product, logs the action, posts the result to the box then clears it
-							productQueryTable.deleteProduct(displayName);
-							returnLabel.Text = "Product deleted";
-							customLogging.newEntry("The product " + displayName + " was deleted");
-							productsTable.DataBind();
-							System.Threading.Thread.Sleep(2000);
-							returnLabel.Text = "";
+						//Deletes the product, logs the action, posts the result to the box then clears it
+						productQueryTable.deleteProduct(displayName);
+						returnLabel.Text = "Product deleted";
+						customLogging.newEntry("The product " + displayName + " was deleted");
+						productsTable.DataBind();
+						System.Threading.Thread.Sleep(2000);
+						returnLabel.Text = "";
 					}
 					else
 					{
@@ -81,6 +81,7 @@ namespace mainCoursework
 					returnMessage.Text = "There is already a product with that name!";
 					System.Threading.Thread.Sleep(750);
 				}
+
 				//Returns the the product has been created then creates it and logs it and refreshes the table
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
 				productQueryTable.addProduct(productName, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, HttpContext.Current.User.Identity.Name);
