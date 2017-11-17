@@ -16,6 +16,7 @@ namespace mainCoursework
 		}
 
 		string username;
+		defaultDataSetTableAdapters.usersTableAdapter userQueryTable = new defaultDataSetTableAdapters.usersTableAdapter();
 
 		//Deleting and change account passwords
 		protected void usersDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -41,11 +42,8 @@ namespace mainCoursework
 							returnLabel.Text = "Account " + deletingUsersPersistent.username + " was deleted";
 							deletingUsersPersistent.deleting = false;
 							//Delete the user
-							using (var deleteUser = new defaultDataSetTableAdapters.usersTableAdapter())
-							{
-								deleteUser.deleteUser(username);
-							}
-							//Log the deletetion, refresh the table and wait, then clear the post box
+							userQueryTable.deleteUser(username);
+							//Log the deletion, refresh the table and wait, then clear the post box
 							customLogging.newEntry("User " + username + " was deleted");
 							usersDisplayTable.DataBind();
 							System.Threading.Thread.Sleep(750);
@@ -73,11 +71,8 @@ namespace mainCoursework
 					{
 						if (passwordBox.Text == confirmPassword.Text)
 						{
-							using (var changePassword = new defaultDataSetTableAdapters.usersTableAdapter())
-							{
-								//Changes the password in the DB
-								changePassword.changePassword(passwordBox.Text, username);
-							}
+							//Changes the password in the DB
+							userQueryTable.changePassword(passwordBox.Text, username);
 							//Posts that the password has been changed and logs it
 							customLogging.newEntry("User " + username + "'s password changed");
 							returnLabel.Text = "User " + username + "'s password was changed to " + passwordBox.Text + ".";
@@ -121,17 +116,14 @@ namespace mainCoursework
 							//Checks if there's any existing users with the given username
 							if (searchUsername.checkUsername(submittedUsername) == null)
 							{
-								using (var addUser = new defaultDataSetTableAdapters.usersTableAdapter())
-								{
-									//Adds the user to the database, posts and refreshes the table then logs the addition
-									addUser.newUser(submittedUsername, submittedPassword, submittedAccessLevel, HttpContext.Current.User.Identity.Name);
-									registerReturn.Text = "New user created";
-									usersDisplayTable.DataBind();
-									customLogging.newEntry("Account " + username + " created");
-									//Waits then clears the postbox
-									System.Threading.Thread.Sleep(2000);
-									registerReturn.Text = "";
-								}
+								//Adds the user to the database, posts and refreshes the table then logs the addition
+								userQueryTable.newUser(submittedUsername, submittedPassword, submittedAccessLevel, HttpContext.Current.User.Identity.Name);
+								registerReturn.Text = "New user created";
+								usersDisplayTable.DataBind();
+								customLogging.newEntry("Account " + username + " created");
+								//Waits then clears the postbox
+								System.Threading.Thread.Sleep(2000);
+								registerReturn.Text = "";
 							}
 							else
 							{
@@ -144,7 +136,6 @@ namespace mainCoursework
 						else
 						{
 
-						}
 						}
 					}
 				}
