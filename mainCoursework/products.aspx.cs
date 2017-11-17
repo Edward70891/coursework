@@ -12,7 +12,9 @@ namespace mainCoursework
 {
     public partial class products : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
+		private defaultDataSetTableAdapters.productsTableAdapter productQueryTable = new defaultDataSetTableAdapters.productsTableAdapter();
+
+		protected void Page_Load(object sender, EventArgs e)
         {
             
         }
@@ -29,17 +31,13 @@ namespace mainCoursework
 					{
 						//Returns that the product has been deleted
 						returnLabel.Text = "Product " + displayName + " was deleted";
-						using (var deleteProduct = new defaultDataSetTableAdapters.productsTableAdapter())
-						{
 							//Deletes the product, logs the action, posts the result to the box then clears it
-							deleteProduct.deleteProduct(displayName);
+							productQueryTable.deleteProduct(displayName);
 							returnLabel.Text = "Product deleted";
 							customLogging.newEntry("The product " + displayName + " was deleted");
 							productsTable.DataBind();
 							System.Threading.Thread.Sleep(2000);
 							returnLabel.Text = "";
-						}
-
 					}
 					else
 					{
@@ -78,21 +76,14 @@ namespace mainCoursework
 					returnMessage.Text = "Please input prices to two decimal places!";
 					break;
 				}
-				using (var checkProductName = new defaultDataSetTableAdapters.productsTableAdapter())
+				if (productQueryTable.checkProductName(productName) != null)
 				{
-					if (checkProductName.checkProductName(productName) != null)
-					{
-						returnMessage.Text = "There is already a product with that name!";
-						System.Threading.Thread.Sleep(750);
-					}
+					returnMessage.Text = "There is already a product with that name!";
+					System.Threading.Thread.Sleep(750);
 				}
-
 				//Returns the the product has been created then creates it and logs it and refreshes the table
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
-				using (var addProductAdapter = new defaultDataSetTableAdapters.productsTableAdapter())
-				{
-					addProductAdapter.addProduct(productName, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, HttpContext.Current.User.Identity.Name);
-				}
+				productQueryTable.addProduct(productName, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, HttpContext.Current.User.Identity.Name);
 				customLogging.newEntry("The product " + displayName + " was created");
 				productsTable.DataBind();
             } while (false) ;

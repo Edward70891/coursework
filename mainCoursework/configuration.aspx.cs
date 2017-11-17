@@ -15,8 +15,8 @@ namespace mainCoursework
 
 		}
 
-		string username;
-		defaultDataSetTableAdapters.usersTableAdapter userQueryTable = new defaultDataSetTableAdapters.usersTableAdapter();
+		private string username;
+		private defaultDataSetTableAdapters.usersTableAdapter userQueryTable = new defaultDataSetTableAdapters.usersTableAdapter();
 
 		//Deleting and change account passwords
 		protected void usersDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
