@@ -120,7 +120,7 @@ namespace mainCoursework
 								userQueryTable.newUser(submittedUsername, submittedPassword, submittedAccessLevel, HttpContext.Current.User.Identity.Name);
 								registerReturn.Text = "New user created";
 								usersDisplayTable.DataBind();
-								customLogging.newEntry("Account " + username + " created");
+								customLogging.newEntry("Account " + submittedUsername + " created by " + HttpContext.Current.User.Identity.Name);
 								//Waits then clears the postbox
 								System.Threading.Thread.Sleep(2000);
 								registerReturn.Text = "";

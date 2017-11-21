@@ -28,18 +28,13 @@
 	<br />
 	<br />
 	Register a New User:<br />
-	<br />
 	<asp:TextBox ID="submittedUsernameBox" runat="server" placeholder = "Username"></asp:TextBox>
-	<br />
 	<br />
 	<asp:TextBox ID="submittedPasswordBox" runat="server" TextMode="Password" placeholder ="Password"></asp:TextBox>
 	<br />
-	<br />
 	<asp:TextBox ID="submittedConfirmPasswordBox" runat="server" TextMode="Password" placeholder ="Confirm Password"></asp:TextBox>
 	<br />
-	<br />
 	<asp:TextBox ID="submittedAccessLevelBox" runat="server" placeholder ="Access Level" TextMode ="Number"></asp:TextBox>
-	<br />
 	<br />
 	<asp:Button ID="newUser" runat="server" Text="Register New User" OnClick="newUser_Click" />
 	<asp:Label ID="registerReturn" runat="server" Text=""></asp:Label>
