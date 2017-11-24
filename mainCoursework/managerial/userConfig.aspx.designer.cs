@@ -85,13 +85,13 @@ namespace mainCoursework {
         protected global::System.Web.UI.WebControls.TextBox submittedConfirmPasswordBox;
         
         /// <summary>
-        /// submittedAccessLevelBox control.
+        /// adminCheckBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox submittedAccessLevelBox;
+        protected global::System.Web.UI.WebControls.CheckBox adminCheckBox;
         
         /// <summary>
         /// newUser control.

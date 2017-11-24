@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="configuration.aspx.cs" Inherits="mainCoursework.configuration" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userConfig.aspx.cs" Inherits="mainCoursework.configuration" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 	
 
@@ -34,7 +34,7 @@
 	<br />
 	<asp:TextBox ID="submittedConfirmPasswordBox" runat="server" TextMode="Password" placeholder ="Confirm Password"></asp:TextBox>
 	<br />
-	<asp:TextBox ID="submittedAccessLevelBox" runat="server" placeholder ="Access Level" TextMode ="Number"></asp:TextBox>
+	<asp:CheckBox ID="adminCheckBox" runat="server" Text="Is admin?" />
 	<br />
 	<asp:Button ID="newUser" runat="server" Text="Register New User" OnClick="newUser_Click" />
 	<asp:Label ID="registerReturn" runat="server" Text=""></asp:Label>

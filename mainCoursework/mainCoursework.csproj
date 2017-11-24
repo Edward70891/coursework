@@ -133,7 +133,8 @@
   <ItemGroup>
     <Content Include="App_Data\log.txt" />
     <Content Include="App_Data\main.accdb" />
-    <Content Include="configuration.aspx" />
+    <Content Include="default.aspx" />
+    <Content Include="managerial\userConfig.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -159,8 +160,8 @@
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="employeeLogin.aspx" />
-    <Content Include="overview.aspx" />
-    <Content Include="products.aspx" />
+    <Content Include="managerial\staffOverview.aspx" />
+    <Content Include="managerial\productsConfig.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -199,12 +200,19 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="commonClasses.cs" />
-    <Compile Include="configuration.aspx.cs">
-      <DependentUpon>configuration.aspx</DependentUpon>
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="configuration.aspx.designer.cs">
-      <DependentUpon>configuration.aspx</DependentUpon>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="managerial\userConfig.aspx.cs">
+      <DependentUpon>userConfig.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="managerial\userConfig.aspx.designer.cs">
+      <DependentUpon>userConfig.aspx</DependentUpon>
     </Compile>
     <Compile Include="defaultDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -221,19 +229,19 @@
     <Compile Include="employeeLogin.aspx.designer.cs">
       <DependentUpon>employeeLogin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="overview.aspx.cs">
-      <DependentUpon>overview.aspx</DependentUpon>
+    <Compile Include="managerial\staffOverview.aspx.cs">
+      <DependentUpon>staffOverview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="overview.aspx.designer.cs">
-      <DependentUpon>overview.aspx</DependentUpon>
+    <Compile Include="managerial\staffOverview.aspx.designer.cs">
+      <DependentUpon>staffOverview.aspx</DependentUpon>
     </Compile>
-    <Compile Include="products.aspx.cs">
-      <DependentUpon>products.aspx</DependentUpon>
+    <Compile Include="managerial\productsConfig.aspx.cs">
+      <DependentUpon>productsConfig.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="products.aspx.designer.cs">
-      <DependentUpon>products.aspx</DependentUpon>
+    <Compile Include="managerial\productsConfig.aspx.designer.cs">
+      <DependentUpon>productsConfig.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">

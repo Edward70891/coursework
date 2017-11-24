@@ -22,10 +22,10 @@ namespace mainCoursework
 		{
 			//Pull the given username into a variable
 			string attemptedName = usernameBox.Text;
-			using (var checkCredentials = new defaultDataSetTableAdapters.usersTableAdapter())
+			using (var checkCredentials = new defaultDataSetTableAdapters.employeesTableAdapter())
 			{
 				//Runs if a user with the given credentials exists
-				if (checkCredentials.searchCredentials(attemptedName, passwordBox.Text) != null)
+				if (checkCredentials.loginCheck(attemptedName, passwordBox.Text) != null)
 				{
 					//Signs the user in and logs the signin to the logfile
 					FormsAuthentication.RedirectFromLoginPage(attemptedName,false);

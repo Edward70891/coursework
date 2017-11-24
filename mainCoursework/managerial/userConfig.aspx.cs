@@ -16,7 +16,7 @@ namespace mainCoursework
 		}
 
 		private string username;
-		private defaultDataSetTableAdapters.employeesTableAdapter userQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter();
+		private defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter();
 
 		//Deleting and change account passwords
 		protected void usersDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -42,7 +42,7 @@ namespace mainCoursework
 							returnLabel.Text = "Account " + deletingUsersPersistent.username + " was deleted";
 							deletingUsersPersistent.deleting = false;
 							//Delete the user
-							userQueryTable.deleteUser(username);
+							employeeQueryTable.deleteEmployee(username);
 							//Log the deletion, refresh the table and wait, then clear the post box
 							customLogging.newEntry("User " + username + " was deleted");
 							usersDisplayTable.DataBind();
@@ -72,7 +72,7 @@ namespace mainCoursework
 						if (passwordBox.Text == confirmPassword.Text)
 						{
 							//Changes the password in the DB
-							userQueryTable.changePassword(passwordBox.Text, username);
+							employeeQueryTable.changePassword(passwordBox.Text, username);
 							//Posts that the password has been changed and logs it
 							customLogging.newEntry("User " + username + "'s password changed");
 							returnLabel.Text = "User " + username + "'s password was changed to " + passwordBox.Text + ".";
@@ -98,65 +98,14 @@ namespace mainCoursework
 
 		protected void newUser_Click(object sender, EventArgs e)
 		{
-			//Checks all boxes have a value
-			if (submittedUsernameBox.Text != "" && submittedPasswordBox.Text != "" && submittedConfirmPasswordBox.Text != "" && submittedAccessLevelBox.Text != "")
-			{
-				//Pulls values from boxes
-				string submittedUsername = submittedUsernameBox.Text;
-				string submittedPassword = submittedPasswordBox.Text;
-				string passwordConfirmation = submittedConfirmPasswordBox.Text;
-				
-				if (submittedPassword == passwordConfirmation)
-				{
-					int submittedAccessLevel = Convert.ToInt32(submittedAccessLevelBox.Text);
-					using (var searchUsername = new defaultDataSetTableAdapters.usersTableAdapter())
-					{
-						if (submittedUsername.All(Char.IsLetterOrDigit) == true)
-						{
-							//Checks if there's any existing users with the given username
-							if (searchUsername.checkUsername(submittedUsername) == null)
-							{
-								//Adds the user to the database, posts and refreshes the table then logs the addition
-								userQueryTable.newUser(submittedUsername, submittedPassword, submittedAccessLevel, HttpContext.Current.User.Identity.Name);
-								registerReturn.Text = "New user created";
-								usersDisplayTable.DataBind();
-								customLogging.newEntry("Account " + submittedUsername + " created by " + HttpContext.Current.User.Identity.Name);
-								//Waits then clears the postbox
-								System.Threading.Thread.Sleep(2000);
-								registerReturn.Text = "";
-							}
-							else
-							{
-								//Posts that the given username is not unique
-								registerReturn.Text = "That username is already taken!";
-								System.Threading.Thread.Sleep(750);
-								registerReturn.Text = "";
-							}
-						}
-						else
-						{
-							//Returns that the username isn't alphanum only
-							registerReturn.Text = "The username must numbers and letters only!";
-							System.Threading.Thread.Sleep(750);
-							registerReturn.Text = "";
-						}
-					}
-				}
-				else
-				{
-					//Posts that the given passwords don't match
-					registerReturn.Text = "The passwords don't match!";
-					System.Threading.Thread.Sleep(750);
-					registerReturn.Text = "";
-				}
-				}
-			}
+
 		}
 
-	//Custom class for managing deletions outside of the button click event
-	static class deletingUsersPersistent
-	{
-		public static string username;
-		public static bool deleting;
+		//Custom class for managing deletions outside of the button click event
+		static class deletingUsersPersistent
+		{
+			public static string username;
+			public static bool deleting;
+		}
 	}
 }
