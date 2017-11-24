@@ -158,7 +158,7 @@
       <DependentUpon>defaultDataSet.xsd</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="login.aspx" />
+    <Content Include="employeeLogin.aspx" />
     <Content Include="overview.aspx" />
     <Content Include="products.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -214,12 +214,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="login.aspx.cs">
-      <DependentUpon>login.aspx</DependentUpon>
+    <Compile Include="employeeLogin.aspx.cs">
+      <DependentUpon>employeeLogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="login.aspx.designer.cs">
-      <DependentUpon>login.aspx</DependentUpon>
+    <Compile Include="employeeLogin.aspx.designer.cs">
+      <DependentUpon>employeeLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="overview.aspx.cs">
       <DependentUpon>overview.aspx</DependentUpon>
