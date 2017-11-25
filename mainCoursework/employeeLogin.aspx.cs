@@ -11,31 +11,35 @@ using System.Web.UI.WebControls;
 
 namespace mainCoursework
 {
-    public partial class login : System.Web.UI.Page
+    public partial class employeeLogin : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 			
         }
 
-		protected void submitCredentialsButton_Click(object sender, EventArgs e)
+		protected void submitEmployeeCredentialsButton_Click(object sender, EventArgs e)
 		{
 			//Pull the given username into a variable
-			string attemptedName = usernameBox.Text;
+			string attemptedName = employeeUsernameBox.Text;
 			using (var checkCredentials = new defaultDataSetTableAdapters.employeesTableAdapter())
 			{
 				//Runs if a user with the given credentials exists
-				if (checkCredentials.loginCheck(attemptedName, passwordBox.Text) != null)
+				if (checkCredentials.loginCheck(attemptedName, employeePasswordBox.Text) != null)
 				{
 					//Signs the user in and logs the signin to the logfile
-					FormsAuthentication.RedirectFromLoginPage(attemptedName,false);
-					customLogging.newEntry(attemptedName + " logged in");
+					Session["isLoggedIn"] = true;
+					Session["currentUser"] = attemptedName;
+					Session["userType"] = "employee";
+					Session["userIsAdmin"] = true;
+					Server.Transfer("~/mamangerial/staffOverview.aspx", false);
+					customLogging.newEntry("Employee " + attemptedName + " logged in");
 				}
 				else
 				{
 					//Posts an error and logs the attempted login to the logfile
-					returnLabel.Text = "The Username or Password is incorrect.";
-					customLogging.newEntry("Someone attempted to login with username '" + attemptedName + "' but the credentials were incorrect");
+					empoyeeLoginReturnLabel.Text = "The Username or Password is incorrect.";
+					customLogging.newEntry("Someone attempted to login as an employee with username '" + attemptedName + "' but the credentials were incorrect");
 				}
 			}
 		}

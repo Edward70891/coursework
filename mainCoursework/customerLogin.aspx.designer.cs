@@ -10,42 +10,51 @@
 namespace mainCoursework {
     
     
-    public partial class employeeLogin {
+    public partial class customerLogin {
         
         /// <summary>
-        /// employeeUsernameBox control.
+        /// customerUsernameBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox employeeUsernameBox;
+        protected global::System.Web.UI.WebControls.TextBox customerUsernameBox;
         
         /// <summary>
-        /// employeePasswordBox control.
+        /// customerPasswordBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox employeePasswordBox;
+        protected global::System.Web.UI.WebControls.TextBox customerPasswordBox;
         
         /// <summary>
-        /// empoyeeLoginReturnLabel control.
+        /// customerLoginReturnLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label empoyeeLoginReturnLabel;
+        protected global::System.Web.UI.WebControls.Label customerLoginReturnLabel;
         
         /// <summary>
-        /// employeeSubmitCredentialsButton control.
+        /// submitCustomerCredentialsButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button employeeSubmitCredentialsButton;
+        protected global::System.Web.UI.WebControls.Button submitCustomerCredentialsButton;
+        
+        /// <summary>
+        /// registerButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button registerButton;
     }
 }

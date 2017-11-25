@@ -134,6 +134,7 @@
     <Content Include="App_Data\log.txt" />
     <Content Include="App_Data\main.accdb" />
     <Content Include="default.aspx" />
+    <Content Include="customerLogin.aspx" />
     <Content Include="managerial\userConfig.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -162,6 +163,7 @@
     <Content Include="employeeLogin.aspx" />
     <Content Include="managerial\staffOverview.aspx" />
     <Content Include="managerial\productsConfig.aspx" />
+    <Content Include="registerCustomer.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -207,6 +209,13 @@
     <Compile Include="default.aspx.designer.cs">
       <DependentUpon>default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="customerLogin.aspx.cs">
+      <DependentUpon>customerLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="customerLogin.aspx.designer.cs">
+      <DependentUpon>customerLogin.aspx</DependentUpon>
+    </Compile>
     <Compile Include="managerial\userConfig.aspx.cs">
       <DependentUpon>userConfig.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -244,6 +253,13 @@
       <DependentUpon>productsConfig.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="registerCustomer.aspx.cs">
+      <DependentUpon>registerCustomer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="registerCustomer.aspx.designer.cs">
+      <DependentUpon>registerCustomer.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
