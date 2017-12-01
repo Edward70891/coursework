@@ -32,7 +32,14 @@ namespace mainCoursework
 					Session["currentUser"] = attemptedName;
 					Session["userType"] = "employee";
 					Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
-					customLogging.newEntry("Employee " + attemptedName + " logged in");
+					if (Convert.ToBoolean(Session["userIsAdmin"]))
+					{
+						customLogging.newEntry("Admin " + attemptedName + " logged in");
+					}
+					else
+					{
+						customLogging.newEntry("Employee " + attemptedName + " logged in");
+					}
 					Server.Transfer("~/managerial/staffOverview.aspx", false);
 				}
 				else
