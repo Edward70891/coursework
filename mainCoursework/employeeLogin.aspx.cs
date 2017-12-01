@@ -27,11 +27,12 @@ namespace mainCoursework
 				var loginCheck = checkCredentials.loginCheck(attemptedName, employeePasswordBox.Text);
 				if (loginCheck != null)
 				{
-					//Signs the user in and logs the signin to the logfile
+					//Sets relevant Session information so other pages can determine information about the logged session
 					Session["isLoggedIn"] = true;
 					Session["currentUser"] = attemptedName;
 					Session["userType"] = "employee";
 					Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
+					//Logs the signin and whether the user was an admin or not
 					if (Convert.ToBoolean(Session["userIsAdmin"]))
 					{
 						customLogging.newEntry("Admin " + attemptedName + " logged in");
@@ -40,6 +41,7 @@ namespace mainCoursework
 					{
 						customLogging.newEntry("Employee " + attemptedName + " logged in");
 					}
+					//Redirects to the staff overview page
 					Server.Transfer("~/managerial/staffOverview.aspx", false);
 				}
 				else
