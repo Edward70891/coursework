@@ -10,42 +10,42 @@
 namespace mainCoursework {
     
     
-    public partial class login {
+    public partial class employeeLogin {
         
         /// <summary>
-        /// usernameBox control.
+        /// employeeUsernameBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox usernameBox;
+        protected global::System.Web.UI.WebControls.TextBox employeeUsernameBox;
         
         /// <summary>
-        /// passwordBox control.
+        /// employeePasswordBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox passwordBox;
+        protected global::System.Web.UI.WebControls.TextBox employeePasswordBox;
         
         /// <summary>
-        /// returnLabel control.
+        /// empoyeeLoginReturnLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label returnLabel;
+        protected global::System.Web.UI.WebControls.Label empoyeeLoginReturnLabel;
         
         /// <summary>
-        /// submitCredentialsButton control.
+        /// employeeSubmitCredentialsButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button submitCredentialsButton;
+        protected global::System.Web.UI.WebControls.Button employeeSubmitCredentialsButton;
     }
 }
