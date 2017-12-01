@@ -14,7 +14,7 @@ namespace mainCoursework
         protected void Page_Load(object sender, EventArgs e)
         {
 			//Check if anyone is logged in
-			if (HttpContext.Current.User.Identity.Name == "")
+			if (Convert.ToString(Session["currentUser"]) == "")
 			{
 				// Show no one is logged in
 				usernameLabel.Text = "No user logged in";
@@ -23,15 +23,18 @@ namespace mainCoursework
 			else
 			{
 				//Show who is logged in and make sure the sign out button is visible
-				usernameLabel.Text = "Welcome, " + HttpContext.Current.User.Identity.Name + "!";
+				usernameLabel.Text = "Welcome, " + Session["currentUser"] + "!";
 				signOut.Visible = true;
 			}
 		}
 
 		protected void signOut_Click(object sender, EventArgs e)
 		{
-			FormsAuthentication.SignOut();
-			FormsAuthentication.RedirectToLoginPage();
+			Session["isLoggedIn"] = false;
+			Session["currentUser"] = "";
+			Session["userIsAdmin"] = false;
+			Session["userType"] = "";
+			Server.Transfer("~/default.aspx", false);
 		}
 	}
 }

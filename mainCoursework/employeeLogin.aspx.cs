@@ -24,21 +24,21 @@ namespace mainCoursework
 			string attemptedName = employeeUsernameBox.Text;
 			using (var checkCredentials = new defaultDataSetTableAdapters.employeesTableAdapter())
 			{
-				//Runs if a user with the given credentials exists
-				if (checkCredentials.loginCheck(attemptedName, employeePasswordBox.Text) != null)
+				var loginCheck = checkCredentials.loginCheck(attemptedName, employeePasswordBox.Text);
+				if (loginCheck != null)
 				{
 					//Signs the user in and logs the signin to the logfile
 					Session["isLoggedIn"] = true;
 					Session["currentUser"] = attemptedName;
 					Session["userType"] = "employee";
-					Session["userIsAdmin"] = true;
-					Server.Transfer("~/mamangerial/staffOverview.aspx", false);
+					Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
 					customLogging.newEntry("Employee " + attemptedName + " logged in");
+					Server.Transfer("~/managerial/staffOverview.aspx", false);
 				}
 				else
 				{
 					//Posts an error and logs the attempted login to the logfile
-					empoyeeLoginReturnLabel.Text = "The Username or Password is incorrect.";
+					employeeLoginReturnLabel.Text = "The Username or Password is incorrect.";
 					customLogging.newEntry("Someone attempted to login as an employee with username '" + attemptedName + "' but the credentials were incorrect");
 				}
 			}

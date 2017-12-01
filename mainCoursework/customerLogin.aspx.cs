@@ -32,8 +32,8 @@ namespace mainCoursework
 					Session["currentUser"] = attemptedName;
 					Session["userType"] = "user";
 					Session["userIsAdmin"] = false;
-					Server.Transfer("~/mamangerial/staffOverview.aspx", false);
-					customLogging.newEntry("User " + attemptedName + " logged in");
+					customLogging.newEntry("Customer " + attemptedName + " logged in");
+					Server.Transfer("~/default.aspx", false);
 				}
 				else
 				{
