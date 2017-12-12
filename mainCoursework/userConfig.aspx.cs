@@ -12,7 +12,10 @@ namespace mainCoursework
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-
+			if (Convert.ToString(Session["userType"]) != "employee")
+			{
+				Server.Transfer("~/default.aspx", false);
+			}
 		}
 
 		private string username;
@@ -27,9 +30,9 @@ namespace mainCoursework
 				//If they're trying to delete something
 				case "deleteUser":
 					//Checks if they're trying to delete the admin account
-					if (username == "admin")
+					if (username == "default")
 					{
-						returnLabel.Text = "You can't delete the admin account!";
+						returnLabel.Text = "You can't delete the default account!";
 						deletingUsersPersistent.deleting = false;
 					}
 

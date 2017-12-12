@@ -8,8 +8,9 @@
 	<asp:GridView ID="usersDisplayTable" runat="server" AutoGenerateColumns="False" DataSourceID="usersDataSource" EmptyDataText="There are no data records to display." onrowcommand="usersDisplayTable_RowCommand">
 		<Columns>
 			<asp:BoundField DataField="username" HeaderText="User Name" SortExpression="username" />
-			<asp:BoundField DataField="clearanceLevel" HeaderText="Access Level" SortExpression="clearanceLevel" />
-			<asp:BoundField DataField="creator" HeaderText="Created By" />
+			<asp:BoundField DataField="forename" HeaderText="Forename" />
+			<asp:BoundField DataField="surname" HeaderText="Surname" />
+			<asp:CheckBoxField DataField="admin" HeaderText="Admin" />
 			<asp:TemplateField>
 				<ItemTemplate>
 					<asp:Button ID="deleteButton" ButtonType="Button" CommandName="deleteUser" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Delete" runat="server" />
@@ -24,7 +25,7 @@
 	<asp:TextBox ID="confirmPassword" runat="server" TextMode="Password" placeholder="Confirm Password"></asp:TextBox>
 	<br />
 	<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
-	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT [username], [clearanceLevel], [creator] FROM [users]"></asp:AccessDataSource>
+	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT * FROM [customers]"></asp:AccessDataSource>
 	<br />
 	<br />
 	Register a New User:<br />

@@ -42,7 +42,7 @@ namespace mainCoursework
 						customLogging.newEntry("Employee " + attemptedName + " logged in");
 					}
 					//Redirects to the staff overview page
-					Server.Transfer("~/managerial/staffOverview.aspx", false);
+					Server.Transfer("~/staffOverview.aspx", false);
 				}
 				else
 				{

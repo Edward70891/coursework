@@ -19,12 +19,14 @@ namespace mainCoursework
 				// Show no one is logged in
 				usernameLabel.Text = "No user logged in";
 				signOut.Visible = false;
+				employeeIn.Visible = true;
 			}
 			else
 			{
 				//Show who is logged in and make sure the sign out button is visible
 				usernameLabel.Text = "Welcome, " + Session["currentUser"] + "!";
 				signOut.Visible = true;
+				employeeIn.Visible = false;
 			}
 		}
 
@@ -35,6 +37,11 @@ namespace mainCoursework
 			Session["userIsAdmin"] = false;
 			Session["userType"] = "";
 			Server.Transfer("~/default.aspx", false);
+		}
+
+		protected void employeeIn_Click(object sender, EventArgs e)
+		{
+			Server.Transfer("~/employeeLogin.aspx", false);
 		}
 	}
 }

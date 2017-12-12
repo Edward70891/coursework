@@ -53,7 +53,8 @@
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/overview.aspx">Overview</a></li>
                         <li><a runat="server" href="~/products.aspx">Products</a></li>
-						<li><a runat="server" href="~/managerial/userConfig.aspx">Config</a></li>
+						<li><a runat="server" href="~/userConfig.aspx">Config</a></li>
+						<li><a runat="server" href="~/customerLogin.aspx">Login</a></li>
                     </ul>
                 </div>
             </div>
@@ -66,6 +67,7 @@
                 <p>&copy; <%: DateTime.Now.Year %></p>
 				<asp:Label ID="usernameLabel" runat="server" Text=""></asp:Label>
 				<asp:Button ID="signOut" runat="server" Text="Sign Out" OnClick="signOut_Click" />
+				<asp:Button ID="employeeIn" runat="server" Text="Employee Log In" OnClick="employeeIn_Click" />
             </footer>
         </div>
 

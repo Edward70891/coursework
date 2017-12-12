@@ -135,7 +135,7 @@
     <Content Include="App_Data\main.accdb" />
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
-    <Content Include="managerial\userConfig.aspx" />
+    <Content Include="userConfig.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -161,8 +161,8 @@
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="employeeLogin.aspx" />
-    <Content Include="managerial\staffOverview.aspx" />
-    <Content Include="managerial\productsConfig.aspx" />
+    <Content Include="staffOverview.aspx" />
+    <Content Include="productsConfig.aspx" />
     <Content Include="registerCustomer.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -216,11 +216,11 @@
     <Compile Include="customerLogin.aspx.designer.cs">
       <DependentUpon>customerLogin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="managerial\userConfig.aspx.cs">
+    <Compile Include="userConfig.aspx.cs">
       <DependentUpon>userConfig.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="managerial\userConfig.aspx.designer.cs">
+    <Compile Include="userConfig.aspx.designer.cs">
       <DependentUpon>userConfig.aspx</DependentUpon>
     </Compile>
     <Compile Include="defaultDataSet.Designer.cs">
@@ -238,18 +238,18 @@
     <Compile Include="employeeLogin.aspx.designer.cs">
       <DependentUpon>employeeLogin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="managerial\staffOverview.aspx.cs">
+    <Compile Include="staffOverview.aspx.cs">
       <DependentUpon>staffOverview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="managerial\staffOverview.aspx.designer.cs">
+    <Compile Include="staffOverview.aspx.designer.cs">
       <DependentUpon>staffOverview.aspx</DependentUpon>
     </Compile>
-    <Compile Include="managerial\productsConfig.aspx.cs">
+    <Compile Include="productsConfig.aspx.cs">
       <DependentUpon>productsConfig.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="managerial\productsConfig.aspx.designer.cs">
+    <Compile Include="productsConfig.aspx.designer.cs">
       <DependentUpon>productsConfig.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

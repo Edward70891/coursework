@@ -15,8 +15,11 @@ namespace mainCoursework
 		private defaultDataSetTableAdapters.productsTableAdapter productQueryTable = new defaultDataSetTableAdapters.productsTableAdapter();
 
 		protected void Page_Load(object sender, EventArgs e)
-        {
-            
+		{
+			if (Convert.ToString(Session["userType"]) != "employee")
+			{
+				Server.Transfer("~default.aspx", true);
+			}
         }
 
 		protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -52,39 +55,39 @@ namespace mainCoursework
 
 		//Adding products
         protected void productAddButton_Click(object sender, EventArgs e)
-        {
-			////A while loop that is broken at the end or prematurely if conditions are not met
-   //         do
-   //         {
-   //             //Check and format the name for both display and storage/reference purposes
-   //             string displayName = productNameBox.Text;
-   //             string productName = displayName;
-   //             TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
-   //             productName = cultInfo.ToTitleCase(productName);
-   //             productName = productName.Replace(" ", "");
-			//	productName = char.ToLower(productName[0]) + productName.Substring(1);
-			//	if (productName.All(Char.IsLetterOrDigit) == false)
-			//	{
-			//		returnMessage.Text = "Please only use numbers and letters in the product name!";
-			//		break;
-			//	}
+		{
+			//A while loop that is broken at the end or prematurely if conditions are not met
+			do
+			{
+				//Check and format the name for both display and storage/reference purposes
+				string displayName = productNameBox.Text;
+				string productName = displayName;
+				TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
+				productName = cultInfo.ToTitleCase(productName);
+				productName = productName.Replace(" ", "");
+				productName = char.ToLower(productName[0]) + productName.Substring(1);
+				if (productName.All(Char.IsLetterOrDigit) == false)
+				{
+					returnMessage.Text = "Please only use numbers and letters in the product name!";
+					break;
+				}
 
-			//	//Check and format the price to ensure 2dp accuracy and only digits content
-			//	double price = Convert.ToDouble(productPrice.Text);
-   //             if (((price * 100) % 1.0) != 0)
-   //             {
-			//		returnMessage.Text = "Please input prices to two decimal places!";
-			//		break;
-			//	}
+				//Check and format the price to ensure 2dp accuracy and only digits content
+				double price = Convert.ToDouble(productPrice.Text);
+				if (((price * 100) % 1.0) != 0)
+				{
+					returnMessage.Text = "Please input prices to two decimal places!";
+					break;
+				}
 
-			//	//Returns the the product has been created then creates it and logs it and refreshes the table
-			//	returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
-			//	productQueryTable.newProduct(productName, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, HttpContext.Current.User.Identity.Name);
-			//	customLogging.newEntry("The product " + displayName + " was created");
-			//	productsTable.DataBind();
-   //         } while (false) ;
-        }
-    }
+				//Returns the the product has been created then creates it and logs it and refreshes the table
+				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
+				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), "", bandBox.Text, descriptionBox.Text);
+				customLogging.newEntry("The product " + displayName + " was created");
+				productsTable.DataBind();
+			} while (false);
+		}
+	}
 
 	static class deletingProductsPersistent
 	{

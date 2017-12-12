@@ -11,7 +11,10 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-        }
+			if (Convert.ToString(Session["userType"]) != "employee")
+			{
+				Server.Transfer("~default.aspx", true);
+			}
+		}
     }
 }
