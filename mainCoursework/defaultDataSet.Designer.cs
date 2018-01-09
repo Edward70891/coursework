@@ -2989,7 +2989,6 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             tableMapping.DataSetTable = "customers";
             tableMapping.ColumnMappings.Add("username", "username");
             tableMapping.ColumnMappings.Add("password", "password");
-            tableMapping.ColumnMappings.Add("phoneNumber", "phoneNumber");
             tableMapping.ColumnMappings.Add("addressLine1", "addressLine1");
             tableMapping.ColumnMappings.Add("adressLine2", "adressLine2");
             tableMapping.ColumnMappings.Add("city", "city");
@@ -3006,8 +3005,8 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             this._adapter.InsertCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
             this._adapter.InsertCommand.CommandText = "INSERT INTO `customers` (`username`, `password`, `forename`, `surname`, `addressL" +
-                "ine1`, `adressLine2`, `city`, `country`, `postCode`, `phoneNumber`) VALUES (?, ?" +
-                ", ?, ?, ?, ?, ?, ?, ?, ?)";
+                "ine1`, `adressLine2`, `city`, `country`, `postCode`) VALUES (?, ?, ?, ?, ?, ?, ?" +
+                ", ?, ?)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("username", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "username", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("password", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "password", global::System.Data.DataRowVersion.Current, false, null));
@@ -3018,12 +3017,11 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("city", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "city", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("country", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "country", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("postCode", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "postCode", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("phoneNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "phoneNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE `customers` SET `username` = ?, `password` = ?, `forename` = ?, `surname` " +
                 "= ?, `addressLine1` = ?, `adressLine2` = ?, `city` = ?, `country` = ?, `postCode" +
-                "` = ?, `phoneNumber` = ? WHERE ((`username` = ?))";
+                "` = ? WHERE ((`username` = ?))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("username", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "username", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("password", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "password", global::System.Data.DataRowVersion.Current, false, null));
@@ -3034,7 +3032,6 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("city", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "city", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("country", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "country", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("postCode", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "postCode", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("phoneNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "phoneNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_username", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "username", global::System.Data.DataRowVersion.Original, false, null));
         }
         
@@ -3051,7 +3048,8 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[5];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT        customers.*\r\nFROM            customers";
+            this._commandCollection[0].CommandText = "SELECT username, [password], forename, surname, addressLine1, adressLine2, city, " +
+                "country, postCode FROM customers";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[1].Connection = this.Connection;
@@ -3085,7 +3083,7 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             this._commandCollection[4].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("city", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "city", global::System.Data.DataRowVersion.Current, false, null));
             this._commandCollection[4].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("country", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "country", global::System.Data.DataRowVersion.Current, false, null));
             this._commandCollection[4].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("postCode", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "postCode", global::System.Data.DataRowVersion.Current, false, null));
-            this._commandCollection[4].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("phoneNumber", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "phoneNumber", global::System.Data.DataRowVersion.Current, false, null));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("phoneNumber", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "phoneNumber", global::System.Data.DataRowVersion.Current, false, null));
             this._commandCollection[4].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("forename", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "forename", global::System.Data.DataRowVersion.Current, false, null));
             this._commandCollection[4].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("surname", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "surname", global::System.Data.DataRowVersion.Current, false, null));
         }
@@ -3174,7 +3172,7 @@ namespace mainCoursework.defaultDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string username, string password, string forename, string surname, string addressLine1, string adressLine2, string city, string country, string postCode, global::System.Nullable<int> phoneNumber) {
+        public virtual int Insert(string username, string password, string forename, string surname, string addressLine1, string adressLine2, string city, string country, string postCode) {
             if ((username == null)) {
                 throw new global::System.ArgumentNullException("username");
             }
@@ -3229,12 +3227,6 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[8].Value = ((string)(postCode));
             }
-            if ((phoneNumber.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[9].Value = ((int)(phoneNumber.Value));
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[9].Value = global::System.DBNull.Value;
-            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -3255,7 +3247,7 @@ namespace mainCoursework.defaultDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string username, string password, string forename, string surname, string addressLine1, string adressLine2, string city, string country, string postCode, global::System.Nullable<int> phoneNumber, string Original_username) {
+        public virtual int Update(string username, string password, string forename, string surname, string addressLine1, string adressLine2, string city, string country, string postCode, string Original_username) {
             if ((username == null)) {
                 throw new global::System.ArgumentNullException("username");
             }
@@ -3310,17 +3302,11 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(postCode));
             }
-            if ((phoneNumber.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((int)(phoneNumber.Value));
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[9].Value = global::System.DBNull.Value;
-            }
             if ((Original_username == null)) {
                 throw new global::System.ArgumentNullException("Original_username");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(Original_username));
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_username));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -3342,8 +3328,8 @@ namespace mainCoursework.defaultDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string password, string forename, string surname, string addressLine1, string adressLine2, string city, string country, string postCode, global::System.Nullable<int> phoneNumber, string Original_username) {
-            return this.Update(Original_username, password, forename, surname, addressLine1, adressLine2, city, country, postCode, phoneNumber, Original_username);
+        public virtual int Update(string password, string forename, string surname, string addressLine1, string adressLine2, string city, string country, string postCode, string Original_username) {
+            return this.Update(Original_username, password, forename, surname, addressLine1, adressLine2, city, country, postCode, Original_username);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3454,7 +3440,7 @@ namespace mainCoursework.defaultDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int newCustomer(string username, string password, string addressLine1, string adressLine2, string city, string country, string postCode, global::System.Nullable<int> phoneNumber, string forename, string surname) {
+        public virtual int newCustomer(string username, string password, string addressLine1, string adressLine2, string city, string country, string postCode, string phoneNumber, string forename, string surname) {
             global::System.Data.OleDb.OleDbCommand command = this.CommandCollection[4];
             if ((username == null)) {
                 throw new global::System.ArgumentNullException("username");
@@ -3498,11 +3484,11 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             else {
                 command.Parameters[6].Value = ((string)(postCode));
             }
-            if ((phoneNumber.HasValue == true)) {
-                command.Parameters[7].Value = ((int)(phoneNumber.Value));
+            if ((phoneNumber == null)) {
+                command.Parameters[7].Value = global::System.DBNull.Value;
             }
             else {
-                command.Parameters[7].Value = global::System.DBNull.Value;
+                command.Parameters[7].Value = ((string)(phoneNumber));
             }
             if ((forename == null)) {
                 command.Parameters[8].Value = global::System.DBNull.Value;
@@ -3719,8 +3705,8 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             this._commandCollection[2].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("username", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "username", global::System.Data.DataRowVersion.Original, false, null));
             this._commandCollection[3] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[3].Connection = this.Connection;
-            this._commandCollection[3].CommandText = "SELECT        admin, forename\r\nFROM            employees\r\nGROUP BY username, [pas" +
-                "sword], admin, forename\r\nHAVING        (username = ?) AND ([password] = ?)";
+            this._commandCollection[3].CommandText = "SELECT        admin\r\nFROM            employees\r\nGROUP BY username, [password], ad" +
+                "min\r\nHAVING        (username = ?) AND ([password] = ?)";
             this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[3].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("username", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "username", global::System.Data.DataRowVersion.Current, false, null));
             this._commandCollection[3].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("password", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "password", global::System.Data.DataRowVersion.Current, false, null));

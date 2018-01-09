@@ -31,6 +31,24 @@ namespace mainCoursework {
         protected global::System.Web.UI.WebControls.TextBox passwordBox;
         
         /// <summary>
+        /// confirmPasswordBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox confirmPasswordBox;
+        
+        /// <summary>
+        /// passwordBoxReturn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label passwordBoxReturn;
+        
+        /// <summary>
         /// forenameBox control.
         /// </summary>
         /// <remarks>
@@ -47,15 +65,6 @@ namespace mainCoursework {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox surnameBox;
-        
-        /// <summary>
-        /// confirmPasswordBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox confirmPasswordBox;
         
         /// <summary>
         /// address1Box control.
@@ -94,12 +103,30 @@ namespace mainCoursework {
         protected global::System.Web.UI.WebControls.TextBox postcodeBox;
         
         /// <summary>
-        /// DropDownList1 control.
+        /// countryDropdown control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList1;
+        protected global::System.Web.UI.WebControls.DropDownList countryDropdown;
+        
+        /// <summary>
+        /// phoneNumberBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox phoneNumberBox;
+        
+        /// <summary>
+        /// registerButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button registerButton;
     }
 }

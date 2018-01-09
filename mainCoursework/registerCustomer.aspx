@@ -6,14 +6,13 @@
 		<asp:TextBox ID="usernameBox" runat="server" placeholder ="Username"></asp:TextBox>
 	</p>
 	<p>
-		<asp:TextBox ID="passwordBox" runat="server" placeholder ="Password"></asp:TextBox>
+		<asp:TextBox ID="passwordBox" runat="server" placeholder ="Password" TextMode="Password" OnTextChanged="passwordBox_TextChanged"></asp:TextBox>
+		<asp:TextBox ID="confirmPasswordBox" runat="server" placeholder ="Confirm Password" TextMode="Password" OnTextChanged="confirmPasswordBox_TextChanged"></asp:TextBox>
+		<asp:Label ID="passwordBoxReturn" runat="server" ForeColor="Red" Text=""></asp:Label>
 	</p>
 	<p>
 		<asp:TextBox ID="forenameBox" runat="server" placeholder ="First Name(s)"></asp:TextBox>
 		<asp:TextBox ID="surnameBox" runat="server" placeholder ="Last Name"></asp:TextBox>
-	<p>
-		<asp:TextBox ID="confirmPasswordBox" runat="server" placeholder ="Confirm Password"></asp:TextBox>
-	</p>
 	<p>
 		<asp:TextBox ID="address1Box" runat="server" placeholder ="Address Line 1"></asp:TextBox>
 	</p>
@@ -26,7 +25,7 @@
 	<p>
 		<asp:TextBox ID="postcodeBox" runat="server" placeholder ="Postcode"></asp:TextBox>
 	</p>
-	<asp:DropDownList ID="DropDownList1" runat="server">
+	<asp:DropDownList ID="countryDropdown" runat="server">
 		<asp:ListItem value="Not Given"> Please Select A Country</asp:ListItem>
 		<asp:ListItem value="Afghanistan"> Afghanistan </asp:ListItem>
         <asp:ListItem value="Albania"> Albania </asp:ListItem>
@@ -272,4 +271,11 @@
         <asp:ListItem value="Zambia"> Zambia </asp:ListItem>
         <asp:ListItem value="Zimbabwe"> Zimbabwe </asp:ListItem>
 	</asp:DropDownList>
+	<p></p>
+	<p>
+		<asp:TextBox ID="phoneNumberBox" runat="server" placeholder="Phone Number"></asp:TextBox>
+	</p>
+	<p>
+		<asp:Button ID="registerButton" runat="server" Text="Register" OnClick="registerButton_Click" />
+	</p>
 </asp:Content>
