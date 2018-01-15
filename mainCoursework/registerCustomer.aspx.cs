@@ -19,38 +19,47 @@ namespace mainCoursework
 		{
 			if (passwordBox.Text == confirmPasswordBox.Text)
 			{
-				try
+				int dump;
+				if (int.TryParse(phoneNumberBox.Text, out dump))
 				{
-					customersQueryTable.newCustomer(usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+					try
+					{
+						customersQueryTable.newCustomer(usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+					}
+					catch
+					{
+						//Catch database exceptions here
+					}
 				}
-				catch
+				else
 				{
-					//Catch database exceptions and problems with phone number here
+					phoneNumReturn.Text = "The phone number must be digits only!";
 				}
+			}
+			else
+			{
+				confirmPasswordBox.Text = "";
+				passwordBoxReturn.Text = "The passwords don't match!";
 			}
 		}
 
 		protected void confirmPasswordBox_TextChanged(object sender, EventArgs e)
 		{
-			passwordsMatch();
+			passwordsMatchCheck();
 		}
 
 		protected void passwordBox_TextChanged(object sender, EventArgs e)
 		{
-			passwordsMatch();
+			passwordsMatchCheck();
 		}
 
-		//Fix me later!
-		private void passwordsMatch()
+		private void passwordsMatchCheck()
 		{
-			//if (passwordBox.Text != confirmPasswordBox.Text)
-			//{
-			//	passwordBoxReturn.Text = "The Passwords do not Match!";
-			//}
-			//else
-			//{
-			//	passwordBoxReturn.Text = "";
-			//}
+			if (passwordBox.Text != confirmPasswordBox.Text)
+			{
+				confirmPasswordBox.Text = "";
+				passwordBoxReturn.Text = "The passwords don't match!";
+			}
 		}
 	}
 }

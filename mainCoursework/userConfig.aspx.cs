@@ -16,6 +16,12 @@ namespace mainCoursework
 			{
 				Server.Transfer("~/default.aspx", false);
 			}
+			if (Convert.ToString(Session["userIsAdmin"]) != "false")
+			{
+				adminCheckBox.Visible = false;
+				passwordBox.Visible = false;
+				confirmPassword.Visible = false;
+			}
 		}
 
 		private string username;
@@ -78,7 +84,7 @@ namespace mainCoursework
 							employeeQueryTable.changePassword(passwordBox.Text, username);
 							//Posts that the password has been changed and logs it
 							customLogging.newEntry("User " + username + "'s password changed");
-							returnLabel.Text = "User " + username + "'s password was changed to " + passwordBox.Text + ".";
+							returnLabel.Text = "User " + username + "'s password was changed to '" + passwordBox.Text + "'.";
 						}
 						else
 						{

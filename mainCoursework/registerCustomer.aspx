@@ -274,6 +274,7 @@
 	<p></p>
 	<p>
 		<asp:TextBox ID="phoneNumberBox" runat="server" placeholder="Phone Number"></asp:TextBox>
+		<asp:Label ID="phoneNumReturn" runat="server" Text=""></asp:Label>
 	</p>
 	<p>
 		<asp:Button ID="registerButton" runat="server" Text="Register" OnClick="registerButton_Click" />

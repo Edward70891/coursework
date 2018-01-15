@@ -55,7 +55,9 @@
 		</asp:DropDownList>
         <br />
 		<asp:TextBox ID="bandBox" runat="server" placeholder="Band Name"></asp:TextBox>
+		<br />
 		<asp:TextBox ID="descriptionBox" runat="server" Rows="4" placeholder="Product Description"></asp:TextBox>
+        <asp:FileUpload ID="imageUpload" runat="server" />
         <br />
         <p>
 			<asp:Button ID="productAddButton" runat="server" Text="Add Product" OnClick="productAddButton_Click" />

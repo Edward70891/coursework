@@ -18,7 +18,7 @@ namespace mainCoursework
 		{
 			if (Convert.ToString(Session["userType"]) != "employee")
 			{
-				Server.Transfer("~default.aspx", true);
+				Server.Transfer("~/default.aspx", true);
 			}
         }
 
@@ -86,6 +86,11 @@ namespace mainCoursework
 				customLogging.newEntry("The product " + displayName + " was created");
 				productsTable.DataBind();
 			} while (false);
+		}
+
+		protected void addImageButton_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 

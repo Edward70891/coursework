@@ -11,7 +11,7 @@
 			<asp:BoundField DataField="forename" HeaderText="Forename" />
 			<asp:BoundField DataField="surname" HeaderText="Surname" />
 			<asp:CheckBoxField DataField="admin" HeaderText="Admin" />
-			<asp:TemplateField>
+			<asp:TemplateField Visible="True">
 				<ItemTemplate>
 					<asp:Button ID="deleteButton" ButtonType="Button" CommandName="deleteUser" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Delete" runat="server" />
 					<asp:Button ID="passwordChange" ButtonType="Button" CommandName="changeUserPassword" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Change Password" runat="server" />
@@ -25,7 +25,7 @@
 	<asp:TextBox ID="confirmPassword" runat="server" TextMode="Password" placeholder="Confirm Password"></asp:TextBox>
 	<br />
 	<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
-	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT * FROM [customers]"></asp:AccessDataSource>
+	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT * FROM [employees]"></asp:AccessDataSource>
 	<br />
 	<br />
 	Register a New User:<br />
