@@ -12,15 +12,23 @@ namespace mainCoursework
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Checks if the user is an employee, and if not redirects them to the default page
 			if (Convert.ToString(Session["userType"]) != "employee")
 			{
 				Server.Transfer("~/default.aspx", false);
 			}
+			//Checks if they're an admin and if they're not, hides the admin related checkboxes and ui elements (otherwise shows them)
 			if (Convert.ToString(Session["userIsAdmin"]) != "false")
 			{
 				adminCheckBox.Visible = false;
 				passwordBox.Visible = false;
 				confirmPassword.Visible = false;
+			}
+			else
+			{
+				adminCheckBox.Visible = true;
+				passwordBox.Visible = true;
+				confirmPassword.Visible = true;
 			}
 		}
 
@@ -110,7 +118,7 @@ namespace mainCoursework
 
 		}
 
-		//Custom class for managing deletions outside of the button click event
+		//Custom class for storing deletion data outside the button_click event to facilitate clicking twice to delete
 		static class deletingUsersPersistent
 		{
 			public static string username;

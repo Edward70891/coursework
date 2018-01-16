@@ -56,7 +56,7 @@ namespace mainCoursework
 		//Adding products
         protected void productAddButton_Click(object sender, EventArgs e)
 		{
-			//A while loop that is broken at the end or prematurely if conditions are not met
+			//A while loop that is broken at the end if conditions are met or prematurely if conditions are not met
 			do
 			{
 				//Check and format the name for both display and storage/reference purposes
@@ -78,6 +78,33 @@ namespace mainCoursework
 				{
 					returnMessage.Text = "Please input prices to two decimal places!";
 					break;
+				}
+
+				//Checks the user has selected a file
+				if (imageUpload.HasFile)
+				{
+					try
+					{
+						//Checks the file is an image and is under 100MB
+						if (imageUpload.PostedFile.ContentType == "image" && imageUpload.PostedFile.ContentLength < 102400)
+						{
+
+						}
+						else
+						{
+							returnMessage.Text = "The selected file must be an image under 1MB";
+						}
+					}
+					//Catches any exceptions that might occur and posts them; this is necessary because this procedure is likely to be error ridden
+					catch (Exception except)
+					{
+						returnMessage.Text = "File Upload failed with error " + except.Message + ", please contact a developer";
+						break;
+					}
+				}
+				else
+				{
+					returnMessage.Text = "You must upload an image";
 				}
 
 				//Returns the the product has been created then creates it and logs it and refreshes the table

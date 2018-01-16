@@ -5,6 +5,7 @@ using System.IO;
 
 namespace commonClasses
 {
+	//Generic logging of events throughout the program
 	public class customLogging
 	{
 		//Logs the creation of a new session when the program starts
@@ -56,6 +57,25 @@ namespace commonClasses
 		{
 			string output = "[" + Convert.ToString(DateTime.Now) + "]";
 			return output;
+		}
+	}
+
+	public class SQLSanitization
+	{
+		//Returns true if any inputs are detected to have brackets, apostrophes, equals signs or hyphons in them
+		public static bool sanitizeCheck(string[] input)
+		{
+			bool isClean = true;
+			//Goes through all strings in the array
+			foreach (string i in input)
+			{
+				//If any strings contain illegal characters, sets the isclean variable to false
+				if (i.Contains("(") || i.Contains(")") || i.Contains("'") || i.Contains("=") || i.Contains("-"))
+				{
+					isClean = false;
+				}
+			}
+			return isClean;
 		}
 	}
 }
