@@ -62,18 +62,29 @@ namespace commonClasses
 
 	public class SQLSanitization
 	{
-		//Returns true if any inputs are detected to have brackets, apostrophes, equals signs or hyphons in them
+		/// <summary>
+		/// A constant error message for easy consistency
+		/// </summary>
+		public const string sanitizeErrorMessage = "The(, ), +, -, = and ' characters are not valid in ANY fields";
+
+		/// <summary>
+		/// Check if the code contains (, ), +, -, = or '
+		/// </summary>
+		/// <param name="input">An array containing all strings to be checked</param>
+		/// <returns>True if clean, false if dirty (contains SQL characters)</returns>
 		public static bool sanitizeCheck(string[] input)
 		{
 			bool isClean = true;
 			//Goes through all strings in the array
 			foreach (string i in input)
 			{
-				//If any strings contain illegal characters, sets the isclean variable to false
-				if (i.Contains("(") || i.Contains(")") || i.Contains("'") || i.Contains("=") || i.Contains("-"))
+				//If any strings contain illegal characters, sets the isclean variable to false and skips the rest of the loops
+				if (i.Contains("(") || i.Contains(")") || i.Contains("'") || i.Contains("=") || i.Contains("-") || i.Contains("+"))
 				{
 					isClean = false;
+					break;
 				}
+
 			}
 			return isClean;
 		}

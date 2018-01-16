@@ -278,5 +278,6 @@
 	</p>
 	<p>
 		<asp:Button ID="registerButton" runat="server" Text="Register" OnClick="registerButton_Click" />
+		<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
 	</p>
 </asp:Content>

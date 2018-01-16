@@ -35,7 +35,7 @@
 	<br />
 	<asp:TextBox ID="submittedConfirmPasswordBox" runat="server" TextMode="Password" placeholder ="Confirm Password"></asp:TextBox>
 	<br />
-	<asp:CheckBox ID="adminCheckBox" runat="server" Text="Is admin?" />
+	<asp:CheckBox ID="adminCheckBox" runat="server" Text="Admin" />
 	<br />
 	<asp:Button ID="newUser" runat="server" Text="Register New User" OnClick="newUser_Click" />
 	<asp:Label ID="registerReturn" runat="server" Text=""></asp:Label>

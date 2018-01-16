@@ -22,34 +22,43 @@ namespace mainCoursework
 		{
 			//Pull the given username into a variable
 			string attemptedName = employeeUsernameBox.Text;
-			using (var checkCredentials = new defaultDataSetTableAdapters.employeesTableAdapter())
+			//Check the inputs are clean of SQL injection
+			if (SQLSanitization.sanitizeCheck(new string[] { attemptedName, employeePasswordBox.Text }))
 			{
-				var loginCheck = checkCredentials.loginCheck(attemptedName, employeePasswordBox.Text);
-				if (loginCheck != null)
+				//Initialize the database connection
+				using (var checkCredentials = new defaultDataSetTableAdapters.employeesTableAdapter())
 				{
-					//Sets relevant Session information so other pages can determine information about the logged session
-					Session["isLoggedIn"] = true;
-					Session["currentUser"] = attemptedName;
-					Session["userType"] = "employee";
-					Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
-					//Logs the signin and whether the user was an admin or not
-					if (Convert.ToBoolean(Session["userIsAdmin"]))
+					var loginCheck = checkCredentials.loginCheck(attemptedName, employeePasswordBox.Text);
+					if (loginCheck != null)
 					{
-						customLogging.newEntry("Admin " + attemptedName + " logged in");
+						//Sets relevant Session information so other pages can determine information about the logged session
+						Session["isLoggedIn"] = true;
+						Session["currentUser"] = attemptedName;
+						Session["userType"] = "employee";
+						Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
+						//Logs the signin and whether the user was an admin or not
+						if (Convert.ToBoolean(Session["userIsAdmin"]))
+						{
+							customLogging.newEntry("Admin " + attemptedName + " logged in");
+						}
+						else
+						{
+							customLogging.newEntry("Employee " + attemptedName + " logged in");
+						}
+						//Redirects to the staff overview page
+						Server.Transfer("~/staffOverview.aspx", false);
 					}
 					else
 					{
-						customLogging.newEntry("Employee " + attemptedName + " logged in");
+						//Posts an error and logs the attempted login to the logfile
+						employeeLoginReturnLabel.Text = "The Username or Password is incorrect.";
+						customLogging.newEntry("Someone attempted to login as an employee with username '" + attemptedName + "' but the credentials were incorrect");
 					}
-					//Redirects to the staff overview page
-					Server.Transfer("~/staffOverview.aspx", false);
 				}
-				else
-				{
-					//Posts an error and logs the attempted login to the logfile
-					employeeLoginReturnLabel.Text = "The Username or Password is incorrect.";
-					customLogging.newEntry("Someone attempted to login as an employee with username '" + attemptedName + "' but the credentials were incorrect");
-				}
+			}
+			else
+			{
+				employeeLoginReturnLabel.Text = SQLSanitization.sanitizeErrorMessage;
 			}
 		}
     }

@@ -56,7 +56,7 @@ namespace mainCoursework
 		//Adding products
         protected void productAddButton_Click(object sender, EventArgs e)
 		{
-			//A while loop that is broken at the end if conditions are met or prematurely if conditions are not met
+			//A dowhile loop that is broken at the end if conditions are met or prematurely if conditions are not met
 			do
 			{
 				//Check and format the name for both display and storage/reference purposes
@@ -80,6 +80,12 @@ namespace mainCoursework
 					break;
 				}
 
+				if (SQLSanitization.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
+				{
+					returnMessage.Text = SQLSanitization.sanitizeErrorMessage;
+					break;
+				}
+
 				//Checks the user has selected a file
 				if (imageUpload.HasFile)
 				{
@@ -88,11 +94,12 @@ namespace mainCoursework
 						//Checks the file is an image and is under 100MB
 						if (imageUpload.PostedFile.ContentType == "image" && imageUpload.PostedFile.ContentLength < 102400)
 						{
-
+							//Image adding code goes here
 						}
 						else
 						{
 							returnMessage.Text = "The selected file must be an image under 1MB";
+							break;
 						}
 					}
 					//Catches any exceptions that might occur and posts them; this is necessary because this procedure is likely to be error ridden
@@ -105,6 +112,7 @@ namespace mainCoursework
 				else
 				{
 					returnMessage.Text = "You must upload an image";
+					break;
 				}
 
 				//Returns the the product has been created then creates it and logs it and refreshes the table

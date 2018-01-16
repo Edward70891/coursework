@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using commonClasses;
 
 namespace mainCoursework
 {
@@ -22,13 +23,22 @@ namespace mainCoursework
 				int dump;
 				if (int.TryParse(phoneNumberBox.Text, out dump))
 				{
-					try
+					if (SQLSanitization.sanitizeCheck(new string[] { usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text }))
 					{
-						customersQueryTable.newCustomer(usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+						try
+						{
+							customersQueryTable.newCustomer(usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+							customLogging.newEntry("Someone registered the user " + usernameBox.Text);
+							returnLabel.Text = "User " + usernameBox.Text + " created";
+						}
+						catch (Exception except)
+						{
+							returnLabel.Text = "Registration failed, reason: " + except.Message;
+						}
 					}
-					catch
+					else
 					{
-						//Catch database exceptions here
+						returnLabel.Text = SQLSanitization.sanitizeErrorMessage;
 					}
 				}
 				else
@@ -36,13 +46,14 @@ namespace mainCoursework
 					phoneNumReturn.Text = "The phone number must be digits only!";
 				}
 			}
-			else
-			{
-				confirmPasswordBox.Text = "";
-				passwordBoxReturn.Text = "The passwords don't match!";
-			}
+			//else
+			//{
+			//	confirmPasswordBox.Text = "";
+			//	passwordBoxReturn.Text = "The passwords don't match!";
+			//}
 		}
 
+		//All the following code checks when either password box is changed if the value are equal and notifies the user if they aren't
 		protected void confirmPasswordBox_TextChanged(object sender, EventArgs e)
 		{
 			passwordsMatchCheck();
@@ -57,7 +68,6 @@ namespace mainCoursework
 		{
 			if (passwordBox.Text != confirmPasswordBox.Text)
 			{
-				confirmPasswordBox.Text = "";
 				passwordBoxReturn.Text = "The passwords don't match!";
 			}
 		}

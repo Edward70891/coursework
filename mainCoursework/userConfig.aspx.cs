@@ -84,30 +84,37 @@ namespace mainCoursework
 					//Disables second click coding
 					deletingUsersPersistent.deleting = false;
 					//Checks there is a value entered in the box
-					if (passwordBox.Text != "" || confirmPassword.Text != "")
+					if (SQLSanitization.sanitizeCheck(new string[] { passwordBox.Text }))
 					{
-						if (passwordBox.Text == confirmPassword.Text)
+						if (passwordBox.Text != "" || confirmPassword.Text != "")
 						{
-							//Changes the password in the DB
-							employeeQueryTable.changePassword(passwordBox.Text, username);
-							//Posts that the password has been changed and logs it
-							customLogging.newEntry("User " + username + "'s password changed");
-							returnLabel.Text = "User " + username + "'s password was changed to '" + passwordBox.Text + "'.";
+							if (passwordBox.Text == confirmPassword.Text)
+							{
+								//Changes the password in the DB
+								employeeQueryTable.changePassword(passwordBox.Text, username);
+								//Posts that the password has been changed and logs it
+								customLogging.newEntry("User " + username + "'s password changed");
+								returnLabel.Text = "User " + username + "'s password was changed to '" + passwordBox.Text + "'.";
+							}
+							else
+							{
+								//Runs if the passwords don't match, notifies the user
+								returnLabel.Text = "The passwords do not match!";
+								System.Threading.Thread.Sleep(750);
+								returnLabel.Text = "";
+							}
 						}
 						else
 						{
-							//Runs if the passwords don't match, notifies the user
-							returnLabel.Text = "The passwords do not match!";
+							//Prompts the user to fill the box
+							returnLabel.Text = "You must fill both boxes!";
 							System.Threading.Thread.Sleep(750);
 							returnLabel.Text = "";
 						}
 					}
 					else
 					{
-						//Prompts the user to fill the box
-						returnLabel.Text = "You must fill both boxes!";
-						System.Threading.Thread.Sleep(750);
-						returnLabel.Text = "";
+						returnLabel.Text = SQLSanitization.sanitizeErrorMessage;
 					}
 					break;
 			}

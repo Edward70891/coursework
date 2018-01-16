@@ -20,27 +20,35 @@ namespace mainCoursework
 
 		protected void submitCustomerCredentialsButton_Click(object sender, EventArgs e)
 		{
-			//Pull the given username into a variable
-			string attemptedName = customerUsernameBox.Text;
-			using (var checkCredentials = new defaultDataSetTableAdapters.customersTableAdapter())
+			//Checks if 
+			if (SQLSanitization.sanitizeCheck(new string[] { customerUsernameBox.Text, customerPasswordBox.Text }))
 			{
-				//Runs if a user with the given credentials exists
-				if (checkCredentials.loginCheck(attemptedName, customerPasswordBox.Text) != null)
+				//Pull the given username into a variable
+				string attemptedName = customerUsernameBox.Text;
+				using (var checkCredentials = new defaultDataSetTableAdapters.customersTableAdapter())
 				{
-					//Signs the user in and logs the signin to the logfile
-					Session["isLoggedIn"] = true;
-					Session["currentUser"] = attemptedName;
-					Session["userType"] = "user";
-					Session["userIsAdmin"] = false;
-					customLogging.newEntry("Customer " + attemptedName + " logged in");
-					Server.Transfer("~/default.aspx", false);
+					//Runs if a user with the given credentials exists
+					if (checkCredentials.loginCheck(attemptedName, customerPasswordBox.Text) != null)
+					{
+						//Signs the user in and logs the signin to the logfile
+						Session["isLoggedIn"] = true;
+						Session["currentUser"] = attemptedName;
+						Session["userType"] = "user";
+						Session["userIsAdmin"] = false;
+						customLogging.newEntry("Customer " + attemptedName + " logged in");
+						Server.Transfer("~/default.aspx", false);
+					}
+					else
+					{
+						//Posts an error and logs the attempted login to the logfile
+						customerLoginReturnLabel.Text = "The Username or Password is incorrect.";
+						customLogging.newEntry("Someone attempted to login as a customer with username '" + attemptedName + "' but the credentials were incorrect");
+					}
 				}
-				else
-				{
-					//Posts an error and logs the attempted login to the logfile
-					customerLoginReturnLabel.Text = "The Username or Password is incorrect.";
-					customLogging.newEntry("Someone attempted to login as a customer with username '" + attemptedName + "' but the credentials were incorrect");
-				}
+			}
+			else
+			{
+				customerLoginReturnLabel.Text = SQLSanitization.sanitizeErrorMessage;
 			}
 		}
 
