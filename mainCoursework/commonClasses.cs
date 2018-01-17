@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data.OleDb;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using System.IO;
 
 namespace commonClasses
@@ -8,7 +13,9 @@ namespace commonClasses
 	//Generic logging of events throughout the program
 	public class customLogging
 	{
-		//Logs the creation of a new session when the program starts
+		/// <summary>
+		/// Logs the creation of a new session
+		/// </summary>
 		public static void newSession()
 		{
 			string result;
@@ -18,18 +25,13 @@ namespace commonClasses
 			writeEntry(result);
 		}
 
-		//Writes a timestamped new entry to the logfile
+		/// <summary>
+		/// Writes a timestamped entry to the logfile
+		/// </summary>
+		/// <param name="entryText">The text that will be written to the logfile</param>
 		public static void newEntry(string entryText)
 		{
-			string result;
-			if (HttpContext.Current.User.Identity.Name == "")
-			{
-				result = generateTimestamp() + " " + entryText;
-			}
-			else
-			{
-				result = generateTimestamp() + " " + entryText + "; Logged user is " + HttpContext.Current.User.Identity.Name;
-			}
+			string result = generateTimestamp() + " " + entryText;
 			writeEntry(entryText);
 		}
 
@@ -60,6 +62,9 @@ namespace commonClasses
 		}
 	}
 
+	/// <summary>
+	/// A small class containing some tools for sanitizing string inputs so SQL injection can't happen
+	/// </summary>
 	public class SQLSanitization
 	{
 		/// <summary>

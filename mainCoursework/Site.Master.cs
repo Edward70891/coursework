@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using commonClasses;
 
 namespace mainCoursework
 {
@@ -36,6 +37,7 @@ namespace mainCoursework
 			Session["currentUser"] = "";
 			Session["userIsAdmin"] = false;
 			Session["userType"] = "";
+			customLogging.newEntry("User logged out");
 			Server.Transfer("~/default.aspx", false);
 		}
 
