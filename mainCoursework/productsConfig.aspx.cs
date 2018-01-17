@@ -10,8 +10,8 @@ using System.Web.UI.WebControls;
 
 namespace mainCoursework
 {
-    public partial class products : System.Web.UI.Page
-    {
+	public partial class products : System.Web.UI.Page
+	{
 		private defaultDataSetTableAdapters.productsTableAdapter productQueryTable = new defaultDataSetTableAdapters.productsTableAdapter();
 
 		protected void Page_Load(object sender, EventArgs e)
@@ -20,7 +20,7 @@ namespace mainCoursework
 			{
 				Server.Transfer("~/default.aspx", true);
 			}
-        }
+		}
 
 		protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)
 		{
@@ -54,7 +54,7 @@ namespace mainCoursework
 		}
 
 		//Adding products
-        protected void productAddButton_Click(object sender, EventArgs e)
+		protected void productAddButton_Click(object sender, EventArgs e)
 		{
 			//A dowhile loop that is broken at the end if conditions are met or prematurely if conditions are not met
 			do
@@ -62,6 +62,7 @@ namespace mainCoursework
 				//Check and format the name for both display and storage/reference purposes
 				string displayName = productNameBox.Text;
 				string productName = displayName;
+				string imagePath;
 				TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
 				productName = cultInfo.ToTitleCase(productName);
 				productName = productName.Replace(" ", "");
@@ -91,16 +92,9 @@ namespace mainCoursework
 				{
 					try
 					{
-						//Checks the file is an image and is under 100MB
-						if (imageUpload.PostedFile.ContentType == "image" && imageUpload.PostedFile.ContentLength < 102400)
-						{
-							//Image adding code goes here
-						}
-						else
-						{
-							returnMessage.Text = "The selected file must be an image under 1MB";
-							break;
-						}
+						string fileName = productName + imageUpload.FileName.Substring(imageUpload.FileName.IndexOf('.'));
+						imagePath = Server.MapPath("~/images/") + fileName;
+						imageUpload.SaveAs(imagePath);
 					}
 					//Catches any exceptions that might occur and posts them; this is necessary because this procedure is likely to be error ridden
 					catch (Exception except)
@@ -117,21 +111,16 @@ namespace mainCoursework
 
 				//Returns the the product has been created then creates it and logs it and refreshes the table
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
-				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), "", bandBox.Text, descriptionBox.Text);
+				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
 				customLogging.newEntry("The product " + displayName + " was created");
 				productsTable.DataBind();
 			} while (false);
 		}
 
-		protected void addImageButton_Click(object sender, EventArgs e)
+		static class deletingProductsPersistent
 		{
-
+			public static string product;
+			public static bool deleting;
 		}
-	}
-
-	static class deletingProductsPersistent
-	{
-		public static string product;
-		public static bool deleting;
 	}
 }

@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 	<div>
 		Products<br />
-		<asp:GridView ID="productsTable" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="productsDataSource" EmptyDataText="There are no data records to display." onrowcommand="productsTable_RowCommand">
+		<asp:GridView ID="productsTable" runat="server" AutoGenerateColumns="False" DataKeyNames="productName" DataSourceID="productsDataSource" EmptyDataText="There are no data records to display." onrowcommand="productsTable_RowCommand">
 			<Columns>
 				<asp:BoundField DataField="displayName" HeaderText="Name" SortExpression="displayName" />
 				<asp:BoundField DataField="price" HeaderText="Price" SortExpression="price" />
@@ -16,7 +16,7 @@
 				</asp:TemplateField>
 			</Columns>
 		</asp:GridView>
-		<asp:AccessDataSource ID="productsDataSource" runat="server" DataFile="App_Data\main.accdb" DeleteCommand="DELETE FROM `products` WHERE `ID` = ?" InsertCommand="INSERT INTO `products` (`ID`, `productName`, `stock`, `price`, `displayName`, `productType`, `creator`) VALUES (?, ?, ?, ?, ?, ?, ?)" SelectCommand="SELECT `ID`, `productName`, `stock`, `price`, `displayName`, `productType`, `creator` FROM `products`" UpdateCommand="UPDATE `products` SET `productName` = ?, `stock` = ?, `price` = ?, `displayName` = ?, `productType` = ?, `creator` = ? WHERE `ID` = ?">
+		<asp:AccessDataSource ID="productsDataSource" runat="server" DataFile="App_Data\main.accdb" DeleteCommand="DELETE FROM `products` WHERE `ID` = ?" InsertCommand="INSERT INTO `products` (`ID`, `productName`, `stock`, `price`, `displayName`, `productType`, `creator`) VALUES (?, ?, ?, ?, ?, ?, ?)" SelectCommand="SELECT productName, stock, price, displayName, productType, creator FROM products" UpdateCommand="UPDATE `products` SET `productName` = ?, `stock` = ?, `price` = ?, `displayName` = ?, `productType` = ?, `creator` = ? WHERE `ID` = ?">
 			<DeleteParameters>
 				<asp:Parameter Name="ID" Type="Int32" />
 			</DeleteParameters>
