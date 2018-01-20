@@ -53,7 +53,7 @@ namespace mainCoursework
 			//}
 		}
 
-		//All the following code checks when either password box is changed if the value are equal and notifies the user if they aren't
+		//The events that catch the text of either password box changing
 		protected void confirmPasswordBox_TextChanged(object sender, EventArgs e)
 		{
 			passwordsMatchCheck();
@@ -64,6 +64,7 @@ namespace mainCoursework
 			passwordsMatchCheck();
 		}
 
+		//Notifies the user that the boxes aren't the same
 		private void passwordsMatchCheck()
 		{
 			if (passwordBox.Text != confirmPasswordBox.Text)

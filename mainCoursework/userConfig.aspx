@@ -28,6 +28,7 @@
 	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT * FROM [employees]"></asp:AccessDataSource>
 	<br />
 	<br />
+
 	Register a New User:<br />
 	<asp:TextBox ID="submittedUsernameBox" runat="server" placeholder = "Username"></asp:TextBox>
 	<br />
@@ -36,6 +37,10 @@
 	<asp:TextBox ID="submittedConfirmPasswordBox" runat="server" TextMode="Password" placeholder ="Confirm Password"></asp:TextBox>
 	<br />
 	<asp:CheckBox ID="adminCheckBox" runat="server" Text="Admin" />
+	<br />
+	<asp:TextBox ID="forenameBox" runat="server" placeholder ="Forename(s)"></asp:TextBox>
+	<br />
+	<asp:TextBox ID="surnameBox" runat="server" placeholder ="Surname"></asp:TextBox>
 	<br />
 	<asp:Button ID="newUser" runat="server" Text="Register New User" OnClick="newUser_Click" />
 	<asp:Label ID="registerReturn" runat="server" Text=""></asp:Label>
