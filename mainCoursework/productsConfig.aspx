@@ -4,7 +4,7 @@
 		Products<br />
 		<asp:GridView ID="productsTable" runat="server" AutoGenerateColumns="False" DataKeyNames="productName" DataSourceID="productsDataSource" EmptyDataText="There are no data records to display." onrowcommand="productsTable_RowCommand">
 			<Columns>
-				<asp:BoundField DataField="displayName" HeaderText="Name" SortExpression="displayName" />
+				<asp:BoundField DataField="productName" HeaderText="Name" />
 				<asp:BoundField DataField="price" HeaderText="Price" SortExpression="price" />
 				<asp:BoundField DataField="stock" HeaderText="Stock" SortExpression="stock" />
 				<asp:BoundField DataField="productType" HeaderText="Type" SortExpression="productType" />

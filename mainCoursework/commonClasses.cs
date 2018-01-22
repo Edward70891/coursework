@@ -81,7 +81,7 @@ namespace commonClasses
 		/// <summary>
 		/// A constant error message for easy consistency
 		/// </summary>
-		public const string sanitizeErrorMessage = "The(, ), +, -, = and ' characters are not valid in ANY fields";
+		public const string sanitizeErrorMessage = "All fields must be full. The (, ), +, -, = and ' characters are not allowed in ANY fields";
 
 		/// <summary>
 		/// Check if the code contains (, ), +, -, = or '
@@ -96,6 +96,11 @@ namespace commonClasses
 			{
 				//If any strings contain illegal characters, sets the isclean variable to false and skips the rest of the loops
 				if (i.Contains("(") || i.Contains(")") || i.Contains("'") || i.Contains("=") || i.Contains("-") || i.Contains("+"))
+				{
+					isClean = false;
+					break;
+				}
+				if (i == "")
 				{
 					isClean = false;
 					break;

@@ -21,17 +21,17 @@ namespace mainCoursework
 
 		protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)
 		{
-			string displayName = productsTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
+			string productName = productsTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
 				//Runs if the delete button is pressed
 				//Checks if this is the second button press
-				if ((deletingProductsPersistent.deleting) && (displayName == deletingProductsPersistent.product))
+				if ((deletingProductsPersistent.deleting) && (productName == deletingProductsPersistent.product))
 				{
 					//Returns that the product has been deleted
-					returnLabel.Text = "Product " + displayName + " was deleted";
+					returnLabel.Text = "Product " + productName + " was deleted";
 					//Deletes the product, logs the action, posts the result to the box then clears it
-					productQueryTable.deleteProduct(displayName);
+					productQueryTable.deleteProduct(productName);
 					returnLabel.Text = "Product deleted";
-					customLogging.newEntry("The product " + displayName + " was deleted");
+					customLogging.newEntry("The product " + productName + " was deleted");
 					productsTable.DataBind();
 					System.Threading.Thread.Sleep(2000);
 					returnLabel.Text = "";
@@ -41,7 +41,7 @@ namespace mainCoursework
 					//Runs on first click, warns and sets up second click using external class
 					returnLabel.Text = "Click again to delete - note that this cannot be undone!";
 					deletingProductsPersistent.deleting = true;
-					deletingProductsPersistent.product = displayName;
+					deletingProductsPersistent.product = productName;
 				}
 		}
 
@@ -51,6 +51,13 @@ namespace mainCoursework
 			//A dowhile loop that is broken at the end if conditions are met or prematurely if conditions are not met
 			do
 			{
+				//Check that the inputs are all full and have no SQL sensitive characters in them
+				if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
+				{
+					returnMessage.Text = customSecurity.sanitizeErrorMessage;
+					break;
+				}
+
 				//Check and format the name for both display and storage/reference purposes
 				string displayName = productNameBox.Text;
 				string productName = displayName;
@@ -70,12 +77,6 @@ namespace mainCoursework
 				if (((price * 100) % 1.0) != 0)
 				{
 					returnMessage.Text = "Please input prices to two decimal places!";
-					break;
-				}
-
-				if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
-				{
-					returnMessage.Text = customSecurity.sanitizeErrorMessage;
 					break;
 				}
 

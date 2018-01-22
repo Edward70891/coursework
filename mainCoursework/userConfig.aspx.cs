@@ -37,9 +37,9 @@ namespace mainCoursework
 				//If they're trying to delete something
 				case "deleteUser":
 					//Checks if they're trying to delete the admin account
-					if (username == "default")
+					if (username == "master")
 					{
-						returnLabel.Text = "You can't delete the default account!";
+						returnLabel.Text = "You can't delete the master admin account!";
 						deletingUsersPersistent.deleting = false;
 					}
 
