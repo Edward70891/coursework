@@ -12,12 +12,7 @@ namespace mainCoursework
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			//Checks if the user is an employee, and if not redirects them to the default page
-			if (Convert.ToString(Session["userType"]) != "employee")
-			{
-				Server.Transfer("~/default.aspx", false);
-			}
-			//Checks if they're an admin and if they're not, hides the admin related checkboxes and ui elements (otherwise shows them)
+			//Checks if they're an admin and if they're not, hides the password changing elements
 			if (Convert.ToString(Session["userIsAdmin"]) != "false")
 			{
 				passwordBox.Visible = false;

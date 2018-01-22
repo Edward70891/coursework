@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Employee.Master" AutoEventWireup="true" CodeBehind="employeeLogin.aspx.cs" Inherits="mainCoursework.employeeLogin" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Customer.Master" AutoEventWireup="true" CodeBehind="employeeLogin.aspx.cs" Inherits="mainCoursework.employeeLogin" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="jumbotron">
 		<h3>Please login to access the site</h3>

@@ -16,10 +16,7 @@ namespace mainCoursework
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			if (Convert.ToString(Session["userType"]) != "employee")
-			{
-				Server.Transfer("~/default.aspx", true);
-			}
+
 		}
 
 		protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)

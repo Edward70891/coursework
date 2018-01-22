@@ -14,19 +14,18 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			//Check if anyone is logged in
-			if (Convert.ToString(Session["currentUser"]) == "")
+			if (Convert.ToString(Session["userType"]) != "employee")
 			{
-				// Show no one is logged in
-				usernameLabel.Text = "No user logged in";
-				signOut.Visible = false;
+				Server.Transfer("~/default.aspx", true);
 			}
-			else
+			//Show who is logged in, whether they are an admin and make sure the sign out button is visible
+			string admin = "";
+			if (Convert.ToString(Session["userIsAdmin"]) == "admin")
 			{
-				//Show who is logged in and make sure the sign out button is visible
-				usernameLabel.Text = "Welcome, " + Session["currentUser"] + "!";
-				signOut.Visible = true;
+				admin = " You are an admin!";
 			}
+			usernameLabel.Text = "Welcome, employee " + Session["currentUser"] + "!" + admin;
+			signOut.Visible = true;
 		}
 
 		protected void signOut_Click(object sender, EventArgs e)
