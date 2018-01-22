@@ -104,18 +104,24 @@ namespace commonClasses
 			return isClean;
 		}
 
+		/// <summary>
+		/// MD5 Hasher
+		/// </summary>
+		/// <param name="input">The string to be hashed</param>
+		/// <returns>A hexadecimal value (with lowercase letters)</returns>
 		public static string generateMD5(string input)
 		{
+			//Make a new md5 object
 			var md5 = System.Security.Cryptography.MD5.Create();
 			byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
 			byte[] hash = md5.ComputeHash(inputBytes);
-
-			var sb = new System.Text.StringBuilder();
+			//Make a new string and add all the new bytes to it
+			string output = "";
 			for (int i = 0; i < hash.Length; i++)
 			{
-				sb.Append(hash[i].ToString("X2"));
+				output = output + hash[i].ToString("x2");
 			}
-			return sb.ToString();
+			return output;
 		}
 	}
 }
