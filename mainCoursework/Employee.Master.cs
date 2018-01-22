@@ -10,7 +10,7 @@ using commonClasses;
 
 namespace mainCoursework
 {
-    public partial class SiteMaster : MasterPage
+    public partial class EmployeeSiteMaster : MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -20,14 +20,12 @@ namespace mainCoursework
 				// Show no one is logged in
 				usernameLabel.Text = "No user logged in";
 				signOut.Visible = false;
-				employeeIn.Visible = true;
 			}
 			else
 			{
 				//Show who is logged in and make sure the sign out button is visible
 				usernameLabel.Text = "Welcome, " + Session["currentUser"] + "!";
 				signOut.Visible = true;
-				employeeIn.Visible = false;
 			}
 		}
 

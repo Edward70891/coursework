@@ -10,7 +10,7 @@
 namespace mainCoursework {
     
     
-    public partial class Site_Mobile {
+    public partial class EmployeeSite_Mobile {
         
         /// <summary>
         /// HeadContent control.

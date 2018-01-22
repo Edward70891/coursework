@@ -10,7 +10,7 @@
 namespace mainCoursework {
     
     
-    public partial class SiteMaster {
+    public partial class CustomerSiteMaster {
         
         /// <summary>
         /// MainContent control.
