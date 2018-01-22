@@ -131,6 +131,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\encryptionTest.accdb" />
     <Content Include="App_Data\log.txt" />
     <Content Include="App_Data\main.accdb" />
     <Content Include="Content\customer.css" />

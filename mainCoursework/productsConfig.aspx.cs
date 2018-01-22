@@ -106,7 +106,7 @@ namespace mainCoursework
 				//Returns the the product has been created then creates it and logs it and refreshes the table
 				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
 				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
-				customLogging.newEntry("The product " + displayName + " was created");
+				customLogging.newEntry("The product " + productName + " was created");
 				productsTable.DataBind();
 			} while (false);
 		}
