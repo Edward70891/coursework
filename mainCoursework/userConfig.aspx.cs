@@ -125,5 +125,10 @@ namespace mainCoursework
 			public static string username;
 			public static bool deleting;
 		}
+
+		protected void registerRedirect_Click(object sender, EventArgs e)
+		{
+			Server.Transfer("~/registerEmployee.aspx", false);
+		}
 	}
 }

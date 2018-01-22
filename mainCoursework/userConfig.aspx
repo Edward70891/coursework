@@ -28,5 +28,6 @@
 	<asp:AccessDataSource ID="usersDataSource" runat="server" DataFile="App_Data\main.accdb" SelectCommand="SELECT * FROM [employees]"></asp:AccessDataSource>
 	<br />
 	<br />
+	<asp:Button ID="registerRedirect" runat="server" Text="Register a New Employee" OnClick="registerRedirect_Click" />
 	
 </asp:Content>
