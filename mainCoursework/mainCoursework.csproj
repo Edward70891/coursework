@@ -235,6 +235,7 @@
     <Compile Include="Customer.Mobile.Master.designer.cs">
       <DependentUpon>Customer.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="productsHandlig.cs" />
     <Compile Include="registerEmployee.aspx.cs">
       <DependentUpon>registerEmployee.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

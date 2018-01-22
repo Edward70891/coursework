@@ -25,32 +25,27 @@ namespace mainCoursework
 		protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)
 		{
 			string displayName = productsTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
-			switch (e.CommandName)
-			{
 				//Runs if the delete button is pressed
-				case "deleteProduct":
-					//Checks if this is the second button press
-					if ((deletingProductsPersistent.deleting) && (displayName == deletingProductsPersistent.product))
-					{
-						//Returns that the product has been deleted
-						returnLabel.Text = "Product " + displayName + " was deleted";
-						//Deletes the product, logs the action, posts the result to the box then clears it
-						productQueryTable.deleteProduct(displayName);
-						returnLabel.Text = "Product deleted";
-						customLogging.newEntry("The product " + displayName + " was deleted");
-						productsTable.DataBind();
-						System.Threading.Thread.Sleep(2000);
-						returnLabel.Text = "";
-					}
-					else
-					{
-						//Runs on first click, warns and sets up second click using external class
-						returnLabel.Text = "Click again to delete - note that this cannot be undone!";
-						deletingProductsPersistent.deleting = true;
-						deletingProductsPersistent.product = displayName;
-					}
-					break;
-			}
+				//Checks if this is the second button press
+				if ((deletingProductsPersistent.deleting) && (displayName == deletingProductsPersistent.product))
+				{
+					//Returns that the product has been deleted
+					returnLabel.Text = "Product " + displayName + " was deleted";
+					//Deletes the product, logs the action, posts the result to the box then clears it
+					productQueryTable.deleteProduct(displayName);
+					returnLabel.Text = "Product deleted";
+					customLogging.newEntry("The product " + displayName + " was deleted");
+					productsTable.DataBind();
+					System.Threading.Thread.Sleep(2000);
+					returnLabel.Text = "";
+				}
+				else
+				{
+					//Runs on first click, warns and sets up second click using external class
+					returnLabel.Text = "Click again to delete - note that this cannot be undone!";
+					deletingProductsPersistent.deleting = true;
+					deletingProductsPersistent.product = displayName;
+				}
 		}
 
 		//Adding products
