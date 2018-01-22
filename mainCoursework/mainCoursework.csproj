@@ -133,9 +133,11 @@
   <ItemGroup>
     <Content Include="App_Data\log.txt" />
     <Content Include="App_Data\main.accdb" />
+    <Content Include="customer.css" />
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
     <Content Include="registerEmployee.aspx" />
+    <Content Include="employee.css" />
     <Content Include="userConfig.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
