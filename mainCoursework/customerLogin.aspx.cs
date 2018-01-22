@@ -56,5 +56,10 @@ namespace mainCoursework
 		{
 			Server.Transfer("registerCustomer.aspx", false);
 		}
+
+		protected void employeeRedirect_Click(object sender, EventArgs e)
+		{
+			Server.Transfer("employeeLogin.aspx", false);
+		}
 	}
 }

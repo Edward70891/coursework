@@ -61,5 +61,10 @@ namespace mainCoursework
 				employeeLoginReturnLabel.Text = SQLSanitization.sanitizeErrorMessage;
 			}
 		}
-    }
+
+		protected void customerRedirect_Click(object sender, EventArgs e)
+		{
+			Server.Transfer("customerLogin.aspx", false);
+		}
+	}
 }
