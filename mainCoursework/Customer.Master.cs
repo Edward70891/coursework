@@ -27,6 +27,11 @@ namespace mainCoursework
 				usernameLabel.Text = "Welcome, " + Session["currentUser"] + "!";
 				signOut.Visible = true;
 			}
+
+			if (Convert.ToString(Session["userType"]) != "employee")
+			{
+				employeeRedirect.Visible = false;
+			}
 		}
 
 		protected void signOut_Click(object sender, EventArgs e)
@@ -39,9 +44,9 @@ namespace mainCoursework
 			Server.Transfer("~/default.aspx", false);
 		}
 
-		protected void employeeIn_Click(object sender, EventArgs e)
+		protected void employeeRedirect_Click(object sender, EventArgs e)
 		{
-			Server.Transfer("~/employeeLogin.aspx", false);
+			Server.Transfer("~/staffOverview.aspx", false);
 		}
 	}
 }

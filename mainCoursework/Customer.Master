@@ -66,6 +66,7 @@
                 <p>&copy; <%: DateTime.Now.Year %></p>
 				<asp:Label ID="usernameLabel" runat="server" Text=""></asp:Label>
 				<asp:Button ID="signOut" runat="server" Text="Sign Out" OnClick="signOut_Click" />
+				<asp:Button ID="employeeRedirect" runat="server" Text="Employee Area" OnClick="employeeRedirect_Click" />
             </footer>
         </div>
 

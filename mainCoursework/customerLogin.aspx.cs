@@ -15,7 +15,11 @@ namespace mainCoursework
     {
 		protected void Page_Load(object sender, EventArgs e)
 		{
-
+			//Redirect the user to the default page if they are already logged in
+			if (Convert.ToString(Session["isLoggedIn"]) == "True")
+			{
+				Server.Transfer("~/default.aspx", false);
+			}
 		}
 
 		protected void submitCustomerCredentialsButton_Click(object sender, EventArgs e)

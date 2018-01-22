@@ -20,7 +20,7 @@ namespace mainCoursework
 			}
 			//Show who is logged in, whether they are an admin and make sure the sign out button is visible
 			string admin = "";
-			if (Convert.ToString(Session["userIsAdmin"]) == "admin")
+			if (Convert.ToString(Session["userIsAdmin"]) == "True")
 			{
 				admin = " You are an admin!";
 			}
@@ -41,6 +41,11 @@ namespace mainCoursework
 		protected void employeeIn_Click(object sender, EventArgs e)
 		{
 			Server.Transfer("~/employeeLogin.aspx", false);
+		}
+
+		protected void customerRedirect_Click(object sender, EventArgs e)
+		{
+			Server.Transfer("~/default.aspx", false);
 		}
 	}
 }

@@ -47,11 +47,11 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" runat="server" href="~/">Popsters Management</a>
+                    <a class="navbar-brand" runat="server" href="~/staffOverview.aspx">Popsters Management</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/overview.aspx">Overview</a></li>
+                        <li><a runat="server" href="~/staffOverview.aspx">Overview</a></li>
 						<li><a runat="server" href="~/userConfig.aspx">UserConfig</a></li>
 						<li><a runat="server" href="~/productsConfig.aspx">ProductConfig</a></li>
 						<li><a runat="server" href="~/employeeLogin.aspx">Login</a></li>
@@ -67,6 +67,7 @@
                 <p>&copy; <%: DateTime.Now.Year %></p>
 				<asp:Label ID="usernameLabel" runat="server" Text=""></asp:Label>
 				<asp:Button ID="signOut" runat="server" Text="Sign Out" OnClick="signOut_Click" />
+				<asp:Button ID="customerRedirect" runat="server" Text="Customer Area" OnClick="customerRedirect_Click" />
             </footer>
         </div>
 

@@ -15,7 +15,19 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-			
+			//If the user is logged in already, redirect them
+			if (Convert.ToString(Session["isLoggedIn"]) == "True")
+			{
+				//If the user is an employee, redirect them to their overview instead of the default page
+				if (Convert.ToString(Session["userType"]) == "employee")
+				{
+					Server.Transfer("~/staffOverview.aspx", false);
+				}
+				else
+				{
+					Server.Transfer("~/default.aspx", false);
+				}
+			}
         }
 
 		protected void submitEmployeeCredentialsButton_Click(object sender, EventArgs e)
