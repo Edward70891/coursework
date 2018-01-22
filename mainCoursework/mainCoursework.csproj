@@ -160,6 +160,7 @@
     <Content Include="defaultDataSet.xss">
       <DependentUpon>defaultDataSet.xsd</DependentUpon>
     </Content>
+    <Content Include="Customer.Mobile.Master" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="employeeLogin.aspx" />
     <Content Include="staffOverview.aspx" />
@@ -197,7 +198,7 @@
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
-    <Content Include="Site.Mobile.Master" />
+    <Content Include="Employee.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -223,6 +224,13 @@
     </Compile>
     <Compile Include="customerLogin.aspx.designer.cs">
       <DependentUpon>customerLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer.Mobile.Master.cs">
+      <DependentUpon>Customer.Mobile.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer.Mobile.Master.designer.cs">
+      <DependentUpon>Customer.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="userConfig.aspx.cs">
       <DependentUpon>userConfig.aspx</DependentUpon>
@@ -275,12 +283,12 @@
     <Compile Include="Customer.Master.designer.cs">
       <DependentUpon>Customer.Master</DependentUpon>
     </Compile>
-    <Compile Include="Site.Mobile.Master.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
+    <Compile Include="Employee.Mobile.Master.cs">
+      <DependentUpon>Employee.Mobile.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Site.Mobile.Master.designer.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
+    <Compile Include="Employee.Mobile.Master.designer.cs">
+      <DependentUpon>Employee.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
