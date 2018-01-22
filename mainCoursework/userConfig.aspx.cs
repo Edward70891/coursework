@@ -82,14 +82,14 @@ namespace mainCoursework
 					//Disables second click coding
 					deletingUsersPersistent.deleting = false;
 					//Checks there is a value entered in the box
-					if (SQLSanitization.sanitizeCheck(new string[] { passwordBox.Text }))
+					if (customSecurity.sanitizeCheck(new string[] { passwordBox.Text }))
 					{
 						if (passwordBox.Text != "" || confirmPassword.Text != "")
 						{
 							if (passwordBox.Text == confirmPassword.Text)
 							{
 								//Changes the password in the DB
-								employeeQueryTable.changePassword(passwordBox.Text, username);
+								employeeQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
 								//Posts that the password has been changed and logs it
 								customLogging.newEntry("User " + username + "'s password changed");
 								returnLabel.Text = "User " + username + "'s password was changed to '" + passwordBox.Text + "'.";
@@ -112,7 +112,7 @@ namespace mainCoursework
 					}
 					else
 					{
-						returnLabel.Text = SQLSanitization.sanitizeErrorMessage;
+						returnLabel.Text = customSecurity.sanitizeErrorMessage;
 					}
 					break;
 			}

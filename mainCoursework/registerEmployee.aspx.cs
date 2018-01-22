@@ -34,14 +34,14 @@ namespace mainCoursework
 			if (submittedPasswordBox.Text == submittedConfirmPasswordBox.Text)
 			{
 				//Checks there's no SQL related things in the boxes
-				if (SQLSanitization.sanitizeCheck(new string[] { submittedUsernameBox.Text, submittedPasswordBox.Text, forenameBox.Text, surnameBox.Text }))
+				if (customSecurity.sanitizeCheck(new string[] { submittedUsernameBox.Text, submittedPasswordBox.Text, forenameBox.Text, surnameBox.Text }))
 				{
 					using (defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter())
 					{
 						try
 						{
 							//Creates the new user, logs the creation of the user and notifies the current user
-							employeeQueryTable.newEmployee(submittedUsernameBox.Text, submittedPasswordBox.Text, adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
+							employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
 							registerReturn.Text = "New user created";
 							customLogging.newEntry("User " + submittedUsernameBox.Text + " was created");
 						}
@@ -54,7 +54,7 @@ namespace mainCoursework
 				}
 				else
 				{
-					registerReturn.Text = SQLSanitization.sanitizeErrorMessage;
+					registerReturn.Text = customSecurity.sanitizeErrorMessage;
 				}
 			}
 			else

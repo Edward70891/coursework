@@ -23,11 +23,11 @@ namespace mainCoursework
 				int dump;
 				if (int.TryParse(phoneNumberBox.Text, out dump))
 				{
-					if (SQLSanitization.sanitizeCheck(new string[] { usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text }))
+					if (customSecurity.sanitizeCheck(new string[] { usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text }))
 					{
 						try
 						{
-							customersQueryTable.newCustomer(usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+							customersQueryTable.newCustomer(usernameBox.Text, customSecurity.generateMD5(passwordBox.Text), address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
 							customLogging.newEntry("Someone registered the user " + usernameBox.Text);
 							returnLabel.Text = "User " + usernameBox.Text + " created";
 						}
@@ -38,7 +38,7 @@ namespace mainCoursework
 					}
 					else
 					{
-						returnLabel.Text = SQLSanitization.sanitizeErrorMessage;
+						returnLabel.Text = customSecurity.sanitizeErrorMessage;
 					}
 				}
 				else

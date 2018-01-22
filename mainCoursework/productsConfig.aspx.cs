@@ -81,9 +81,9 @@ namespace mainCoursework
 					break;
 				}
 
-				if (SQLSanitization.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
+				if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
 				{
-					returnMessage.Text = SQLSanitization.sanitizeErrorMessage;
+					returnMessage.Text = customSecurity.sanitizeErrorMessage;
 					break;
 				}
 

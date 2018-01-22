@@ -23,12 +23,12 @@ namespace mainCoursework
 			//Pull the given username into a variable
 			string attemptedName = employeeUsernameBox.Text;
 			//Check the inputs are clean of SQL injection
-			if (SQLSanitization.sanitizeCheck(new string[] { attemptedName, employeePasswordBox.Text }))
+			if (customSecurity.sanitizeCheck(new string[] { attemptedName, employeePasswordBox.Text }))
 			{
 				//Initialize the database connection
 				using (var checkCredentials = new defaultDataSetTableAdapters.employeesTableAdapter())
 				{
-					var loginCheck = checkCredentials.loginCheck(attemptedName, employeePasswordBox.Text);
+					var loginCheck = checkCredentials.loginCheck(attemptedName, customSecurity.generateMD5(employeePasswordBox.Text));
 					if (loginCheck != null)
 					{
 						//Sets relevant Session information so other pages can determine information about the logged session
@@ -58,7 +58,7 @@ namespace mainCoursework
 			}
 			else
 			{
-				employeeLoginReturnLabel.Text = SQLSanitization.sanitizeErrorMessage;
+				employeeLoginReturnLabel.Text = customSecurity.sanitizeErrorMessage;
 			}
 		}
 

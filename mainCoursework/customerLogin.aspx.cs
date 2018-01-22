@@ -21,14 +21,14 @@ namespace mainCoursework
 		protected void submitCustomerCredentialsButton_Click(object sender, EventArgs e)
 		{
 			//Checks if 
-			if (SQLSanitization.sanitizeCheck(new string[] { customerUsernameBox.Text, customerPasswordBox.Text }))
+			if (customSecurity.sanitizeCheck(new string[] { customerUsernameBox.Text, customerPasswordBox.Text }))
 			{
 				//Pull the given username into a variable
 				string attemptedName = customerUsernameBox.Text;
 				using (var checkCredentials = new defaultDataSetTableAdapters.customersTableAdapter())
 				{
 					//Runs if a user with the given credentials exists
-					if (checkCredentials.loginCheck(attemptedName, customerPasswordBox.Text) != null)
+					if (checkCredentials.loginCheck(attemptedName, customSecurity.generateMD5(customerPasswordBox.Text)) != null)
 					{
 						//Signs the user in and logs the signin to the logfile
 						Session["isLoggedIn"] = true;
@@ -48,7 +48,7 @@ namespace mainCoursework
 			}
 			else
 			{
-				customerLoginReturnLabel.Text = SQLSanitization.sanitizeErrorMessage;
+				customerLoginReturnLabel.Text = customSecurity.sanitizeErrorMessage;
 			}
 		}
 
