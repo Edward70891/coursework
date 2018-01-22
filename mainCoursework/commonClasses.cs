@@ -32,7 +32,17 @@ namespace commonClasses
 		public static void newEntry(string entryText)
 		{
 			string result = generateTimestamp() + " " + entryText;
-			writeEntry(entryText);
+			writeEntry(result);
+		}
+
+		/// <summary>
+		/// Writes a timestamped entry to the logfile with the exception message
+		/// </summary>
+		/// <param name="except">The exception thrown</param>
+		public static void newException(Exception except)
+		{
+			string result = generateTimestamp() + " An error occurred in " + except.Source + " with message " + except.Message;
+			writeEntry(result);
 		}
 
 		//Checks both possible locations for the logfile (this needs a better solution) then writes the given text to them
