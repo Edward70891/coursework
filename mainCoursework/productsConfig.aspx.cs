@@ -28,7 +28,8 @@ namespace mainCoursework
 				{
 					//Returns that the product has been deleted
 					returnLabel.Text = "Product " + productName + " was deleted";
-					//Deletes the product, logs the action, posts the result to the box then clears it
+					//Deletes the product and it's image, logs the action, posts the result to the box then clears it
+					System.IO.File.Delete(Server.MapPath("~/images/") + productName);
 					productQueryTable.deleteProduct(productName);
 					returnLabel.Text = "Product deleted";
 					customLogging.newEntry("The product " + productName + " was deleted");
