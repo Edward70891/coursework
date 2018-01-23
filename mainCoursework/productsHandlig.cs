@@ -7,26 +7,26 @@ using System.Web;
 namespace mainCoursework
 {
 	/// <summary>
-	/// A struct for storing product info, highly recommended to use the product class instead of this as that includes logic
-	/// </summary>
-	public struct productStruct
-	{
-		public string productName;
-		public string displayName;
-		public int stock;
-		public decimal price;
-		public string band;
-		public string description;
-		public string imagePath;
-		public string type;
-	}
-
-	/// <summary>
 	/// A class to instantiate when wanting to have an easy to manage product object with all the relevant information attached.
 	/// Please use me instead of directly accessing the database to modify stock!
 	/// </summary>
 	public class product
 	{
+		/// <summary>
+		/// A struct for storing product info, highly recommended to use the product class instead of this as that includes logic
+		/// </summary>
+		public struct productStruct
+		{
+			public string productName;
+			public string displayName;
+			public int stock;
+			public decimal price;
+			public string band;
+			public string description;
+			public string imagePath;
+			public string type;
+		}
+
 		//Gets the data link
 		private defaultDataSet.productsDataTable dataTable = new defaultDataSet.productsDataTable();
 		private mainCoursework.defaultDataSetTableAdapters.productsTableAdapter adapter = new mainCoursework.defaultDataSetTableAdapters.productsTableAdapter();
