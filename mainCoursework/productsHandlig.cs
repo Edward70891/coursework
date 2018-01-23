@@ -20,7 +20,7 @@ namespace mainCoursework
 			private mainCoursework.defaultDataSetTableAdapters.productsTableAdapter adapter = new mainCoursework.defaultDataSetTableAdapters.productsTableAdapter();
 
 			//Declares all the read only variables about the product
-			private string ProductName;
+			private string productName;
 			private string displayName;
 			private int stock;
 			private int NewStock;
@@ -40,7 +40,7 @@ namespace mainCoursework
 				get
 				{
 					string[] result = new string[9];
-					result[0] = ProductName;
+					result[0] = productName;
 					result[1] = displayName;
 					result[2] = Convert.ToString(stock);
 					result[3] = Convert.ToString(NewStock);
@@ -54,12 +54,27 @@ namespace mainCoursework
 			}
 
 			/// <summary>
-			/// Adds all needed values to their properties and gets the required product from the table
+			/// Initialize the product using the name of a product; this method will access the database (and thus is slower)
 			/// </summary>
-			/// <param name="iniName">The productName of the item to pull from the DB</param>
+			/// <param name="iniName">The name of the product to pull from the database</param>
 			public product(string iniName)
 			{
 				getData(iniName);
+			}
+			/// <summary>
+			/// Initialize the product using a datarow passed to the method, does not access database
+			/// </summary>
+			/// <param name="row">The datarow containing the product information</param>
+			public product(DataRow row)
+			{
+				productName = Convert.ToString(row[0]);
+				displayName = Convert.ToString(row[3]);
+				stock = Convert.ToInt32(row[1]);
+				price = Convert.ToDecimal(row[2]);
+				band = Convert.ToString(row[7]);
+				description = Convert.ToString(row[8]);
+				imagePath = Convert.ToString(row[6]);
+				type = Convert.ToString(row[4]);
 			}
 
 			/// <summary>
@@ -67,23 +82,30 @@ namespace mainCoursework
 			/// </summary>
 			public void saveStock()
 			{
-				adapter.updateStock(NewStock, ProductName);
+				adapter.updateStock(NewStock, productName);
 				stock = NewStock;
 				NewStock = 0;
 			}
 
+			/// <summary>
+			/// Refreshes the data using data from the database regardless of how the class was initialized
+			/// </summary>
 			public void refresh()
 			{
-				getData(ProductName);
+				getData(productName);
 			}
 
+			/// <summary>
+			/// Load the product straight from the database
+			/// </summary>
+			/// <param name="searchName">The name of the product to fetch</param>
 			private void getData(string searchName)
 			{
 				//Gets "all" (ie, only the one) rows with the given productname
 				var rows = dataTable.Select("productName = '" + searchName + "'");
 				//Converts the rows variable to a single object
 				System.Data.DataRow row = rows[0];
-				ProductName = searchName;
+				productName = searchName;
 				//Sets all the values according the the indexes of the table columns
 				displayName = Convert.ToString(row[3]);
 				stock = Convert.ToInt32(row[1]);
@@ -117,9 +139,9 @@ namespace mainCoursework
 		/// </summary>
 		public class productList
 		{
-			//The complete list of all the products in the product table - please only read from this once constructed
+			//The complete list of all the products initialised
 			private product[] masterList;
-			//The variable that all the code in this class will modify, 
+			//The variable that all the code in this class will modify
 			private product[] WorkingList;
 			//Read only property that returns the working list for the caller to use
 			public product[] list
@@ -128,21 +150,6 @@ namespace mainCoursework
 				{
 					return WorkingList;
 				}
-			}
-			//Performs the first construction of the master list
-			public productList()
-			{
-				constructMaster();
-			}
-
-			/// <summary>
-			/// Reloads all products from the table; use me when expecting database changes from another source
-			/// NB also resets the working list
-			/// </summary>
-			public void refreshMasterList()
-			{
-				constructMaster();
-				resetWorkingList();
 			}
 
 			/// <summary>
@@ -153,18 +160,31 @@ namespace mainCoursework
 				WorkingList = masterList;
 			}
 
-			//Sets the master list to be the contents of the database table
-			private void constructMaster()
+			/// <summary>
+			/// Sets the list to be the entire contents of the database table, initializes working list
+			/// </summary>
+			public void importAll()
 			{
-				System.Data.DataTable data;
-				using (var adaptor = new defaultDataSetTableAdapters.productsTableAdapter())
-				{
-					data = adaptor.getProductNames();
-				}
+				var data = new defaultDataSet.productsDataTable();
 				int i = 0;
 				foreach (DataRow row in data.Rows)
 				{
-					masterList[i] = new product(Convert.ToString(row[0]));
+					masterList[i] = new product(row);
+					i++;
+				}
+				WorkingList = masterList;
+			}
+
+			/// <summary>
+			/// Call me to initialize the master list with a given set of names
+			/// </summary>
+			/// <param name="productNames">The productName value of all the products to initialize</param>
+			public void importWithString(string[] productNames)
+			{
+				int i = 0;
+				foreach (string str in productNames)
+				{
+					masterList[i] = new product(str);
 					i++;
 				}
 			}

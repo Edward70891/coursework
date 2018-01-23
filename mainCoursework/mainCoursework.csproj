@@ -137,6 +137,7 @@
     <Content Include="Content\customer.css" />
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
+    <Content Include="products.aspx" />
     <Content Include="registerEmployee.aspx" />
     <Content Include="Content\employee.css" />
     <Content Include="userConfig.aspx" />
@@ -234,6 +235,13 @@
     </Compile>
     <Compile Include="Customer.Mobile.Master.designer.cs">
       <DependentUpon>Customer.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="products.aspx.cs">
+      <DependentUpon>products.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="products.aspx.designer.cs">
+      <DependentUpon>products.aspx</DependentUpon>
     </Compile>
     <Compile Include="productsHandlig.cs" />
     <Compile Include="registerEmployee.aspx.cs">
