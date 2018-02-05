@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace mainCoursework
 {
@@ -245,6 +243,7 @@ namespace mainCoursework
 					//Set the working list to be the filtered list
 					WorkingList = filteredList.ToArray();
 					break;
+
 				case "type":
 					//Goes through all the objects in the master list
 					for (int i = 0; i < masterList.Length; i++)
@@ -273,6 +272,7 @@ namespace mainCoursework
 					//Set the working list to be the filtered list
 					WorkingList = filteredList.ToArray();
 					break;
+
 				case "stock":
 					//Goes through all the objects in the master list
 					for (int i = 0; i < masterList.Length; i++)
