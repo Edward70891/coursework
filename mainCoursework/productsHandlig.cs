@@ -29,7 +29,7 @@ namespace mainCoursework
 
 		//Gets the data link
 		private defaultDataSet.productsDataTable dataTable = new defaultDataSet.productsDataTable();
-		private mainCoursework.defaultDataSetTableAdapters.productsTableAdapter adapter = new mainCoursework.defaultDataSetTableAdapters.productsTableAdapter();
+		private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
 
 		//Declares the needed variables
 		private productStruct ProductInfo = new productStruct();
@@ -206,21 +206,90 @@ namespace mainCoursework
 		/// <summary>
 		/// Filters the working list
 		/// </summary>
-		/// <param name="field">What piece of data to filter by; "band", "type" or "stock" (stock is treated as all things in stock)</param>
+		/// <param name="field">What piece of data to filter by; "band", "type" or "stock" (stock is treated as all things in stock (stock will be whitelisted regardless of the whitelist input))</param>
 		/// <param name="value">What value to look for</param>
 		/// <param name="whitelist">Set me to true to keep only entries with that value; false to keep all but that value</param>
 		public void filter(string field, string value, bool whitelist)
 		{
+			//Makes a new list
+			List<product> filteredList = new List<product>();
+			int filteredIndex = 0;
+			//Determines what field to sort by according to user input
 			switch (field)
 			{
 				case "band":
-
+					//Goes through all the objects in the master list
+					for (int i = 0; i < masterList.Length; i++)
+					{
+						if (whitelist)
+						{
+							//Runs if it's whitelisting
+							if (masterList[i].productInfo.band.ToUpper() == value.ToUpper())
+							{
+								//If their band matches add them to the filtered list
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+						else
+						{
+							//Runs if it's blacklisting (ie whitelist=false)
+							if (masterList[i].productInfo.band.ToUpper() != value.ToUpper())
+							{
+								//If their band doesn't match add them to the filtered list
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+					}
+					//Set the working list to be the filtered list
+					WorkingList = filteredList.ToArray();
+					break;
 				case "type":
-
+					//Goes through all the objects in the master list
+					for (int i = 0; i < masterList.Length; i++)
+					{
+						if (whitelist)
+						{
+							//Runs if it's whitelisting
+							if (masterList[i].productInfo.type.ToUpper() == value.ToUpper())
+							{
+								//If their band matches add them to the filtered list
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+						else
+						{
+							//Runs if it's blacklisting (ie whitelist=false)
+							if (masterList[i].productInfo.type.ToUpper() != value.ToUpper())
+							{
+								//If their band doesn't match add them to the filtered list
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+					}
+					//Set the working list to be the filtered list
+					WorkingList = filteredList.ToArray();
+					break;
 				case "stock":
-
+					//Goes through all the objects in the master list
+					for (int i = 0; i < masterList.Length; i++)
+					{
+						if (masterList[i].productInfo.stock > 0)
+						{
+							//If their stock isn't 0 add them to the filtered list
+							filteredList.Add(masterList[i]);
+							filteredIndex++;
+						}
+					}
+					//Set the working list to be the filtered list
+					WorkingList = filteredList.ToArray();
+					break;
+				//If incorrectly called this is thrown
 				default:
-					throw new System.ArgumentException("The filter field must be one of the specified values");
+					throw new ArgumentException("The filter field must be one of the specified values");
 			}
 		}
 	}
