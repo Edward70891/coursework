@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace mainCoursework
 {
@@ -10,26 +14,11 @@ namespace mainCoursework
 	/// </summary>
 	public class product
 	{
-		/// <summary>
-		/// A struct for storing product info, highly recommended to use the product class instead of this as that includes logic
-		/// </summary>
-		public struct productStruct
-		{
-			public string productName;
-			public string displayName;
-			public int stock;
-			public decimal price;
-			public string band;
-			public string description;
-			public string imagePath;
-			public string type;
-		}
-
 		//Gets the data link
 		private defaultDataSet.productsDataTable dataTable = new defaultDataSet.productsDataTable();
 		private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
 
-		//Declares the needed variables
+		//Declares the productstruct
 		private productStruct ProductInfo = new productStruct();
 		/// <summary>
 		/// All the info about the current product
@@ -110,9 +99,53 @@ namespace mainCoursework
 
 
 
+	/// <summary>
+	/// A struct for storing product info, highly recommended to use the product class instead of this as that includes logic
+	/// </summary>
+	public struct productStruct
+	{
+		public string productName;
+		public string displayName;
+		public int stock;
+		public decimal price;
+		public string band;
+		public string description;
+		public string imagePath;
+		public string type;
+	}
 
+	/// <summary>
+	/// A control that builds itself ready to add
+	/// </summary>
+	public class aspNetProductPanel
+	{
+		public Panel generatedControl;
+		public aspNetProductPanel(productStruct info)
+		{
+			generatedControl.CssClass = "productPanel";
+			Image displayedImage = new Image();
+			//Configure image here
 
+			Label nameTag = new Label();
+			nameTag.CssClass = "nameTag";
+			nameTag.Text = info.displayName;
 
+			Button detailsButton = new Button();
+			nameTag.CssClass = "detailsButton";
+			detailsButton.Text = "View";
+			//Configure details button here
+
+			Label priceTag = new Label();
+			nameTag.CssClass = "priceTag";
+			priceTag.Text = "£" + Convert.ToString(info.price);
+
+			Label stockTag = new Label();
+			nameTag.CssClass = "stockTag";
+			stockTag.Text = Convert.ToString(info.stock);
+			
+			//Put more elements here
+		}
+	}
 
 
 
