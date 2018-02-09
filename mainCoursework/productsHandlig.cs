@@ -117,33 +117,41 @@ namespace mainCoursework
 	/// <summary>
 	/// A control that builds itself ready to add
 	/// </summary>
-	public class aspNetProductPanel
+	public class productPanel
 	{
 		public Panel generatedControl;
-		public aspNetProductPanel(productStruct info)
+		public productPanel(productStruct info)
 		{
 			generatedControl.CssClass = "productPanel";
 			Image displayedImage = new Image();
 			//Configure image here
+			generatedControl.Controls.Add(displayedImage);
 
 			Label nameTag = new Label();
 			nameTag.CssClass = "nameTag";
 			nameTag.Text = info.displayName;
+			generatedControl.Controls.Add(nameTag);
 
 			Button detailsButton = new Button();
-			nameTag.CssClass = "detailsButton";
+			detailsButton.CssClass = "detailsButton";
 			detailsButton.Text = "View";
 			//Configure details button here
+			generatedControl.Controls.Add(detailsButton);
 
 			Label priceTag = new Label();
-			nameTag.CssClass = "priceTag";
+			priceTag.CssClass = "priceTag";
 			priceTag.Text = "£" + Convert.ToString(info.price);
+			generatedControl.Controls.Add(priceTag);
 
 			Label stockTag = new Label();
-			nameTag.CssClass = "stockTag";
+			stockTag.CssClass = "stockTag";
 			stockTag.Text = Convert.ToString(info.stock);
-			
-			//Put more elements here
+			generatedControl.Controls.Add(stockTag);
+
+			Label descriptionTag = new Label();
+			descriptionTag.CssClass = "descriptionTag";
+			descriptionTag.Text = Convert.ToString(info.description);
+			generatedControl.Controls.Add(descriptionTag);
 		}
 	}
 
@@ -181,6 +189,21 @@ namespace mainCoursework
 		public void resetWorkingList()
 		{
 			WorkingList = masterList;
+		}
+
+		/// <summary>
+		/// Generate an array of panels containing product info
+		/// </summary>
+		/// <returns>An array of panels containing the appropriate information identical to the working list</returns>
+		public Panel[] generateControls()
+		{
+			Panel[] result = new Panel[WorkingList.Length];
+			for (int i = 0; i < WorkingList.Length; i++)
+			{
+				productPanel working = new productPanel(WorkingList[i].productInfo);
+				result[i] = working.generatedControl;
+			}
+			return result;
 		}
 
 		/// <summary>
