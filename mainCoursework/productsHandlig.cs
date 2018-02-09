@@ -15,7 +15,6 @@ namespace mainCoursework
 	public class product
 	{
 		//Gets the data link
-		private defaultDataSet.productsDataTable dataTable = new defaultDataSet.productsDataTable();
 		private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
 
 		//Declares the productstruct
@@ -81,7 +80,7 @@ namespace mainCoursework
 		private void getData(string searchName)
 		{
 			//Gets "all" (ie, only the one) rows with the given productname
-			var rows = dataTable.Select("productName = '" + searchName + "'");
+			var rows = adapter.getDataTable(searchName);
 			//Converts the rows variable to a single object
 			System.Data.DataRow row = rows[0];
 			ProductInfo.productName = searchName;
@@ -119,38 +118,56 @@ namespace mainCoursework
 	/// </summary>
 	public class productPanel
 	{
-		public Panel generatedControl;
+		public Panel generatedControl = new Panel();
 		public productPanel(productStruct info)
 		{
 			generatedControl.CssClass = "productPanel";
+			generatedControl.ID = info.productName;
+
 			Image displayedImage = new Image();
 			//Configure image here
+			displayedImage.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(displayedImage);
 
-			Label nameTag = new Label();
-			nameTag.CssClass = "nameTag";
-			nameTag.Text = info.displayName;
+			Label nameTag = new Label()
+			{
+				CssClass = "nameTag",
+				Text = info.displayName
+			};
+			displayedImage.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(nameTag);
 
-			Button detailsButton = new Button();
-			detailsButton.CssClass = "detailsButton";
-			detailsButton.Text = "View";
+			Button detailsButton = new Button()
+			{
+				CssClass = "detailsButton",
+				Text = "View"
+			};
 			//Configure details button here
+			nameTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(detailsButton);
 
-			Label priceTag = new Label();
-			priceTag.CssClass = "priceTag";
-			priceTag.Text = "£" + Convert.ToString(info.price);
+			Label priceTag = new Label()
+			{
+				CssClass = "priceTag",
+				Text = "£" + Convert.ToString(info.price)
+			};
+			priceTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(priceTag);
 
-			Label stockTag = new Label();
-			stockTag.CssClass = "stockTag";
-			stockTag.Text = Convert.ToString(info.stock);
+			Label stockTag = new Label()
+			{
+				CssClass = "stockTag",
+				Text = Convert.ToString(info.stock)
+			};
+			stockTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(stockTag);
 
-			Label descriptionTag = new Label();
-			descriptionTag.CssClass = "descriptionTag";
-			descriptionTag.Text = Convert.ToString(info.description);
+			Label descriptionTag = new Label()
+			{
+				CssClass = "descriptionTag",
+				Text = Convert.ToString(info.description)
+			};
+			descriptionTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(descriptionTag);
 		}
 	}
@@ -213,6 +230,7 @@ namespace mainCoursework
 		{
 			var data = new defaultDataSet.productsDataTable();
 			int i = 0;
+			masterList = new product[data.Rows.Count];
 			foreach (DataRow row in data.Rows)
 			{
 				masterList[i] = new product(row);
