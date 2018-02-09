@@ -17,7 +17,7 @@ namespace mainCoursework
 		{
 			product test = new product("sampleProduct");
 			productPanel testPanel = new productPanel(test.productInfo);
-			this.Form.Controls.Add(testPanel.generatedControl);
+
 			//if (initialized)
 			//{
 			//	populatePage();
