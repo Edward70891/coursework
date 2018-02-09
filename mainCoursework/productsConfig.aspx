@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Employee.Master" AutoEventWireup="true" CodeBehind="productsConfig.aspx.cs" Inherits="mainCoursework.products" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Employee.Master" AutoEventWireup="true" CodeBehind="productsConfig.aspx.cs" Inherits="mainCoursework.productsConfig" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 	<div>
 		Products<br />

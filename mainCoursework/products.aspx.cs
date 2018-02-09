@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace mainCoursework
 {
-	public partial class products1 : System.Web.UI.Page
+	public partial class products : System.Web.UI.Page
 	{
 		productList productsDisplayList = new productList();
 		Panel[] panels;
@@ -15,19 +15,16 @@ namespace mainCoursework
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			product test = new product("sampleProduct");
-			productPanel testPanel = new productPanel(test.productInfo);
-
-			//if (initialized)
-			//{
-			//	populatePage();
-			//}
-			//else
-			//{
-			//	productsDisplayList.importAll();
-			//	populatePage();
-			//	initialized = true;
-			//}
+			if (initialized)
+			{
+				populatePage();
+			}
+			else
+			{
+				productsDisplayList.importAll();
+				populatePage();
+				initialized = true;
+			}
 		}
 
 		private void populatePage()
@@ -35,7 +32,7 @@ namespace mainCoursework
 			panels = productsDisplayList.generateControls();
 			for (int i = 0; i < panels.Length; i++)
 			{
-				this.Controls.Add(panels[i]);
+				contentPlaceHolder.Controls.Add(panels[i]);
 			}
 		}
 	}

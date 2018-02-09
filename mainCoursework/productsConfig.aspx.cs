@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace mainCoursework
 {
-	public partial class products : System.Web.UI.Page
+	public partial class productsConfig : System.Web.UI.Page
 	{
 		private defaultDataSetTableAdapters.productsTableAdapter productQueryTable = new defaultDataSetTableAdapters.productsTableAdapter();
 

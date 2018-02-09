@@ -122,7 +122,7 @@ namespace mainCoursework
 		public productPanel(productStruct info)
 		{
 			generatedControl.CssClass = "productPanel";
-			generatedControl.ID = info.productName;
+			generatedControl.ID = info.productName + "Panel";
 
 			Image displayedImage = new Image()
 			{
@@ -146,7 +146,7 @@ namespace mainCoursework
 			{
 				CssClass = "detailsButton",
 				Text = "View",
-				ID = info.productName + "DetailsButton"
+				ID = info.productName + "DetailsLinkButton"
 			};
 			//Configure details button here
 			nameTag.Attributes.Add("runat", "server");
