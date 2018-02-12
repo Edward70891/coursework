@@ -6,7 +6,6 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" type="text/css" href="~/Content/customer.css">
     <title><%: Page.Title %>Popsters Management</title>
 
     <asp:PlaceHolder runat="server">
@@ -15,7 +14,8 @@
 
     <webopt:bundlereference runat="server" path="~/Content/css" />
     <link runat="server" href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
+	
+	<link rel="stylesheet" type="text/css" href="~/Content/customer.css" runat="server">
 </head>
 <body>
     <form runat="server">
