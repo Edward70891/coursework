@@ -9,7 +9,6 @@ namespace mainCoursework
 {
 	public partial class products1 : System.Web.UI.Page
 	{
-		ContentPlaceHolder existingContent;
 		productList productsDisplayList = new productList();
 		Panel[] panels;
 		bool initialized = false;
@@ -30,11 +29,10 @@ namespace mainCoursework
 
 		private void populatePage()
 		{
-			existingContent = (ContentPlaceHolder)Master.FindControl("MainContent");
 			panels = productsDisplayList.generateControls();
 			for (int i = 0; i < panels.Length; i++)
 			{
-				existingContent.Controls.Add(panels[i]);
+				productsListPanel.Controls.Add(panels[i]);
 			}
 		}
 	}

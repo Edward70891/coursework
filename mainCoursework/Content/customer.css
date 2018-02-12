@@ -29,3 +29,13 @@ textarea {
 		padding: 0;
 	}
 }
+
+
+/* Custom CSS */
+.productPanel {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.nameTag {
+	font-weight: bold;
+}
