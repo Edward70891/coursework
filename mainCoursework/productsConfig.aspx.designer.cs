@@ -10,7 +10,7 @@
 namespace mainCoursework {
     
     
-    public partial class products {
+    public partial class productsConfig {
         
         /// <summary>
         /// productsTable control.

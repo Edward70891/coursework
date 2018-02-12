@@ -122,9 +122,13 @@ namespace mainCoursework
 		public productPanel(productStruct info)
 		{
 			generatedControl.CssClass = "productPanel";
-			generatedControl.ID = info.productName;
+			generatedControl.ID = info.productName + "Panel";
 
-			Image displayedImage = new Image();
+			Image displayedImage = new Image()
+			{
+				CssClass = "productImage",
+				ID = info.productName + "ImageTag"
+			};
 			//Configure image here
 			displayedImage.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(displayedImage);
@@ -132,7 +136,8 @@ namespace mainCoursework
 			Label nameTag = new Label()
 			{
 				CssClass = "nameTag",
-				Text = info.displayName
+				Text = info.displayName,
+				ID = info.productName + "NameTag"
 			};
 			displayedImage.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(nameTag);
@@ -140,7 +145,8 @@ namespace mainCoursework
 			Button detailsButton = new Button()
 			{
 				CssClass = "detailsButton",
-				Text = "View"
+				Text = "View",
+				ID = info.productName + "DetailsLinkButton"
 			};
 			//Configure details button here
 			nameTag.Attributes.Add("runat", "server");
@@ -149,7 +155,8 @@ namespace mainCoursework
 			Label priceTag = new Label()
 			{
 				CssClass = "priceTag",
-				Text = "£" + Convert.ToString(info.price)
+				Text = "£" + Convert.ToString(info.price),
+				ID = info.productName + "PriceTag"
 			};
 			priceTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(priceTag);
@@ -157,7 +164,8 @@ namespace mainCoursework
 			Label stockTag = new Label()
 			{
 				CssClass = "stockTag",
-				Text = Convert.ToString(info.stock)
+				Text = Convert.ToString(info.stock),
+				ID = info.productName + "StockTag"
 			};
 			stockTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(stockTag);
@@ -165,7 +173,8 @@ namespace mainCoursework
 			Label descriptionTag = new Label()
 			{
 				CssClass = "descriptionTag",
-				Text = Convert.ToString(info.description)
+				Text = Convert.ToString(info.description),
+				ID = info.productName + "DescriptionTag"
 			};
 			descriptionTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(descriptionTag);
