@@ -187,6 +187,7 @@ namespace mainCoursework
 	/// </summary>
 	public class productList
 	{
+		private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
 		//The complete list of all the products initialised
 		private product[] masterList;
 		//The variable that all the code in this class will modify
@@ -228,7 +229,7 @@ namespace mainCoursework
 		/// </summary>
 		public void importAll()
 		{
-			var data = new defaultDataSet.productsDataTable();
+			var data = adapter.GetData();
 			int i = 0;
 			masterList = new product[data.Rows.Count];
 			foreach (DataRow row in data.Rows)

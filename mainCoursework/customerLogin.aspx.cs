@@ -24,7 +24,7 @@ namespace mainCoursework
 
 		protected void submitCustomerCredentialsButton_Click(object sender, EventArgs e)
 		{
-			//Checks if 
+			//Checks if there are any SQL sensitive characters in the inputs
 			if (customSecurity.sanitizeCheck(new string[] { customerUsernameBox.Text, customerPasswordBox.Text }))
 			{
 				//Pull the given username into a variable

@@ -9,34 +9,32 @@ namespace mainCoursework
 {
 	public partial class products1 : System.Web.UI.Page
 	{
+		ContentPlaceHolder existingContent;
 		productList productsDisplayList = new productList();
 		Panel[] panels;
 		bool initialized = false;
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			product test = new product("sampleProduct");
-			productPanel testPanel = new productPanel(test.productInfo);
-			this.Form.Controls.Add(testPanel.generatedControl);
-			
-			//if (initialized)
-			//{
-			//	populatePage();
-			//}
-			//else
-			//{
-			//	productsDisplayList.importAll();
-			//	populatePage();
-			//	initialized = true;
-			//}
+			if (initialized)
+			{
+				populatePage();
+			}
+			else
+			{
+				productsDisplayList.importAll();
+				populatePage();
+				initialized = true;
+			}
 		}
 
 		private void populatePage()
 		{
+			existingContent = (ContentPlaceHolder)Master.FindControl("MainContent");
 			panels = productsDisplayList.generateControls();
 			for (int i = 0; i < panels.Length; i++)
 			{
-				this.Controls.Add(panels[i]);
+				existingContent.Controls.Add(panels[i]);
 			}
 		}
 	}
