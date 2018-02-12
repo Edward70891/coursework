@@ -15,7 +15,7 @@
     <webopt:bundlereference runat="server" path="~/Content/css" />
     <link runat="server" href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 	
-	<link rel="stylesheet" type="text/css" href="~/Content/customer.css" runat="server">
+	<link rel="stylesheet" type="text/css" href="/Content/customer.css" runat="server">
 </head>
 <body>
     <form runat="server">

@@ -137,6 +137,7 @@
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
     <Content Include="products.aspx" />
+    <Content Include="productView.aspx" />
     <Content Include="registerEmployee.aspx" />
     <Content Include="Content\employee.css" />
     <Content Include="userConfig.aspx" />
@@ -243,6 +244,13 @@
       <DependentUpon>products.aspx</DependentUpon>
     </Compile>
     <Compile Include="productsHandlig.cs" />
+    <Compile Include="productView.aspx.cs">
+      <DependentUpon>productView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="productView.aspx.designer.cs">
+      <DependentUpon>productView.aspx</DependentUpon>
+    </Compile>
     <Compile Include="registerEmployee.aspx.cs">
       <DependentUpon>registerEmployee.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
