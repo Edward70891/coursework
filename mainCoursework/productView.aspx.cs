@@ -11,7 +11,7 @@ namespace mainCoursework
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-
+			productTitle.Text = Convert.ToString(Session["productRedirectName"]);
 		}
 	}
 }

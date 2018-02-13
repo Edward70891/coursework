@@ -146,9 +146,10 @@ namespace mainCoursework
 			{
 				CssClass = "detailsButton",
 				Text = "View",
-				ID = info.productName + "DetailsLinkButton"
+				ID = info.productName + "DetailsLinkButton",
+				OnClientClick = "detailsButton_Click",
+				CommandArgument = info.productName
 			};
-			//Configure details button here
 			nameTag.Attributes.Add("runat", "server");
 			generatedControl.Controls.Add(detailsButton);
 
@@ -270,6 +271,8 @@ namespace mainCoursework
 		/// <param name="sortType">What parameter to sort the list by, "price", "stock", "name", or "band"</param>
 		public void sort(bool ascending, string sortType)
 		{
+			//A new array to sort into
+			product[] sortedList = new product[WorkingList.Length];
 			switch (sortType)
 			{
 				case "price":

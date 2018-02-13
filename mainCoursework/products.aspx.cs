@@ -35,5 +35,12 @@ namespace mainCoursework
 				productsListPanel.Controls.Add(panels[i]);
 			}
 		}
+
+		protected void detailsButton_Click(object sender, EventArgs e)
+		{
+			Button btn = (Button)sender;
+			Session["productRedirectName"] = btn.CommandArgument;
+			Server.Transfer("~/productView.aspx", false);
+		}
 	}
 }
