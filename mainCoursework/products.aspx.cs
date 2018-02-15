@@ -32,6 +32,16 @@ namespace mainCoursework
 			panels = productsDisplayList.generateControls();
 			for (int i = 0; i < panels.Length; i++)
 			{
+				Button detailsButton = new Button()
+				{
+					CssClass = "detailsButton",
+					Text = "View",
+					ID = productsDisplayList.list[i].productInfo.productName + "DetailsLinkButton",
+					CommandArgument = productsDisplayList.list[i].productInfo.productName
+				};
+				detailsButton.Click += new EventHandler(detailsButton_Click);
+				detailsButton.Attributes.Add("runat", "server");
+				panels[i].Controls.Add(detailsButton);
 				productsListPanel.Controls.Add(panels[i]);
 			}
 		}

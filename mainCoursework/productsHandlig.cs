@@ -119,8 +119,11 @@ namespace mainCoursework
 	public class productPanel
 	{
 		public Panel generatedControl = new Panel();
-		public productPanel(productStruct info)
+		public productStruct info;
+		public productPanel(productStruct productInfo)
 		{
+			info = productInfo;
+
 			generatedControl.CssClass = "productPanel";
 			generatedControl.ID = info.productName + "Panel";
 
@@ -139,19 +142,8 @@ namespace mainCoursework
 				Text = info.displayName,
 				ID = info.productName + "NameTag"
 			};
-			displayedImage.Attributes.Add("runat", "server");
-			generatedControl.Controls.Add(nameTag);
-
-			Button detailsButton = new Button()
-			{
-				CssClass = "detailsButton",
-				Text = "View",
-				ID = info.productName + "DetailsLinkButton",
-				OnClientClick = "detailsButton_Click",
-				CommandArgument = info.productName
-			};
 			nameTag.Attributes.Add("runat", "server");
-			generatedControl.Controls.Add(detailsButton);
+			generatedControl.Controls.Add(nameTag);
 
 			Label priceTag = new Label()
 			{
