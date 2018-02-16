@@ -82,7 +82,7 @@ namespace mainCoursework
 			//Gets "all" (ie, only the one) rows with the given productname
 			var rows = adapter.getDataTable(searchName);
 			//Converts the rows variable to a single object
-			System.Data.DataRow row = rows[0];
+			DataRow row = rows[0];
 			ProductInfo.productName = searchName;
 			//Sets all the values according the the indexes of the table columns
 			ProductInfo.displayName = Convert.ToString(row[3]);
@@ -224,6 +224,15 @@ namespace mainCoursework
 				result[i] = working.generatedControl;
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Initialize the list with a prebuilt array
+		/// </summary>
+		/// <param name="array">The array to load into the class</param>
+		public void setWorkingList(product[] array)
+		{
+			WorkingList = array;
 		}
 
 		/// <summary>

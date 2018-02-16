@@ -13,12 +13,39 @@ namespace mainCoursework {
     public partial class productView {
         
         /// <summary>
-        /// productTitle control.
+        /// product control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label productTitle;
+        protected global::System.Web.UI.WebControls.Panel product;
+        
+        /// <summary>
+        /// amountToAdd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox amountToAdd;
+        
+        /// <summary>
+        /// cartButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button cartButton;
+        
+        /// <summary>
+        /// returnLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label returnLabel;
     }
 }
