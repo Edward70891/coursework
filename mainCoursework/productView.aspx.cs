@@ -22,9 +22,8 @@ namespace mainCoursework
 			}
 			//Instantiate a new product and a new panel, make them, change the css class then add them
 			currentProduct = new product(Convert.ToString(Session["productRedirectName"]));
-			Session["productRedirectName"] = "";
 			productPanel currentPanel = new productPanel(currentProduct.productInfo);
-			Panel toAdd = currentPanel.generatedControl;
+			Panel toAdd = currentPanel;
 			toAdd.CssClass = "fullProductPanel";
 			product.Controls.Add(toAdd);
 		}
@@ -38,8 +37,16 @@ namespace mainCoursework
 			}
 			else
 			{
-				adapter.insertProduct(Convert.ToString(Session["currentUser"]), currentProduct.productInfo.productName, Convert.ToInt32(amountToAdd.Text));
-				returnLabel.Text = amountToAdd.Text + " " + currentProduct.productInfo.productName + "s added to your cart!";
+				//Make sure they're not trying to add 0 of something to their cart
+				if (amountToAdd.Text != "0")
+				{
+					adapter.insertProduct(Convert.ToString(Session["currentUser"]), currentProduct.productInfo.productName, Convert.ToInt32(amountToAdd.Text));
+					returnLabel.Text = amountToAdd.Text + " " + currentProduct.productInfo.productName + "s added to your cart!";
+				}
+				else
+				{
+					returnLabel.Text = "You can't add 0 of something to your cart!";
+				}
 			}
 		}
 	}

@@ -116,16 +116,15 @@ namespace mainCoursework
 	/// <summary>
 	/// A control that builds itself ready to add
 	/// </summary>
-	public class productPanel
+	public class productPanel : System.Web.UI.WebControls.Panel
 	{
-		public Panel generatedControl = new Panel();
 		public productStruct info;
 		public productPanel(productStruct productInfo)
 		{
 			info = productInfo;
 
-			generatedControl.CssClass = "productPanel";
-			generatedControl.ID = info.productName + "Panel";
+			this.CssClass = "productPanel";
+			this.ID = info.productName + "Panel";
 
 			Image displayedImage = new Image()
 			{
@@ -134,7 +133,8 @@ namespace mainCoursework
 			};
 			//Configure image here
 			displayedImage.Attributes.Add("runat", "server");
-			generatedControl.Controls.Add(displayedImage);
+			this.Controls.Add(displayedImage);
+			this.Controls.Add(new LiteralControl("<br />"));
 
 			Label nameTag = new Label()
 			{
@@ -143,7 +143,8 @@ namespace mainCoursework
 				ID = info.productName + "NameTag"
 			};
 			nameTag.Attributes.Add("runat", "server");
-			generatedControl.Controls.Add(nameTag);
+			this.Controls.Add(nameTag);
+			this.Controls.Add(new LiteralControl("<br />"));
 
 			Label priceTag = new Label()
 			{
@@ -152,16 +153,24 @@ namespace mainCoursework
 				ID = info.productName + "PriceTag"
 			};
 			priceTag.Attributes.Add("runat", "server");
-			generatedControl.Controls.Add(priceTag);
+			this.Controls.Add(priceTag);
 
 			Label stockTag = new Label()
 			{
 				CssClass = "stockTag",
-				Text = Convert.ToString(info.stock),
 				ID = info.productName + "StockTag"
 			};
+			if (info.stock == 0)
+			{
+				stockTag.Text = "Out of stock";
+			}
+			else
+			{
+				stockTag.Text = Convert.ToString(info.stock) + "in stock";
+			}
 			stockTag.Attributes.Add("runat", "server");
-			generatedControl.Controls.Add(stockTag);
+			this.Controls.Add(stockTag);
+			this.Controls.Add(new LiteralControl("<br />"));
 
 			Label descriptionTag = new Label()
 			{
@@ -170,7 +179,8 @@ namespace mainCoursework
 				ID = info.productName + "DescriptionTag"
 			};
 			descriptionTag.Attributes.Add("runat", "server");
-			generatedControl.Controls.Add(descriptionTag);
+			this.Controls.Add(descriptionTag);
+			this.Controls.Add(new LiteralControl("<br />"));
 		}
 	}
 
@@ -221,7 +231,7 @@ namespace mainCoursework
 			for (int i = 0; i < WorkingList.Length; i++)
 			{
 				productPanel working = new productPanel(WorkingList[i].productInfo);
-				result[i] = working.generatedControl;
+				result[i] = working;
 			}
 			return result;
 		}

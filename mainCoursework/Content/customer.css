@@ -33,5 +33,17 @@ textarea {
 
 /* Custom CSS */
 .productPanel {
-	
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.nameTag {
+	font-size: large;
+	font-weight: bold;
+}
+.productImage{
+	width: 100px;
+	height: 100px;
+}
+.detailsButton{
+	/*Align right here*/
 }
