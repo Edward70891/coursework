@@ -230,8 +230,7 @@ namespace mainCoursework
 			Panel[] result = new Panel[WorkingList.Length];
 			for (int i = 0; i < WorkingList.Length; i++)
 			{
-				productPanel working = new productPanel(WorkingList[i].productInfo);
-				result[i] = working;
+				result[i] = new productPanel(WorkingList[i].productInfo);
 			}
 			return result;
 		}
@@ -245,10 +244,13 @@ namespace mainCoursework
 			WorkingList = array;
 		}
 
+		////////////////
+		//Constructors//
+		////////////////
 		/// <summary>
 		/// Sets the list to be the entire contents of the database table, initializes working list
 		/// </summary>
-		public void importAll()
+		public productList()
 		{
 			var data = adapter.GetData();
 			int i = 0;
@@ -260,12 +262,11 @@ namespace mainCoursework
 			}
 			WorkingList = masterList;
 		}
-
 		/// <summary>
 		/// Call me to initialize the master list with a given set of names
 		/// </summary>
 		/// <param name="productNames">The productName value of all the products to initialize</param>
-		public void importWithString(string[] productNames)
+		public productList(string[] productNames)
 		{
 			int i = 0;
 			foreach (string str in productNames)
@@ -273,6 +274,20 @@ namespace mainCoursework
 				masterList[i] = new product(str);
 				i++;
 			}
+		}
+		/// <summary>
+		/// Initialize the list with a datatable
+		/// </summary>
+		/// <param name="data">The datatable to use to initialize</param>
+		public productList(DataTable data)
+		{
+			int i = 0;
+			foreach (DataRow row in data.Rows)
+			{
+				masterList[i] = new product(row);
+				i++;
+			}
+			WorkingList = masterList;
 		}
 
 		/// <summary>

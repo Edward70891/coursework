@@ -10,20 +10,20 @@ namespace mainCoursework
 	public partial class products1 : System.Web.UI.Page
 	{
 		//Opens needed variables: a productList, a panel array, and a bool to facilitate stopping checking the database every refresh
-		productList productsDisplayList = new productList();
+		productList productsDisplayList;
 		Panel[] panels;
 		bool initialized = false;
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			//If the page has already been initialized, just reload the display, otherwise initialize the productList (and set the bool to true)
+			//If the page has already been initialized, just reload the display, otherwise initialize the productList (and set the bool to true so this doesn't run every time)
 			if (initialized)
 			{
 				populatePage();
 			}
 			else
 			{
-				productsDisplayList.importAll();
+				productsDisplayList = new productList();
 				populatePage();
 				initialized = true;
 			}

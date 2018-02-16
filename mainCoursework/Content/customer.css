@@ -47,3 +47,6 @@ textarea {
 .detailsButton{
 	/*Align right here*/
 }
+.stockTag{
+	text-align: right;
+}
