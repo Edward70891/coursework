@@ -133,6 +133,7 @@
   <ItemGroup>
     <Content Include="App_Data\log.txt" />
     <Content Include="App_Data\main.accdb" />
+    <Content Include="cart.aspx" />
     <Content Include="Content\customer.css" />
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
@@ -207,6 +208,13 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="cart.aspx.cs">
+      <DependentUpon>cart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="cart.aspx.designer.cs">
+      <DependentUpon>cart.aspx</DependentUpon>
+    </Compile>
     <Compile Include="commonClasses.cs" />
     <Compile Include="Employee.Master.cs">
       <DependentUpon>Employee.Master</DependentUpon>
