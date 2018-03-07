@@ -54,12 +54,22 @@ namespace sortTesting
 			{
 				return input;
 			}
+			else if (input.Length == 2)
+			{
+				if (input[0] > input[1])
+				{
+					int temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
 
 			int[] subArray;
 			List<int> subList = new List<int>();
 			int[] superArray;
 			List<int> superList = new List<int>();
-			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2));
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length - 1) / 2));
 
 			for (int i = 0; i < input.Length; i++)
 			{
