@@ -32,19 +32,14 @@ namespace sortTesting
 
 			Console.Clear();
 			Console.WriteLine("You've given the following list to be sorted:");
-			foreach (int current in toSort)
-			{
-				Console.Write(current + ", ");
-			}
+			printArray(toSort);
 
 			sorted = quickSort(toSort);
 
 			Console.WriteLine();
 			Console.WriteLine("The algorithm gave the following sorted list:");
-			foreach (int i in sorted)
-			{
-				Console.Write(i + ", ");
-			}
+			printArray(sorted);
+
 			Console.Read();
 		}
 
@@ -69,7 +64,7 @@ namespace sortTesting
 			List<int> subList = new List<int>();
 			int[] superArray;
 			List<int> superList = new List<int>();
-			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length - 1) / 2));
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
 
 			for (int i = 0; i < input.Length; i++)
 			{
@@ -90,25 +85,36 @@ namespace sortTesting
 			superArray = quickSort(superList.ToArray());
 
 			int finalLength = subArray.Length + superArray.Length + 1;
-			int[] result = new int[finalLength];
+			int[] result = subArray;
+			int[] pivotArray = new int[1];
+			pivotArray[0] = input[pivotIndex];
+			appendArray(ref result, ref pivotArray);
+			appendArray(ref result, ref superArray);
 
-			for (int i = 0; i < finalLength; i++)
-			{
-				if (i < subArray.Length)
-				{
-					result[i] = subArray[i];
-				}
-				else if (i == subArray.Length)
-				{
-					result[i] = input[pivotIndex];
-				}
-				else
-				{
-					result[i] = superArray[i - subArray.Length];
-				}
-			}
-
+			printArray(result);
 			return result;
+		}
+
+		static void appendArray<T>(ref T[] baseArray, ref T[] addition)
+		{
+			T[] result = new T[baseArray.Length + addition.Length];
+			for (int i = 0; i < baseArray.Length; i++)
+			{
+				result[i] = baseArray[i];
+			}
+			for (int i = baseArray.Length; i < result.Length; i++)
+			{
+				result[i] = addition[i - baseArray.Length];
+			}
+			baseArray = result;
+		}
+
+		static void printArray<T>(T[] input)
+		{
+			foreach (T current in input)
+			{
+				Console.WriteLine(Convert.ToString(current) + ", ");
+			}
 		}
 	}
 }
