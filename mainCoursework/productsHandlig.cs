@@ -302,16 +302,324 @@ namespace mainCoursework
 			switch (sortType)
 			{
 				case "price":
-
+					WorkingList = sortPrice(WorkingList, ascending);
+					break;
 				case "stock":
-
+					WorkingList = sortStock(WorkingList, ascending);
+					break;
 				case "name":
-
+					WorkingList = sortName(WorkingList, ascending);
+					break;
 				case "band":
-
+					WorkingList = sortBand(WorkingList, ascending);
+					break;
 				default:
 					throw new System.ArgumentException("The sort type must be one of the specified values.");
 			}
+		}
+
+		private static product[] sortPrice(product[] input, bool ascending)
+		{
+			//All the base cases
+			//If it is passed an array with a single (or no) element, return just that
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
+			else if (input.Length == 2)
+			{
+				if (input[0].productInfo.price > input[1].productInfo.price)
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
+
+			//Initialize the needed variables; the two lists to add the numbers to, the arrays to add those to, and the index of the pivot
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			//The actual sort, cycle through all the elements in the array
+			for (int i = 0; i < input.Length; i++)
+			{
+				//If it's looking at the pivot, don't sort it
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				//If the current element is smaller than or equal to the pivot, add it to the appropriate list for the sort type
+				else if (input[i].productInfo.price <= input[pivotIndex].productInfo.price)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				//If the current element is larger than the picot, add it to the appropriate list for the sort type
+				else if (input[i].productInfo.price > input[pivotIndex].productInfo.price)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			//Calls itself on the two arrays we produce from the lists
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortPrice(subArray, ascending);
+			superArray = sortPrice(superArray, ascending);
+
+			//Assembles the final array
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			//Returns the final array
+			return result;
+		}
+
+		private static product[] sortStock(product[] input, bool ascending)
+		{
+			//All the base cases
+			//If it is passed an array with a single (or no) element, return just that
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
+			else if (input.Length == 2)
+			{
+				if (input[0].productInfo.stock > input[1].productInfo.stock)
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
+
+			//Initialize the needed variables; the two lists to add the numbers to, the arrays to add those to, and the index of the pivot
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			//The actual sort, cycle through all the elements in the array
+			for (int i = 0; i < input.Length; i++)
+			{
+				//If it's looking at the pivot, don't sort it
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				//If the current element is smaller than or equal to the pivot, add it to the appropriate list for the sort type
+				else if (input[i].productInfo.stock <= input[pivotIndex].productInfo.stock)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				//If the current element is larger than the picot, add it to the appropriate list for the sort type
+				else if (input[i].productInfo.stock > input[pivotIndex].productInfo.stock)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			//Calls itself on the two arrays we produce from the lists
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortStock(subArray, ascending);
+			superArray = sortStock(superArray, ascending);
+
+			//Assembles the final array
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			//Returns the final array
+			return result;
+		}
+
+		private static product[] sortBand(product[] input, bool ascending)
+		{
+			//All the base cases
+			//If it is passed an array with a single (or no) element, return just that
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
+			else if (input.Length == 2)
+			{
+				if (input[0].productInfo.displayName.CompareTo(input[1]) > 0)
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
+
+			//Initialize the needed variables; the two lists to add the numbers to, the arrays to add those to, and the index of the pivot
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			//The actual sort, cycle through all the elements in the array
+			for (int i = 0; i < input.Length; i++)
+			{
+				//If it's looking at the pivot, don't sort it
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				//If the current element is smaller than or equal to the pivot, add it to the sublist
+				else if (input[i].productInfo.band.CompareTo(input[pivotIndex]) <= 0)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				//If the current element is larger than the picot, add it to the superlist
+				else if (input[i].productInfo.band.CompareTo(input[pivotIndex]) > 0)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			//Calls itself on the two arrays we produce from the lists
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortName(subArray, ascending);
+			superArray = sortName(superArray, ascending);
+
+			//Assembles the final array
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			//Returns the final array
+			return result;
+		}
+
+		private static product[] sortName(product[] input, bool ascending)
+		{
+			//All the base cases
+			//If it is passed an array with a single (or no) element, return just that
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
+			else if (input.Length == 2)
+			{
+				if (input[0].productInfo.displayName.CompareTo(input[1]) > 0)
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
+
+			//Initialize the needed variables; the two lists to add the numbers to, the arrays to add those to, and the index of the pivot
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			//The actual sort, cycle through all the elements in the array
+			for (int i = 0; i < input.Length; i++)
+			{
+				//If it's looking at the pivot, don't sort it
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				//If the current element is smaller than or equal to the pivot, add it to the sublist
+				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex]) <= 0)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				//If the current element is larger than the picot, add it to the superlist
+				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex]) > 0)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			//Calls itself on the two arrays we produce from the lists
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortName(subArray, ascending);
+			superArray = sortName(superArray, ascending);
+
+			//Assembles the final array
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			//Returns the final array
+			return result;
 		}
 
 		/// <summary>

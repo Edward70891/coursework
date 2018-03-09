@@ -40,7 +40,7 @@ namespace sortTesting
 			}
 		}
 
-		//-------------------------------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		static void sortInts()
 		{
@@ -94,8 +94,7 @@ namespace sortTesting
 			bool firstInput = true;
 			while (true)
 			{
-				int inputInt;
-				if (int.TryParse(Console.ReadLine(), out inputInt))
+				if (int.TryParse(Console.ReadLine(), out int inputInt))
 				{
 					userInputs.Add(inputInt);
 					firstInput = false;
@@ -156,7 +155,7 @@ namespace sortTesting
 			Console.Read();
 		}
 
-		//----------------------------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		static void sortDecimals()
 		{
@@ -165,8 +164,7 @@ namespace sortTesting
 				Console.Clear();
 				Console.WriteLine("How many numbers do you want to generate? (Enter a non-numeric input to go back)");
 				string input = Console.ReadLine();
-				int count;
-				if (int.TryParse(input, out count) != true)
+				if (int.TryParse(input, out int count) != true)
 				{
 					break;
 				}
@@ -221,7 +219,7 @@ namespace sortTesting
 			Console.Read();
 		}
 
-		//----------------------------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		static void sortStrings()
 		{
@@ -284,7 +282,24 @@ namespace sortTesting
 
 		static void sortRandomStrings()
 		{
-			//Random string generation goes here
+			Console.Clear();
+			Console.WriteLine("How many strings do you want to generate?");
+			int count = Convert.ToInt32(Console.ReadLine());
+			Console.WriteLine("How many letters per string?");
+			int length = Convert.ToInt32(Console.ReadLine());
+			Random generator = new Random();
+			List<string> inputs = new List<string>();
+			for (int i = 0; i <= count; i++)
+			{
+				char[] characters = new char[length];
+				for (int o = 0; o < length; o++)
+				{
+					characters[o] = (char)Convert.ToInt32(Math.Ceiling((generator.NextDouble() * 26) + 64));
+				}
+				string element = new string(characters);
+				inputs.Add(element);
+			}
+			stringSortContainer(inputs.ToArray());
 		}
 
 		static void stringSortContainer(string[] elements)
