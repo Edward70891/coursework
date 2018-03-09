@@ -13,6 +13,42 @@ namespace mainCoursework {
     public partial class products1 {
         
         /// <summary>
+        /// SortingControlsdddddd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel SortingControlsdddddd;
+        
+        /// <summary>
+        /// sortField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList sortField;
+        
+        /// <summary>
+        /// sortType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList sortType;
+        
+        /// <summary>
+        /// startSortButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button startSortButton;
+        
+        /// <summary>
         /// productsListPanel control.
         /// </summary>
         /// <remarks>

@@ -297,8 +297,6 @@ namespace mainCoursework
 		/// <param name="sortType">What parameter to sort the list by, "price", "stock", "name", or "band"</param>
 		public void sort(bool ascending, string sortType)
 		{
-			//A new array to sort into
-			product[] sortedList = new product[WorkingList.Length];
 			switch (sortType)
 			{
 				case "price":
@@ -481,7 +479,7 @@ namespace mainCoursework
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0].productInfo.displayName.CompareTo(input[1]) > 0)
+				if (input[0].productInfo.band.CompareTo(input[1].productInfo.band) > 0)
 				{
 					product temp = input[0];
 					input[0] = input[1];
@@ -506,7 +504,7 @@ namespace mainCoursework
 					continue;
 				}
 				//If the current element is smaller than or equal to the pivot, add it to the sublist
-				else if (input[i].productInfo.band.CompareTo(input[pivotIndex]) <= 0)
+				else if (input[i].productInfo.band.CompareTo(input[pivotIndex].productInfo.band) <= 0)
 				{
 					if (ascending)
 					{
@@ -518,7 +516,7 @@ namespace mainCoursework
 					}
 				}
 				//If the current element is larger than the picot, add it to the superlist
-				else if (input[i].productInfo.band.CompareTo(input[pivotIndex]) > 0)
+				else if (input[i].productInfo.band.CompareTo(input[pivotIndex].productInfo.band) > 0)
 				{
 					if (ascending)
 					{
@@ -557,7 +555,7 @@ namespace mainCoursework
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0].productInfo.displayName.CompareTo(input[1]) > 0)
+				if (input[0].productInfo.displayName.CompareTo(input[1].productInfo.displayName) > 0)
 				{
 					product temp = input[0];
 					input[0] = input[1];
@@ -582,7 +580,7 @@ namespace mainCoursework
 					continue;
 				}
 				//If the current element is smaller than or equal to the pivot, add it to the sublist
-				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex]) <= 0)
+				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex].productInfo.displayName) <= 0)
 				{
 					if (ascending)
 					{
@@ -594,7 +592,7 @@ namespace mainCoursework
 					}
 				}
 				//If the current element is larger than the picot, add it to the superlist
-				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex]) > 0)
+				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex].productInfo.displayName) > 0)
 				{
 					if (ascending)
 					{

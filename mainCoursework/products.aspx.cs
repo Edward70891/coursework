@@ -33,6 +33,8 @@ namespace mainCoursework
 		{
 			//Generate the panel array from the product list
 			panels = productsDisplayList.generateControls();
+			//Clear out the display list
+			productsListPanel.Controls.Clear();
 			for (int i = 0; i < panels.Length; i++)
 			{
 				//Creates and sets the properties of a button for each product and slots it into the panel before it's added to the page
@@ -57,6 +59,21 @@ namespace mainCoursework
 			Button btn = (Button)sender;
 			Session["productRedirectName"] = btn.CommandArgument;
 			Server.Transfer("~/productView.aspx", false);
+		}
+
+		protected void startSortButton_Click(object sender, EventArgs e)
+		{
+			bool ascending;
+			if (sortType.SelectedIndex == 0)
+			{
+				ascending = true;
+			}
+			else
+			{
+				ascending = false;
+			}
+			productsDisplayList.sort(ascending, sortField.SelectedValue);
+			populatePage();
 		}
 	}
 }
