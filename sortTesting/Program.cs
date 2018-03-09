@@ -15,17 +15,21 @@ namespace sortTesting
 			while (true)
 			{
 				Console.Clear();
-				Console.WriteLine("Input 1 for entering your own values, 2 for randomly generated ones or 0 for exit");
+				Console.WriteLine("Input 1 to sort integers, 2 to sort decimals, 3 to sort strings or 0 to exit");
 				string choice = Console.ReadLine();
 				if (choice == "1")
 				{
-					sortUserInput();
+					sortInts();
 				}
 				else if (choice == "2")
 				{
-					sortRandomNumbers();
+					//Sorting decimals code goes here
 				}
-				else if (choice == "9")
+				else if (choice == "3")
+				{
+					//Sorting strings goes here
+				}
+				else if (choice == "0")
 				{
 					break;
 				}
@@ -36,7 +40,33 @@ namespace sortTesting
 			}
 		}
 
-		static void sortRandomNumbers()
+		static void sortInts()
+		{
+			while (true)
+			{
+				Console.Clear();
+				Console.WriteLine("Input 1 to enter your own integers, 2 to randomly generate ones or 0 to go back");
+				string choice = Console.ReadLine();
+				if (choice == "1")
+				{
+					sortUserInputInts();
+				}
+				else if (choice == "2")
+				{
+					sortRandomInts();
+				}
+				else if (choice == "0")
+				{
+					break;
+				}
+				else
+				{
+					Console.WriteLine("Invalid input");
+				}
+			}
+		}
+
+		static void sortRandomInts()
 		{
 			Console.Clear();
 			Console.WriteLine("How many numbers do you want to generate?");
@@ -49,10 +79,10 @@ namespace sortTesting
 			{
 				inputs.Add(Convert.ToInt32(Math.Ceiling(generator.NextDouble() * limit)));
 			}
-			sortContainer(inputs.ToArray());
+			intSortContainer(inputs.ToArray());
 		}
 
-		static void sortUserInput()
+		static void sortUserInputInts()
 		{
 			Console.Clear();
 			Console.WriteLine("Please input all the numbers you want sorting (separated by pressing enter), followed by any non numberic input to terminate the list.");
@@ -82,10 +112,10 @@ namespace sortTesting
 				}
 			}
 
-			sortContainer(elements);
+			intSortContainer(elements);
 		}
 
-		static void sortContainer(int[] elements)
+		static void intSortContainer(int[] elements)
 		{
 			Console.Clear();
 			Console.WriteLine("You've given the following list to be sorted:");
@@ -94,6 +124,43 @@ namespace sortTesting
 			Stopwatch timer = new Stopwatch();
 			timer.Start();
 			elements = sort.quickSortInteger(elements);
+			timer.Stop();
+
+			Console.WriteLine();
+			Console.WriteLine("The algorithm gave the following sorted list in " + timer.ElapsedMilliseconds + " ms or " + timer.ElapsedTicks + "ticks:");
+			common.outputArray(elements);
+
+			Console.Read();
+		}
+
+		static void sortDecimals()
+		{
+			while (true)
+			{
+				Console.Clear();
+				Console.WriteLine("How many numbers do you want to generate?");
+				int count = Convert.ToInt32(Console.ReadLine());
+				Console.WriteLine("What do you want the upper limit to be?");
+				int limit = Convert.ToInt32(Console.ReadLine());
+				Random generator = new Random();
+				List<decimal> inputs = new List<decimal>();
+				for (int i = 0; i <= count; i++)
+				{
+					inputs.Add(Convert.ToDecimal(generator.NextDouble() * limit));
+				}
+				decimalSortContainer(inputs.ToArray());
+			}
+		}
+
+		static void decimalSortContainer(decimal[] elements)
+		{
+			Console.Clear();
+			Console.WriteLine("You've given the following list to be sorted:");
+			common.outputArray(elements);
+
+			Stopwatch timer = new Stopwatch();
+			timer.Start();
+			elements = sort.quickSortDecimal(elements);
 			timer.Stop();
 
 			Console.WriteLine();
