@@ -23,11 +23,11 @@ namespace sortTesting
 				}
 				else if (choice == "2")
 				{
-					//Sorting decimals code goes here
+					sortDecimals();
 				}
 				else if (choice == "3")
 				{
-					//Sorting strings goes here
+					sortStrings();
 				}
 				else if (choice == "0")
 				{
@@ -39,6 +39,8 @@ namespace sortTesting
 				}
 			}
 		}
+
+		//-------------------------------------------------------------------------------------------------------------
 
 		static void sortInts()
 		{
@@ -117,13 +119,34 @@ namespace sortTesting
 
 		static void intSortContainer(int[] elements)
 		{
+			bool ascending;
+			while (true)
+			{
+				Console.WriteLine("Input 1 for ascending order, 2 for descending order");
+				string ascendingChoice = Console.ReadLine();
+				if (ascendingChoice == "1")
+				{
+					ascending = true;
+					break;
+				}
+				else if (ascendingChoice == "2")
+				{
+					ascending = false;
+					break;
+				}
+				else
+				{
+					Console.WriteLine("Invalid input.");
+				}
+			}
+
 			Console.Clear();
 			Console.WriteLine("You've given the following list to be sorted:");
 			common.outputArray(elements);
 
 			Stopwatch timer = new Stopwatch();
 			timer.Start();
-			elements = sort.quickSortInteger(elements);
+			elements = sort.quickSortInteger(elements, ascending);
 			timer.Stop();
 
 			Console.WriteLine();
@@ -133,13 +156,20 @@ namespace sortTesting
 			Console.Read();
 		}
 
+		//----------------------------------------------------------------------------------------------------------------------
+
 		static void sortDecimals()
 		{
 			while (true)
 			{
 				Console.Clear();
-				Console.WriteLine("How many numbers do you want to generate?");
-				int count = Convert.ToInt32(Console.ReadLine());
+				Console.WriteLine("How many numbers do you want to generate? (Enter a non-numeric input to go back)");
+				string input = Console.ReadLine();
+				int count;
+				if (int.TryParse(input, out count) != true)
+				{
+					break;
+				}
 				Console.WriteLine("What do you want the upper limit to be?");
 				int limit = Convert.ToInt32(Console.ReadLine());
 				Random generator = new Random();
@@ -154,13 +184,139 @@ namespace sortTesting
 
 		static void decimalSortContainer(decimal[] elements)
 		{
+			bool ascending;
+			while (true)
+			{
+				Console.WriteLine("Input 1 for ascending order, 2 for descending order");
+				string ascendingChoice = Console.ReadLine();
+				if (ascendingChoice == "1")
+				{
+					ascending = true;
+					break;
+				}
+				else if (ascendingChoice == "2")
+				{
+					ascending = false;
+					break;
+				}
+				else
+				{
+					Console.WriteLine("Invalid input.");
+				}
+			}
+
 			Console.Clear();
 			Console.WriteLine("You've given the following list to be sorted:");
 			common.outputArray(elements);
 
 			Stopwatch timer = new Stopwatch();
 			timer.Start();
-			elements = sort.quickSortDecimal(elements);
+			elements = sort.quickSortDecimal(elements, ascending);
+			timer.Stop();
+
+			Console.WriteLine();
+			Console.WriteLine("The algorithm gave the following sorted list in " + timer.ElapsedMilliseconds + " ms or " + timer.ElapsedTicks + "ticks:");
+			common.outputArray(elements);
+
+			Console.Read();
+		}
+
+		//----------------------------------------------------------------------------------------------------------------------
+
+		static void sortStrings()
+		{
+			while (true)
+			{
+				Console.Clear();
+				Console.WriteLine("Input 1 to enter your own strings, 2 to randomly generate ones or 0 to go back");
+				string choice = Console.ReadLine();
+				if (choice == "1")
+				{
+					sortUserInputStrings();
+				}
+				else if (choice == "2")
+				{
+					sortRandomStrings();
+				}
+				else if (choice == "0")
+				{
+					break;
+				}
+				else
+				{
+					Console.WriteLine("Invalid input");
+				}
+			}
+		}
+
+		static void sortUserInputStrings()
+		{
+			Console.Clear();
+			Console.WriteLine("Please input all the strings you want sorting (separated by pressing enter), followed by any numberic input to terminate the list.");
+
+			List<string> userInputs = new List<string>();
+			string[] elements;
+			bool firstInput = true;
+			while (true)
+			{
+				string inputString = Console.ReadLine();
+				if (int.TryParse(inputString, out int stuff) == false)
+				{
+					userInputs.Add(inputString);
+					firstInput = false;
+				}
+				else if (firstInput == true)
+				{
+					Console.Clear();
+					Console.WriteLine("You must enter at least one number!");
+					continue;
+				}
+				else
+				{
+					elements = userInputs.ToArray();
+					userInputs = null;
+					break;
+				}
+			}
+
+			stringSortContainer(elements);
+		}
+
+		static void sortRandomStrings()
+		{
+			//Random string generation goes here
+		}
+
+		static void stringSortContainer(string[] elements)
+		{
+			bool ascending;
+			while (true)
+			{
+				Console.WriteLine("Input 1 for ascending order, 2 for descending order");
+				string ascendingChoice = Console.ReadLine();
+				if (ascendingChoice == "1")
+				{
+					ascending = true;
+					break;
+				}
+				else if (ascendingChoice == "2")
+				{
+					ascending = false;
+					break;
+				}
+				else
+				{
+					Console.WriteLine("Invalid input.");
+				}
+			}
+
+			Console.Clear();
+			Console.WriteLine("You've given the following list to be sorted:");
+			common.outputArray(elements);
+
+			Stopwatch timer = new Stopwatch();
+			timer.Start();
+			elements = sort.quickSortString(elements, ascending);
 			timer.Stop();
 
 			Console.WriteLine();

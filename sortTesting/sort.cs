@@ -8,12 +8,7 @@ namespace sortTesting
 {
 	static class sort
 	{
-		/// <summary>
-		/// Sort an array of integers
-		/// </summary>
-		/// <param name="input">The array of integers to be sorted</param>
-		/// <returns>A sorted array of integers</returns>
-		public static int[] quickSortInteger(int[] input)
+		public static int[] quickSortInteger(int[] input, bool ascending)
 		{
 			//All the base cases
 			//If it is passed an array with a single (or no) element, return just that
@@ -48,23 +43,37 @@ namespace sortTesting
 				{
 					continue;
 				}
-				//If the current element is smaller than or equal to the pivot, add it to the sublist
+				//If the current element is smaller than or equal to the pivot, add it to the appropriate list for the sort type
 				else if (input[i] <= input[pivotIndex])
 				{
-					subList.Add(input[i]);
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
 				}
-				//If the current element is larger than the picot, add it to the superlist
+				//If the current element is larger than the picot, add it to the appropriate list for the sort type
 				else if (input[i] > input[pivotIndex])
 				{
-					superList.Add(input[i]);
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
 				}
 			}
 
 			//Calls itself on the two arrays we produce from the lists
 			subArray = subList.ToArray();
 			superArray = superList.ToArray();
-			subArray = quickSortInteger(subArray);
-			superArray = quickSortInteger(superArray);
+			subArray = quickSortInteger(subArray, ascending);
+			superArray = quickSortInteger(superArray, ascending);
 
 			//Assembles the final array
 			int[] result;
@@ -80,7 +89,7 @@ namespace sortTesting
 		/// </summary>
 		/// <param name="input">The array of decimals to be sorted</param>
 		/// <returns>A sorted array of decimals</returns>
-		public static decimal[] quickSortDecimal(decimal[] input)
+		public static decimal[] quickSortDecimal(decimal[] input, bool ascending)
 		{
 			//All the base cases
 			//If it is passed an array with a single (or no) element, return just that
@@ -115,23 +124,37 @@ namespace sortTesting
 				{
 					continue;
 				}
-				//If the current element is smaller than or equal to the pivot, add it to the sublist
+				//If the current element is smaller than or equal to the pivot, add it to the appropriate list for the sort type
 				else if (input[i] <= input[pivotIndex])
 				{
-					subList.Add(input[i]);
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
 				}
-				//If the current element is larger than the picot, add it to the superlist
+				//If the current element is larger than the picot, add it to the appropriate list for the sort type
 				else if (input[i] > input[pivotIndex])
 				{
-					superList.Add(input[i]);
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
 				}
 			}
 
 			//Calls itself on the two arrays we produce from the lists
 			subArray = subList.ToArray();
 			superArray = superList.ToArray();
-			subArray = quickSortDecimal(subArray);
-			superArray = quickSortDecimal(superArray);
+			subArray = quickSortDecimal(subArray, ascending);
+			superArray = quickSortDecimal(superArray, ascending);
 
 			//Assembles the final array
 			decimal[] result;
@@ -143,7 +166,7 @@ namespace sortTesting
 		}
 
 
-		public static string[] quickSortString(string[] input)
+		public static string[] quickSortString(string[] input, bool ascending)
 		{
 			//All the base cases
 			//If it is passed an array with a single (or no) element, return just that
@@ -181,20 +204,34 @@ namespace sortTesting
 				//If the current element is smaller than or equal to the pivot, add it to the sublist
 				else if (input[i].CompareTo(input[pivotIndex]) <= 0)
 				{
-					subList.Add(input[i]);
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
 				}
 				//If the current element is larger than the picot, add it to the superlist
 				else if (input[i].CompareTo(input[pivotIndex]) > 0)
 				{
-					superList.Add(input[i]);
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
 				}
 			}
 
 			//Calls itself on the two arrays we produce from the lists
 			subArray = subList.ToArray();
 			superArray = superList.ToArray();
-			subArray = quickSortString(subArray);
-			superArray = quickSortString(superArray);
+			subArray = quickSortString(subArray, ascending);
+			superArray = quickSortString(superArray, ascending);
 
 			//Assembles the final array
 			string[] result;
