@@ -11,11 +11,53 @@ namespace sortTesting
 	{
 		static void Main(string[] args)
 		{
+			while (true)
+			{
+				Console.Clear();
+				Console.WriteLine("Input 1 for entering your own values, 2 for randomly generated ones or 0 for exit");
+				string choice = Console.ReadLine();
+				if (choice == "1")
+				{
+					sortUserInput();
+				}
+				else if (choice == "2")
+				{
+					sortRandomNumbers();
+				}
+				else if (choice == "9")
+				{
+					break;
+				}
+				else
+				{
+					Console.WriteLine("Invalid input");
+				}
+			}
+		}
+
+		static void sortRandomNumbers()
+		{
+			Console.Clear();
+			Console.WriteLine("How many numbers do you want to generate?");
+			int count = Convert.ToInt32(Console.ReadLine());
+			Console.WriteLine("What do you want the upper limit to be?");
+			int limit = Convert.ToInt32(Console.ReadLine());
+			Random generator = new Random();
+			List<int> inputs = new List<int>();
+			for (int i = 0; i <= count; i++)
+			{
+				inputs.Add(Convert.ToInt32(Math.Ceiling(generator.NextDouble() * limit)));
+			}
+			sortContainer(inputs.ToArray());
+		}
+
+		static void sortUserInput()
+		{
+			Console.Clear();
 			Console.WriteLine("Please input all the numbers you want sorting (separated by pressing enter), followed by any non numberic input to terminate the list.");
 
 			List<int> userInputs = new List<int>();
-			int[] toSort;
-			int[] sorted;
+			int[] elements;
 			bool firstInput = true;
 			while (true)
 			{
@@ -33,24 +75,29 @@ namespace sortTesting
 				}
 				else
 				{
-					toSort = userInputs.ToArray();
+					elements = userInputs.ToArray();
 					userInputs = null;
 					break;
 				}
 			}
 
+			sortContainer(elements);
+		}
+
+		static void sortContainer(int[] elements)
+		{
 			Console.Clear();
 			Console.WriteLine("You've given the following list to be sorted:");
-			outputArray(toSort);
+			outputArray(elements);
 
 			Stopwatch timer = new Stopwatch();
 			timer.Start();
-			sorted = quickSortNumeric(toSort);
+			elements = quickSortNumeric(elements);
 			timer.Stop();
 
 			Console.WriteLine();
-			Console.WriteLine("The algorithm gave the following sorted list in " + timer.ElapsedMilliseconds + " ms:");
-			outputArray(sorted);
+			Console.WriteLine("The algorithm gave the following sorted list in " + timer.ElapsedMilliseconds + " ms or " + timer.ElapsedTicks + "ticks:");
+			outputArray(elements);
 
 			Console.Read();
 		}
@@ -58,8 +105,8 @@ namespace sortTesting
 		static int[] quickSortNumeric(int[] input)
 		{
 			//All the base cases
-			//If it is passed an array with a single element, return just that
-			if (input.Length == 1)
+			//If it is passed an array with a single (or no) element, return just that
+			if (input.Length <= 1)
 			{
 				return input;
 			}
@@ -103,8 +150,10 @@ namespace sortTesting
 			}
 
 			//Calls itself on the two arrays we produce from the lists
-			subArray = quickSortNumeric(subList.ToArray());
-			superArray = quickSortNumeric(superList.ToArray());
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = quickSortNumeric(subArray);
+			superArray = quickSortNumeric(superArray);
 
 			//Assembles the final array
 			int[] result;
