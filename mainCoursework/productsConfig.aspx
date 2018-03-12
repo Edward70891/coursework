@@ -46,7 +46,7 @@
 		<br />
 		<asp:TextBox ID="productNameBox" runat="server" placeholder="Product Name"></asp:TextBox>
 		<br />
-		<asp:TextBox ID="productPrice" runat="server" TextMode="Number" placeholder ="Product Price"></asp:TextBox>
+		<asp:TextBox ID="productPrice" runat="server" placeholder ="Product Price"></asp:TextBox>
 		<br />
 		Product Type:<br />
 		<asp:DropDownList ID="typeDropdown" runat="server">

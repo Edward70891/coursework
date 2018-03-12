@@ -149,7 +149,7 @@ namespace mainCoursework
 			Label priceTag = new Label()
 			{
 				CssClass = "priceTag",
-				Text = "£" + Convert.ToString(info.price),
+				Text = "£" + commonClasses.common.formatPrice(info.price),
 				ID = info.productName + "PriceTag"
 			};
 			priceTag.Attributes.Add("runat", "server");

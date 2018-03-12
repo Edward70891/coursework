@@ -156,5 +156,26 @@ namespace commonClasses
 			result[baseArray.Length] = addition;
 			return result;
 		}
+
+		public static string formatPrice(decimal input)
+		{
+			string output = Convert.ToString(input);
+			try
+			{
+				if (output.Substring(output.IndexOf('.') + 1).Length == 0)
+				{
+					output = output + "00";
+				}
+				else if (output.Substring(output.IndexOf('.') + 1).Length == 1)
+				{
+					output = output + "0";
+				}
+			}
+			catch
+			{
+				output = output + ".00";
+			}
+			return output;
+		}
 	}
 }

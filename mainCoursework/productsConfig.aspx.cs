@@ -52,6 +52,8 @@ namespace mainCoursework
 			//A dowhile loop that is broken at the end if conditions are met or prematurely if conditions are not met
 			do
 			{
+				string errorAppend = "";
+
 				//Check that the inputs are all full and have no SQL sensitive characters in them
 				if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
 				{
@@ -74,12 +76,12 @@ namespace mainCoursework
 				}
 
 				//Check and format the price to ensure 2dp accuracy and only digits content
-				double price = Convert.ToDouble(productPrice.Text);
-				if (((price * 100) % 1.0) != 0)
+				if (!priceValid(productPrice.Text))
 				{
-					returnMessage.Text = "Please input prices to two decimal places!";
+					returnMessage.Text = "Invalid price format";
 					break;
 				}
+				decimal price = Convert.ToDecimal(productPrice.Text);
 
 				//Checks the user has selected a file
 				if (imageUpload.HasFile)
@@ -99,16 +101,38 @@ namespace mainCoursework
 				}
 				else
 				{
-					returnMessage.Text = "You must upload an image";
-					break;
+					errorAppend = " with no image";
+					imagePath = "NONE";
 				}
 
 				//Returns the the product has been created then creates it and logs it and refreshes the table
-				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName;
+				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName + errorAppend;
 				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
 				customLogging.newEntry("The product " + productName + " was created");
 				productsTable.DataBind();
 			} while (false);
+		}
+
+		private static bool priceValid(string input)
+		{
+			//Make a new string without the decimal point
+			string noPoint = input;
+			noPoint.Replace(".", "");
+			//Check if that string contains any non-digit characters
+			foreach (char c in noPoint)
+			{
+				if (!char.IsDigit(c))
+				{
+					return false;
+				}
+			}
+			//Check how many decimal places there are, and return false if there are more than 2
+			string decimalPlaces = input.Substring(input.IndexOf('.') + 1);
+			if (decimalPlaces.Length > 2)
+			{
+				return false;
+			}
+			return true;
 		}
 
 		static class deletingProductsPersistent
