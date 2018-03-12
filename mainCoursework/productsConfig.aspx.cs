@@ -106,7 +106,7 @@ namespace mainCoursework
 				}
 
 				//Returns the the product has been created then creates it and logs it and refreshes the table
-				returnMessage.Text = "Product created named " + productName + ", priced at £" + Convert.ToString(price) + " and displayed as " + displayName + errorAppend;
+				returnMessage.Text = "Product created named " + productName + ", priced at £" + common.formatPrice(price) + " and displayed as " + displayName + errorAppend;
 				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
 				customLogging.newEntry("The product " + productName + " was created");
 				productsTable.DataBind();
@@ -116,8 +116,7 @@ namespace mainCoursework
 		private static bool priceValid(string input)
 		{
 			//Make a new string without the decimal point
-			string noPoint = input;
-			noPoint.Replace(".", "");
+			string noPoint = input.Replace(".", "");
 			//Check if that string contains any non-digit characters
 			foreach (char c in noPoint)
 			{
@@ -127,12 +126,19 @@ namespace mainCoursework
 				}
 			}
 			//Check how many decimal places there are, and return false if there are more than 2
-			string decimalPlaces = input.Substring(input.IndexOf('.') + 1);
-			if (decimalPlaces.Length > 2)
+			try
 			{
-				return false;
+				string decimalPlaces = input.Substring(input.IndexOf('.') + 1);
+				if (decimalPlaces.Length > 2)
+				{
+					return false;
+				}
+				return true;
 			}
-			return true;
+			catch
+			{
+				return true;
+			}
 		}
 
 		static class deletingProductsPersistent
