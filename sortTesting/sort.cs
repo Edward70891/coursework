@@ -19,7 +19,7 @@ namespace sortTesting
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0] > input[1])
+				if ((input[0] > input[1] && ascending) || (input[0] < input[1] && !ascending))
 				{
 					int temp = input[0];
 					input[0] = input[1];
@@ -100,7 +100,7 @@ namespace sortTesting
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0] > input[1])
+				if ((input[0] > input[1] && ascending) || (input[0] < input[1] && !ascending))
 				{
 					decimal temp = input[0];
 					input[0] = input[1];
@@ -177,7 +177,7 @@ namespace sortTesting
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0].CompareTo(input[1]) > 0)
+				if ((input[0].CompareTo(input[1]) > 0 && ascending) || (input[0].CompareTo(input[1]) < 0 && !ascending))
 				{
 					string temp = input[0];
 					input[0] = input[1];
