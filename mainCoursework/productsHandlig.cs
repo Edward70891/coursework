@@ -327,13 +327,12 @@ namespace mainCoursework
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0].productInfo.price > input[1].productInfo.price)
+				if ((input[0].productInfo.price > input[1].productInfo.price && ascending) || (input[0].productInfo.price < input[1].productInfo.price && !ascending))
 				{
 					product temp = input[0];
 					input[0] = input[1];
 					input[1] = temp;
 				}
-				return input;
 			}
 
 			//Initialize the needed variables; the two lists to add the numbers to, the arrays to add those to, and the index of the pivot
@@ -403,7 +402,7 @@ namespace mainCoursework
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0].productInfo.stock > input[1].productInfo.stock)
+				if ((input[0].productInfo.stock > input[1].productInfo.stock && ascending) || (input[0].productInfo.stock < input[1].productInfo.stock && !ascending))
 				{
 					product temp = input[0];
 					input[0] = input[1];
@@ -479,7 +478,7 @@ namespace mainCoursework
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0].productInfo.band.CompareTo(input[1].productInfo.band) > 0)
+				if ((input[0].productInfo.band.CompareTo(input[1].productInfo.band) > 0 && ascending) || (input[0].productInfo.band.CompareTo(input[1].productInfo.band) < 0 && !ascending))
 				{
 					product temp = input[0];
 					input[0] = input[1];
@@ -555,7 +554,7 @@ namespace mainCoursework
 			//If it is passed an array with two elements, check if they need swapping and do so if necessary, then return them
 			else if (input.Length == 2)
 			{
-				if (input[0].productInfo.displayName.CompareTo(input[1].productInfo.displayName) > 0)
+				if ((input[0].productInfo.displayName.CompareTo(input[1].productInfo.displayName) > 0 && ascending) || (input[0].productInfo.displayName.CompareTo(input[1].productInfo.displayName) < 0 && !ascending))
 				{
 					product temp = input[0];
 					input[0] = input[1];
