@@ -31,7 +31,20 @@ namespace mainCoursework
 					i++;
 				}
 			}
-			populatePage();
+			if (cartList.Length == 0)
+			{
+				productsListPanel.Controls.Add
+					(
+						new TextBox()
+						{
+							Text = "Your cart is empty!",
+							CssClass = "cartEmptyMessage"
+						}
+					);
+			}
+			else
+			{
+				populatePage();			}
 		}
 
 		private void populatePage()
