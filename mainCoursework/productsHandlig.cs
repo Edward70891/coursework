@@ -123,7 +123,7 @@ namespace mainCoursework
 		{
 			info = productInfo;
 
-			this.CssClass = "productPanel";
+			this.CssClass = "productDisplayPanel";
 			this.ID = info.productName + "Panel";
 
 			Image displayedImage = new Image()
@@ -287,6 +287,11 @@ namespace mainCoursework
 				masterList[i] = new product(row);
 				i++;
 			}
+			WorkingList = masterList;
+		}
+		public productList(product[] products)
+		{
+			masterList = products;
 			WorkingList = masterList;
 		}
 
