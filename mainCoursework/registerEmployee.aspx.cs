@@ -37,8 +37,8 @@ namespace mainCoursework
 						{
 							//Creates the new user, logs the creation of the user and notifies the current user
 							employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
-							registerReturn.Text = "New user created";
-							customLogging.newEntry("User " + submittedUsernameBox.Text + " was created");
+							registerReturn.Text = "New employee created";
+							customLogging.newEntry("Employee " + submittedUsernameBox.Text + " was created");
 						}
 						//Catches errors (hopefully only database related) and posts them to the user
 						catch (Exception except)

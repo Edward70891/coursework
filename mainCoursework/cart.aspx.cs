@@ -35,7 +35,7 @@ namespace mainCoursework
 			{
 				productsListPanel.Controls.Add
 					(
-						new TextBox()
+						new Label()
 						{
 							Text = "Your cart is empty!",
 							CssClass = "cartEmptyMessage"
