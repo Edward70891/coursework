@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.DataVisualization.Charting;
 
 namespace mainCoursework
 {
@@ -44,8 +45,8 @@ namespace mainCoursework
 		//Apply the selected settings and render the graph with those settings
 		protected void applyButton_Click(object sender, EventArgs e)
 		{
-
+			chartHolder.Controls.Clear();
+			var chart = new Chart();
 		}
-
 	}
 }

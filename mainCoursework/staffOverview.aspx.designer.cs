@@ -13,6 +13,15 @@ namespace mainCoursework {
     public partial class overview {
         
         /// <summary>
+        /// dataFilterTypePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel dataFilterTypePanel;
+        
+        /// <summary>
         /// dataFilterType control.
         /// </summary>
         /// <remarks>
@@ -20,6 +29,33 @@ namespace mainCoursework {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList dataFilterType;
+        
+        /// <summary>
+        /// yAxisSelectionPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel yAxisSelectionPanel;
+        
+        /// <summary>
+        /// yAxisSelection control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList yAxisSelection;
+        
+        /// <summary>
+        /// timeLengthPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel timeLengthPanel;
         
         /// <summary>
         /// timeLength control.
@@ -47,5 +83,14 @@ namespace mainCoursework {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button applyButton;
+        
+        /// <summary>
+        /// chartHolder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel chartHolder;
     }
 }
