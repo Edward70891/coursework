@@ -13,7 +13,7 @@ namespace mainCoursework
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//Checks if they're an admin and if they're not, hides the admin related checkboxes and ui elements (otherwise shows them)
-			if (Convert.ToString(Session["userIsAdmin"]) == "false")
+			if (Convert.ToString(Session["userIsAdmin"]) == "False")
 			{
 				adminCheckBox.Visible = false;
 			}

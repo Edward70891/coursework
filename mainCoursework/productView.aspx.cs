@@ -31,7 +31,7 @@ namespace mainCoursework
 		protected void cartButton_Click(object sender, EventArgs e)
 		{
 			//Makes sure it's a logged in customer trying to add the item and denies them if it isn't
-			if (Convert.ToString(Session["userType"]) != "user")
+			if (Convert.ToString(Session["userType"]) != "customer")
 			{
 				returnLabel.Text = "You must log in to a customer account to have a cart!";
 			}

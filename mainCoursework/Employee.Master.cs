@@ -20,13 +20,13 @@ namespace mainCoursework
 				Server.Transfer("~/default.aspx", true);
 			}
 			//If the user is logged in, hide the login box
-			if (Convert.ToString(Session["isLoggedIn"]) != "true")
+			if (Convert.ToString(Session["isLoggedIn"]) != "True")
 			{
 				loginNavbar.Visible = false;
 			}
 			//Show who is logged in, whether they are an admin and make sure the sign out button is visible
 			string admin = "";
-			if (Convert.ToString(Session["userIsAdmin"]) == "true")
+			if (Convert.ToString(Session["userIsAdmin"]) == "True")
 			{
 				admin = " You are an admin!";
 			}
@@ -36,9 +36,9 @@ namespace mainCoursework
 
 		protected void signOut_Click(object sender, EventArgs e)
 		{
-			Session["isLoggedIn"] = false;
+			Session["isLoggedIn"] = "False";
 			Session["currentUser"] = "";
-			Session["userIsAdmin"] = false;
+			Session["userIsAdmin"] = "False";
 			Session["userType"] = "";
 			customLogging.newEntry("User logged out");
 			Server.Transfer("~/default.aspx", false);

@@ -16,7 +16,7 @@ namespace mainCoursework
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//Checks if they're an admin and if they're not, hides the password changing and account deleting elements
-			if (Convert.ToString(Session["userIsAdmin"]) == "false")
+			if (Convert.ToString(Session["userIsAdmin"]) == "False")
 			{
 				configControls.Visible = false;
 				employeesDisplayTable.Columns[4].Visible = false;

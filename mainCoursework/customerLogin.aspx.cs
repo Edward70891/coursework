@@ -35,10 +35,10 @@ namespace mainCoursework
 					if (checkCredentials.loginCheck(attemptedName, customSecurity.generateMD5(customerPasswordBox.Text)) != null)
 					{
 						//Signs the user in and logs the signin to the logfile
-						Session["isLoggedIn"] = true;
+						Session["isLoggedIn"] = "True";
 						Session["currentUser"] = attemptedName;
 						Session["userType"] = "customer";
-						Session["userIsAdmin"] = false;
+						Session["userIsAdmin"] = "False";
 						customLogging.newEntry("Customer " + attemptedName + " logged in");
 						Server.Transfer("~/default.aspx", false);
 					}

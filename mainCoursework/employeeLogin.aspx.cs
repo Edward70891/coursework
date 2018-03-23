@@ -44,7 +44,7 @@ namespace mainCoursework
 					if (loginCheck != null)
 					{
 						//Sets relevant Session information so other pages can determine information about the logged session
-						Session["isLoggedIn"] = true;
+						Session["isLoggedIn"] = "True";
 						Session["currentUser"] = attemptedName;
 						Session["userType"] = "employee";
 						Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
