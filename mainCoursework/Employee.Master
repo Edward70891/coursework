@@ -16,6 +16,7 @@
     <webopt:bundlereference runat="server" path="~/Content/css" />
     <link runat="server" href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
+	<link runat="server" href="~/Content/employee.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <form runat="server">
@@ -63,7 +64,7 @@
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
-            <hr />
+			<hr />
             <footer>
                 <p>&copy; <%: DateTime.Now.Year %></p>
 				<asp:Label ID="usernameLabel" runat="server" Text=""></asp:Label>
