@@ -13,5 +13,24 @@ namespace mainCoursework
         {
 			
 		}
-    }
+
+		//If "forever is selected, grey out the time length text box"
+		protected void timeLength_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (timeLength.SelectedValue == "forever")
+			{
+				dateBox.ReadOnly = true;
+			}
+			else
+			{
+				dateBox.ReadOnly = false;
+			}
+		}
+
+		//Apply the selected settings and render the graph with those settings
+		protected void applyButton_Click(object sender, EventArgs e)
+		{
+
+		}
+	}
 }
