@@ -20,6 +20,7 @@ namespace mainCoursework
 				// Show no one is logged in
 				usernameLabel.Text = "No user logged in";
 				signOut.Visible = false;
+				userProfileNavbar.Visible = false;
 			}
 			else
 			{
