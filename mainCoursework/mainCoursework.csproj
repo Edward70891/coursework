@@ -137,6 +137,7 @@
     <Content Include="Content\customer.css" />
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
+    <Content Include="orderHistory.aspx" />
     <Content Include="products.aspx" />
     <Content Include="productView.aspx" />
     <Content Include="registerEmployee.aspx" />
@@ -200,6 +201,7 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Customer.Master" />
+    <Content Include="userProfile.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -243,6 +245,13 @@
     </Compile>
     <Compile Include="Customer.Mobile.Master.designer.cs">
       <DependentUpon>Customer.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="orderHistory.aspx.cs">
+      <DependentUpon>orderHistory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="orderHistory.aspx.designer.cs">
+      <DependentUpon>orderHistory.aspx</DependentUpon>
     </Compile>
     <Compile Include="products.aspx.cs">
       <DependentUpon>products.aspx</DependentUpon>
@@ -323,6 +332,13 @@
     </Compile>
     <Compile Include="Employee.Mobile.Master.designer.cs">
       <DependentUpon>Employee.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="userProfile.aspx.cs">
+      <DependentUpon>userProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="userProfile.aspx.designer.cs">
+      <DependentUpon>userProfile.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>

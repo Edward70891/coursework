@@ -53,9 +53,9 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
 						<li><a runat="server" href="~/products.aspx">Products</a></li>
-						<li><a runat="server" href="~/customerLogin.aspx" visible="true" id ="loginNavbar">Login</a></li>
-						<li><a runat="server" href="~/about.aspx">About</a></li>
 						<li><a runat="server" href="~/cart.aspx">Cart</a></li>
+						<li><a runat="server" href="~/userProfile.aspx">Profile</a></li>
+						<li><a runat="server" href="~/customerLogin.aspx" visible="true" id ="loginNavbar">Login</a></li>
                     </ul>
                 </div>
             </div>
