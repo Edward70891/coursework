@@ -14,7 +14,7 @@ namespace mainCoursework
 			
 		}
 
-		//If "forever is selected, grey out the time length text box"
+		//If "forever" is selected, grey out the time length text box
 		protected void timeLength_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (timeLength.SelectedValue == "forever")
@@ -27,10 +27,25 @@ namespace mainCoursework
 			}
 		}
 
+		//If one of the time modes is selected, grey out the time period radio buttons
+		protected void dataFilterType_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (dataFilterType.SelectedValue == "week" || dataFilterType.SelectedValue == "month" || dataFilterType.SelectedValue == "quarter")
+			{
+				timeLength.Enabled = false;
+				timeLength.SelectedValue = "day";
+			}
+			else
+			{
+				timeLength.Enabled = true;
+			}
+		}
+
 		//Apply the selected settings and render the graph with those settings
 		protected void applyButton_Click(object sender, EventArgs e)
 		{
 
 		}
+
 	}
 }
