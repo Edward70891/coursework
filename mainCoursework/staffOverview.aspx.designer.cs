@@ -11,5 +11,23 @@ namespace mainCoursework {
     
     
     public partial class overview {
+        
+        /// <summary>
+        /// dataFilterType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList dataFilterType;
+        
+        /// <summary>
+        /// timeLength control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList timeLength;
     }
 }

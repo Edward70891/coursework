@@ -20,7 +20,7 @@ namespace mainCoursework
 				Server.Transfer("~/default.aspx", true);
 			}
 			//If the user is logged in, hide the login box
-			if (Convert.ToString(Session["isLoggedIn"]) != "True")
+			if (Convert.ToString(Session["isLoggedIn"]) == "True")
 			{
 				loginNavbar.Visible = false;
 			}
