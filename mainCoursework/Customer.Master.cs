@@ -28,6 +28,12 @@ namespace mainCoursework
 				signOut.Visible = true;
 			}
 
+			//If the user is logged in, hide the login box
+			if (Convert.ToString(Session["isLoggedIn"]) != "true")
+			{
+				loginNavbar.Visible = false;
+			}
+
 			if (Convert.ToString(Session["userType"]) != "employee")
 			{
 				employeeRedirect.Visible = false;

@@ -14,13 +14,19 @@ namespace mainCoursework
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+			//If it's not an employee trying to access the page, redirect them
 			if (Convert.ToString(Session["userType"]) != "employee")
 			{
 				Server.Transfer("~/default.aspx", true);
 			}
+			//If the user is logged in, hide the login box
+			if (Convert.ToString(Session["isLoggedIn"]) != "true")
+			{
+				loginNavbar.Visible = false;
+			}
 			//Show who is logged in, whether they are an admin and make sure the sign out button is visible
 			string admin = "";
-			if (Convert.ToString(Session["userIsAdmin"]) == "True")
+			if (Convert.ToString(Session["userIsAdmin"]) == "true")
 			{
 				admin = " You are an admin!";
 			}

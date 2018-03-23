@@ -10,10 +10,13 @@ namespace mainCoursework
 {
 	public partial class configuration : System.Web.UI.Page
 	{
+		defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter();
+		defaultDataSetTableAdapters.customersTableAdapter customerQueryTable = new defaultDataSetTableAdapters.customersTableAdapter();
+
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//Checks if they're an admin and if they're not, hides the password changing and account deleting elements
-			if (Convert.ToString(Session["userIsAdmin"]) != "false")
+			if (Convert.ToString(Session["userIsAdmin"]) == "false")
 			{
 				configControls.Visible = false;
 				employeesDisplayTable.Columns[4].Visible = false;
@@ -79,22 +82,24 @@ namespace mainCoursework
 			public static string type;
 		}
 
+		/// <summary>
+		/// Delete a user. Please make sure the first letter of the type is capitalised.
+		/// </summary>
+		/// <param name="username">The username of the person to be deleted</param>
+		/// <param name="type">"Customer" or "Employee"</param>
 		protected void deleteUser(string username, string type)
 		{
-			object queryTable;
-			defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter();
-			defaultDataSetTableAdapters.customersTableAdapter customerQueryTable = new defaultDataSetTableAdapters.customersTableAdapter();
+			//Make a reference to the correct gridview according to type
 			GridView displayTable;
 			if (type == "Employee")
 			{
-				queryTable = ref employeeQueryTable;
 				displayTable = employeesDisplayTable;
 			}
 			else if (type == "Customer")
 			{
-				queryTable = customerQueryTable;
-				displayTable = employeesDisplayTable;
+				displayTable = customersDisplayTable;
 			}
+			//Throw an exception if the type is not "Customer" or "Employee"
 			else
 			{
 				throw new Exception();
@@ -107,7 +112,14 @@ namespace mainCoursework
 				deletingUsersPersistent.deleting = false;
 				deletingUsersPersistent.type = "";
 				//Delete the user
-				queryTable.deleteUser(username);
+				if (type == "Employee")
+				{
+					employeeQueryTable.deleteUser(username);
+				}
+				else
+				{
+					customerQueryTable.deleteUser(username);
+				}
 				//Log the deletion, refresh the GridView and wait, then clear the post box
 				customLogging.newEntry(type + " " + username + " was deleted");
 				displayTable.DataBind();
@@ -126,18 +138,14 @@ namespace mainCoursework
 
 		protected void changeUserPassword(string username, string type)
 		{
-			object queryTable;
-			defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter();
-			defaultDataSetTableAdapters.customersTableAdapter customerQueryTable = new defaultDataSetTableAdapters.customersTableAdapter();
+			//Make a reference to the correct gridview for commands
 			GridView displayTable;
 			if (type == "Employee")
 			{
-				queryTable = employeeQueryTable;
 				displayTable = employeesDisplayTable;
 			}
 			else if (type == "Customer")
 			{
-				queryTable = customerQueryTable;
 				displayTable = employeesDisplayTable;
 			}
 			else
@@ -156,7 +164,14 @@ namespace mainCoursework
 					if (passwordBox.Text == confirmPassword.Text)
 					{
 						//Changes the password in the DB
-						queryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
+						if (type == "Employee")
+						{
+							employeeQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
+						}
+						else
+						{
+							customerQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
+						}
 						//Posts that the password has been changed and logs it
 						customLogging.newEntry(type + " " + username + "'s password changed");
 						returnLabel.Text = type + " " + username + "'s password was changed to '" + passwordBox.Text + "'.";

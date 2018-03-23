@@ -54,7 +54,7 @@ namespace mainCoursework
 				productPanel panel = new productPanel(current.product.productInfo);
 				//Remove stockTag and descriptionTag; maybe this works?
 				panel.Controls.Remove(panel.Controls[3]);
-				panel.Controls.Remove(panel.Controls[3]);
+				panel.Controls.Remove(panel.Controls[3]); //Removing 3 again because it falls into the newly opened space
 
 				TextBox amountBox = new TextBox()
 				{
@@ -93,14 +93,14 @@ namespace mainCoursework
 
 		protected void removeButton_Click(object sender, EventArgs e)
 		{
-			//Button btn = (Button)sender;
+			Button btn = (Button)sender;
 			//Session["productRedirectName"] = btn.CommandArgument;
 			////Other code for this goes here
 		}
 
 		protected void updateButton_Click(object sender, EventArgs e)
 		{
-			//Button btn = (Button)sender;
+			Button btn = (Button)sender;
 			//Session["productRedirectName"] = btn.CommandArgument;
 			////Other code for this goes here
 		}
