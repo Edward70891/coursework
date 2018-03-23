@@ -37,7 +37,7 @@ namespace mainCoursework
 						//Signs the user in and logs the signin to the logfile
 						Session["isLoggedIn"] = true;
 						Session["currentUser"] = attemptedName;
-						Session["userType"] = "user";
+						Session["userType"] = "customer";
 						Session["userIsAdmin"] = false;
 						customLogging.newEntry("Customer " + attemptedName + " logged in");
 						Server.Transfer("~/default.aspx", false);

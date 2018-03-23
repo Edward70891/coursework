@@ -20,17 +20,7 @@ namespace mainCoursework
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			using(DataTable temp = cartsTableAdapter.getCart(Convert.ToString(Session["currentUser"])))
-			{
-				cartList = new cartItem[temp.Rows.Count];
-				int i = 0;
-				foreach (DataRow row in temp.Rows)
-				{
-					cartList[i].product = new product(Convert.ToString(row[2]));
-					cartList[i].amount = Convert.ToInt32(row[3]);
-					i++;
-				}
-			}
+			populateList();
 			if (cartList.Length == 0)
 			{
 				productsListPanel.Controls.Add
@@ -44,7 +34,23 @@ namespace mainCoursework
 			}
 			else
 			{
-				populatePage();			}
+				populatePage();
+			}
+		}
+
+		private void populateList()
+		{
+			using (DataTable temp = cartsTableAdapter.getCart(Convert.ToString(Session["currentUser"])))
+			{
+				cartList = new cartItem[temp.Rows.Count];
+				int i = 0;
+				foreach (DataRow row in temp.Rows)
+				{
+					cartList[i].product = new product(Convert.ToString(row[2]));
+					cartList[i].amount = Convert.ToInt32(row[3]);
+					i++;
+				}
+			}
 		}
 
 		private void populatePage()
@@ -103,6 +109,29 @@ namespace mainCoursework
 			Button btn = (Button)sender;
 			//Session["productRedirectName"] = btn.CommandArgument;
 			////Other code for this goes here
+		}
+
+		protected void purchaseButton_Click(object sender, EventArgs e)
+		{
+			makeOrder();
+		}
+
+		protected void makeOrder()
+		{
+			if (Convert.ToString(Session["userType"]) != "customer")
+			{
+				returnLabel.Text = "You're not a registered customer so you can't make an order!";
+				return;
+			}
+			var ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
+			foreach (cartItem current in cartList)
+			{
+				ordersAdaptor.newOrder(DateTime.Now, current.product.productInfo.price * current.amount, current.amount, Convert.ToString(Session["currentUser"]), current.product.productInfo.productName);
+			}
+			cartsTableAdapter.deleteCart(Convert.ToString(Session["CurrentUser"]));
+			populateList();
+			populatePage();
+			returnLabel.Text = "Thanks for your order!";
 		}
 	}
 }
