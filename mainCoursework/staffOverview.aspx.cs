@@ -11,10 +11,27 @@ namespace mainCoursework
 {
     public partial class overview : System.Web.UI.Page
 	{
-		struct dataStruct
+		struct dataStruct : IComparable
 		{
 			public string Xvalue;
 			public decimal Yvalue;
+
+			int IComparable.CompareTo(object obj)
+			{
+				dataStruct comparison = (dataStruct)obj;
+				if (comparison.Yvalue > this.Yvalue)
+				{
+					return 1;
+				}
+				else if (comparison.Yvalue < this.Yvalue)
+				{
+					return -1;
+				}
+				else
+				{
+					return 0;
+				}
+			}
 		}
 
 		defaultDataSetTableAdapters.ordersTableAdapter adaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
@@ -72,30 +89,85 @@ namespace mainCoursework
 		}
 
 		//Get the data and format it ready
-		private dataStruct getData(DateTime startTime)
+		private dataStruct[] getData(DateTime startTime)
 		{
 			//Get the data
 			DataTable data = adaptor.GetData();
+			DataView view = new DataView(data);
+			DateTime[] bounds = new DateTime[2];
+			dataStruct[] output;
+			bounds[0] = startTime;
 
 			//Filter out the unwanted data if the user isn't having time divisions on the X axis
-			if (dataFilterType.SelectedIndex < 1)
+			if (dataFilterType.SelectedIndex < 1 && timeLength.SelectedValue != "forever")
 			{
 				switch (timeLength.SelectedValue)
 				{
-					case "forever":
-						break;
 					case "day":
-
+						bounds[1] = startTime.AddDays(1);
+						break;
 					case "week":
-
+						bounds[1] = startTime.AddDays(7);
+						break;
 					case "month":
-
+						bounds[1] = startTime.AddMonths(1);
+						break;
 					case "6month":
-
+						bounds[1] = startTime.AddMonths(6);
+						break;
 					case "year":
-
+						bounds[1] = startTime.AddYears(1);
+						break;
 				}
+				view.RowFilter = "#" + bounds[0].ToString() + "# < datePlaced < #" + bounds[1].ToString() + "#";
+				data = view.ToTable();
 			}
+
+			//Group the values in the table into their needed format
+			if (dataFilterType.SelectedValue == "customer")
+			{
+				//Group them according to the count of each for now
+				var result = from row in data.AsEnumerable()
+							 group row by row.Field<string>("user") into grp
+							 select new
+							 {
+								 productName = grp.Key,
+								 count = grp.Count()
+							 };
+				List<dataStruct> list = new List<dataStruct>();
+				foreach (var t in result)
+				{
+					dataStruct element = new dataStruct();
+					element.Xvalue = t.productName;
+					element.Yvalue = t.count;
+					list.Add(element);
+				}
+				output = list.ToArray();
+				Array.Sort(output);
+			}
+			else if (dataFilterType.SelectedValue == "product")
+			{
+				//Group them according to the count of each for now
+				var result = from row in data.AsEnumerable()
+							 group row by row.Field<string>("productName") into grp
+							 select new
+							 {
+								 productName = grp.Key,
+								 count = grp.Count()
+							 };
+				List<dataStruct> list = new List<dataStruct>();
+				foreach (var t in result)
+				{
+					dataStruct element = new dataStruct();
+					element.Xvalue = t.productName;
+					element.Yvalue = t.count;
+					list.Add(element);
+				}
+				output = list.ToArray();
+				Array.Sort(output);
+			}
+
+			return output;
 		}
 	}
 }
