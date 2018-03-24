@@ -11,14 +11,19 @@ namespace mainCoursework
 {
     public partial class overview : System.Web.UI.Page
 	{
-		struct dataStruct : IComparable
+		struct dataValueStruct : IComparable
 		{
-			public string Xvalue;
-			public decimal Yvalue;
+			public dataValueStruct(string Xaxis, decimal Yaxis)
+			{
+				Xvalue = Xaxis;
+				Yvalue = Yaxis;
+			}
+			public readonly string Xvalue;
+			public readonly decimal Yvalue;
 
 			int IComparable.CompareTo(object obj)
 			{
-				dataStruct comparison = (dataStruct)obj;
+				dataValueStruct comparison = (dataValueStruct)obj;
 				if (comparison.Yvalue > this.Yvalue)
 				{
 					return 1;
@@ -89,18 +94,18 @@ namespace mainCoursework
 		}
 
 		//Get the data and format it ready
-		private dataStruct[] getData(DateTime startTime)
+		private dataValueStruct[] getData(DateTime startTime)
 		{
 			//Get the data
 			DataTable data = adaptor.GetData();
-			DataView view = new DataView(data);
 			DateTime[] bounds = new DateTime[2];
-			dataStruct[] output;
+			dataValueStruct[] output;
 			bounds[0] = startTime;
 
 			//Filter out the unwanted data if the user isn't having time divisions on the X axis
 			if (dataFilterType.SelectedIndex < 1 && timeLength.SelectedValue != "forever")
 			{
+				DataView view = new DataView(data);
 				switch (timeLength.SelectedValue)
 				{
 					case "day":
@@ -128,18 +133,16 @@ namespace mainCoursework
 			{
 				//Group them according to the count of each for now
 				var result = from row in data.AsEnumerable()
-							 group row by row.Field<string>("user") into grp
+							 group row by row.Field<string>("user") into customerGrouping
 							 select new
 							 {
-								 productName = grp.Key,
-								 count = grp.Count()
+								 productName = customerGrouping.Key,
+								 count = customerGrouping.Count()
 							 };
-				List<dataStruct> list = new List<dataStruct>();
+				List<dataValueStruct> list = new List<dataValueStruct>();
 				foreach (var t in result)
 				{
-					dataStruct element = new dataStruct();
-					element.Xvalue = t.productName;
-					element.Yvalue = t.count;
+					dataValueStruct element = new dataValueStruct(t.productName, t.count);
 					list.Add(element);
 				}
 				output = list.ToArray();
@@ -149,22 +152,24 @@ namespace mainCoursework
 			{
 				//Group them according to the count of each for now
 				var result = from row in data.AsEnumerable()
-							 group row by row.Field<string>("productName") into grp
+							 group row by row.Field<string>("productName") into productGrouping
 							 select new
 							 {
-								 productName = grp.Key,
-								 count = grp.Count()
+								 productName = productGrouping.Key,
+								 count = productGrouping.Count()
 							 };
-				List<dataStruct> list = new List<dataStruct>();
+				List<dataValueStruct> list = new List<dataValueStruct>();
 				foreach (var t in result)
 				{
-					dataStruct element = new dataStruct();
-					element.Xvalue = t.productName;
-					element.Yvalue = t.count;
+					dataValueStruct element = new dataValueStruct(t.productName, t.count);
 					list.Add(element);
 				}
 				output = list.ToArray();
 				Array.Sort(output);
+			}
+			else
+			{
+				output = new dataValueStruct[0];
 			}
 
 			return output;
