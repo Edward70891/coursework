@@ -11,9 +11,9 @@ namespace mainCoursework
 {
     public partial class overview : System.Web.UI.Page
 	{
-		struct dataValueStruct : IComparable
+		struct dataEntryStruct : IComparable
 		{
-			public dataValueStruct(string Xaxis, decimal Yaxis)
+			public dataEntryStruct(string Xaxis, decimal Yaxis)
 			{
 				Xvalue = Xaxis;
 				Yvalue = Yaxis;
@@ -23,7 +23,7 @@ namespace mainCoursework
 
 			int IComparable.CompareTo(object obj)
 			{
-				dataValueStruct comparison = (dataValueStruct)obj;
+				dataEntryStruct comparison = (dataEntryStruct)obj;
 				if (comparison.Yvalue > this.Yvalue)
 				{
 					return 1;
@@ -90,16 +90,29 @@ namespace mainCoursework
 			var data = getData(startTime);
 
 			chartHolder.Controls.Clear();
-			var chart = new Chart();
+			var series = new Series();
+			foreach (dataEntryStruct entry in data)
+			{
+				DataPoint point = new DataPoint()
+				{
+					AxisLabel = entry.Xvalue,
+					YValues = new double[] { Convert.ToDouble(entry.Yvalue) }
+				};
+				series.Points.Add(point);
+			}
+			Chart chart = new Chart()
+			{
+				
+			}
 		}
 
-		//Get the data and format it ready
-		private dataValueStruct[] getData(DateTime startTime)
+		//Get the data and format it ready to add to the chart
+		private dataEntryStruct[] getData(DateTime startTime)
 		{
 			//Get the data
 			DataTable data = adaptor.GetData();
 			DateTime[] bounds = new DateTime[2];
-			dataValueStruct[] output;
+			dataEntryStruct[] output;
 			bounds[0] = startTime;
 
 			//Filter out the unwanted data if the user isn't having time divisions on the X axis
@@ -131,47 +144,36 @@ namespace mainCoursework
 			//Group the values in the table into their needed format
 			if (dataFilterType.SelectedValue == "customer")
 			{
-				//Group them according to the count of each for now
-				var result = from row in data.AsEnumerable()
-							 group row by row.Field<string>("user") into customerGrouping
-							 select new
-							 {
-								 productName = customerGrouping.Key,
-								 count = customerGrouping.Count()
-							 };
-				List<dataValueStruct> list = new List<dataValueStruct>();
-				foreach (var t in result)
+				List<dataEntryStruct> list = new List<dataEntryStruct>(); 
+				var query = data.Rows.Cast<DataRow>().GroupBy(product => product["customer"]).Select(grouped => new {
+					name = grouped.Key,
+					total = grouped.Sum(product => (int)product["productAmount"])
+				});
+				foreach (var t in query)
 				{
-					dataValueStruct element = new dataValueStruct(t.productName, t.count);
-					list.Add(element);
+					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
 				}
 				output = list.ToArray();
-				Array.Sort(output);
 			}
 			else if (dataFilterType.SelectedValue == "product")
 			{
-				//Group them according to the count of each for now
-				var result = from row in data.AsEnumerable()
-							 group row by row.Field<string>("productName") into productGrouping
-							 select new
-							 {
-								 productName = productGrouping.Key,
-								 count = productGrouping.Count()
-							 };
-				List<dataValueStruct> list = new List<dataValueStruct>();
-				foreach (var t in result)
+				List<dataEntryStruct> list = new List<dataEntryStruct>();
+				var query = data.Rows.Cast<DataRow>().GroupBy(product => product["product"]).Select(grouped => new {
+					name = grouped.Key,
+					total = grouped.Sum(product => (int)product["productAmount"])
+				});
+				foreach (var t in query)
 				{
-					dataValueStruct element = new dataValueStruct(t.productName, t.count);
-					list.Add(element);
+					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
 				}
 				output = list.ToArray();
-				Array.Sort(output);
 			}
 			else
 			{
-				output = new dataValueStruct[0];
+				output = new dataEntryStruct[0];
 			}
 
+			Array.Sort(output);
 			return output;
 		}
 	}
