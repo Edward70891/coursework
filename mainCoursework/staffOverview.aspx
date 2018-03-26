@@ -45,7 +45,14 @@
 
 	<%-- Chart is held here --%>
 	<asp:Label ID="returnLabel" runat="server"></asp:Label>
-	<asp:Panel ID="chartHolder" runat="server">
+	<asp:Chart ID="mainChart" runat="server">
+		<Series>
+			<asp:Series Name="Default" ChartType="Bar"></asp:Series>
+		</Series>
+		<ChartAreas>
+			<asp:ChartArea Name="chartArea">
 
-	</asp:Panel>
+			</asp:ChartArea>
+		</ChartAreas>
+	</asp:Chart>
 </asp:Content>

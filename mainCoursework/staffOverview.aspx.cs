@@ -88,9 +88,18 @@ namespace mainCoursework
 			}
 
 			var data = getData(startTime);
-			Chart chart = getChart(data);
-
-			chartHolder.Controls.Clear();
+			string[] xValues = new string[data.Length];
+			decimal[] yValues = new decimal[data.Length];
+			int i = 0;
+			foreach (dataEntryStruct current in data)
+			{
+				xValues[i] = current.Xvalue;
+				yValues[i] = current.Yvalue;
+				i++;
+			}
+			mainChart.ChartAreas["chartArea"].AxisX = new Axis(mainChart.ChartAreas["chartArea"], AxisName.X);
+			mainChart.ChartAreas["chartArea"].AxisY = new Axis(mainChart.ChartAreas["chartArea"], AxisName.Y);
+			mainChart.Series["Default"].Points.DataBindXY(xValues, yValues);
 		}
 
 		//Get the data and format it ready to add to the chart
@@ -163,12 +172,6 @@ namespace mainCoursework
 			}
 
 			Array.Sort(output);
-			return output;
-		}
-
-		private Chart getChart(dataEntryStruct[] input)
-		{
-			Chart output = new Chart();
 			return output;
 		}
 	}
