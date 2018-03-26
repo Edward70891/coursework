@@ -11,6 +11,7 @@ namespace mainCoursework
 {
     public partial class overview : System.Web.UI.Page
 	{
+		//It would be best to delete this structure and just deal with the arrays on their own
 		struct dataEntryStruct : IComparable
 		{
 			//Declare variables and set them, this constructor should be mandatory
@@ -93,7 +94,7 @@ namespace mainCoursework
 
 
 			//Initialize the needed variables
-			var data = getData(startTime);
+			var data = getDataByType(startTime);
 			string[] xValues = new string[data.Length];
 			decimal[] yValues = new decimal[data.Length];
 			int i = 0;
@@ -109,11 +110,11 @@ namespace mainCoursework
 			mainChart.ChartAreas["chartArea"].AxisY = new Axis(mainChart.ChartAreas["chartArea"], AxisName.Y);
 			mainChart.Series["Default"].Points.DataBindXY(xValues, yValues);
 			//Try to render the chart on the page, this doesn't work
-			mainChart.SaveImage(System.IO.Directory.GetCurrentDirectory(), ChartImageFormat.Jpeg);
+			//mainChart.SaveImage(System.IO.Directory.GetCurrentDirectory(), ChartImageFormat.Jpeg);
 		}
 
 		//Get the data and format it ready to add to the chart
-		private dataEntryStruct[] getData(DateTime startTime)
+		private dataEntryStruct[] getDataByType(DateTime startTime)
 		{
 			//Get the data
 			DataTable data = adaptor.GetData();
@@ -156,12 +157,16 @@ namespace mainCoursework
 			//Group the data according to the type requested by the user
 			void groupData(string type)
 			{
+				//Make a list of the custom structure and define a query to group the data and sum the amounts
 				List<dataEntryStruct> list = new List<dataEntryStruct>();
-				var query = data.Rows.Cast<DataRow>().GroupBy(product => product[type]).Select(grouped => new {
-					name = grouped.Key,
-					total = grouped.Sum(product => (int)product["productAmount"])
+				var query = data.Rows.Cast<DataRow>()
+					.GroupBy(product => product[type])
+					.Select(grouped => new {
+						name = grouped.Key,
+						total = grouped.Sum(product => (int)product["productAmount"])
 				});
 
+				//Populate the list by running the query and convert it into an array
 				foreach (var t in query)
 				{
 					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
