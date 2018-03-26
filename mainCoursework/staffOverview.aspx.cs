@@ -88,22 +88,9 @@ namespace mainCoursework
 			}
 
 			var data = getData(startTime);
+			Chart chart = getChart(data);
 
 			chartHolder.Controls.Clear();
-			var series = new Series();
-			foreach (dataEntryStruct entry in data)
-			{
-				DataPoint point = new DataPoint()
-				{
-					AxisLabel = entry.Xvalue,
-					YValues = new double[] { Convert.ToDouble(entry.Yvalue) }
-				};
-				series.Points.Add(point);
-			}
-			Chart chart = new Chart()
-			{
-				
-			}
 		}
 
 		//Get the data and format it ready to add to the chart
@@ -149,6 +136,7 @@ namespace mainCoursework
 					name = grouped.Key,
 					total = grouped.Sum(product => (int)product["productAmount"])
 				});
+
 				foreach (var t in query)
 				{
 					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
@@ -162,6 +150,7 @@ namespace mainCoursework
 					name = grouped.Key,
 					total = grouped.Sum(product => (int)product["productAmount"])
 				});
+
 				foreach (var t in query)
 				{
 					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
@@ -174,6 +163,12 @@ namespace mainCoursework
 			}
 
 			Array.Sort(output);
+			return output;
+		}
+
+		private Chart getChart(dataEntryStruct[] input)
+		{
+			Chart output = new Chart();
 			return output;
 		}
 	}
