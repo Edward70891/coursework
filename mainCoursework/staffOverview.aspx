@@ -42,8 +42,9 @@
 	<%-- Apply button --%>
 	<br />
 	<asp:Button ID="applyButton" runat="server" Text="Apply Settings" OnClick="applyButton_Click" />
+	<br />
 
-	<%-- Chart is held here --%>
+	<%-- The Chart itself --%>
 	<asp:Label ID="returnLabel" runat="server"></asp:Label>
 	<asp:Chart ID="mainChart" runat="server">
 		<Series>

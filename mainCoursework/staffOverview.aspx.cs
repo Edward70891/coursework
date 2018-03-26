@@ -13,6 +13,7 @@ namespace mainCoursework
 	{
 		struct dataEntryStruct : IComparable
 		{
+			//Declare variables and set them, this constructor should be mandatory
 			public dataEntryStruct(string Xaxis, decimal Yaxis)
 			{
 				Xvalue = Xaxis;
@@ -21,6 +22,7 @@ namespace mainCoursework
 			public readonly string Xvalue;
 			public readonly decimal Yvalue;
 
+			//Define sorting logic
 			int IComparable.CompareTo(object obj)
 			{
 				dataEntryStruct comparison = (dataEntryStruct)obj;
@@ -39,6 +41,7 @@ namespace mainCoursework
 			}
 		}
 
+		//The dataset adaptor, this should really be global
 		defaultDataSetTableAdapters.ordersTableAdapter adaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
 
 		protected void Page_Load(object sender, EventArgs e)
@@ -79,6 +82,7 @@ namespace mainCoursework
 		//Apply the selected settings and render the graph with those settings
 		protected void applyButton_Click(object sender, EventArgs e)
 		{
+			returnLabel.Text = "";
 			//Pull the date the user wants and deny them if it's not in a valid format (so long as it's needed)
 			DateTime startTime;
 			if (!DateTime.TryParse(dateBox.Text, out startTime) && timeLength.SelectedValue != "forever" && dataFilterType.SelectedIndex < 2)
@@ -87,19 +91,25 @@ namespace mainCoursework
 				return;
 			}
 
+
+			//Initialize the needed variables
 			var data = getData(startTime);
 			string[] xValues = new string[data.Length];
 			decimal[] yValues = new decimal[data.Length];
 			int i = 0;
+			//Transfer the data values into the array axes we've made
 			foreach (dataEntryStruct current in data)
 			{
 				xValues[i] = current.Xvalue;
 				yValues[i] = current.Yvalue;
 				i++;
 			}
+			//Insert the axes into the chart area
 			mainChart.ChartAreas["chartArea"].AxisX = new Axis(mainChart.ChartAreas["chartArea"], AxisName.X);
 			mainChart.ChartAreas["chartArea"].AxisY = new Axis(mainChart.ChartAreas["chartArea"], AxisName.Y);
 			mainChart.Series["Default"].Points.DataBindXY(xValues, yValues);
+			//Try to render the chart on the page, this doesn't work
+			mainChart.SaveImage(System.IO.Directory.GetCurrentDirectory(), ChartImageFormat.Jpeg);
 		}
 
 		//Get the data and format it ready to add to the chart
@@ -137,42 +147,27 @@ namespace mainCoursework
 				data = view.ToTable();
 			}
 
-			//Group the values in the table into their needed format
-			if (dataFilterType.SelectedValue == "customer")
-			{
-				List<dataEntryStruct> list = new List<dataEntryStruct>(); 
-				var query = data.Rows.Cast<DataRow>().GroupBy(product => product["customer"]).Select(grouped => new {
-					name = grouped.Key,
-					total = grouped.Sum(product => (int)product["productAmount"])
-				});
+			groupData(dataFilterType.SelectedValue);
 
-				foreach (var t in query)
-				{
-					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
-				}
-				output = list.ToArray();
-			}
-			else if (dataFilterType.SelectedValue == "product")
-			{
-				List<dataEntryStruct> list = new List<dataEntryStruct>();
-				var query = data.Rows.Cast<DataRow>().GroupBy(product => product["product"]).Select(grouped => new {
-					name = grouped.Key,
-					total = grouped.Sum(product => (int)product["productAmount"])
-				});
-
-				foreach (var t in query)
-				{
-					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
-				}
-				output = list.ToArray();
-			}
-			else
-			{
-				output = new dataEntryStruct[0];
-			}
-
+			//Sort the output and return it
 			Array.Sort(output);
 			return output;
+
+			//Group the data according to the type requested by the user
+			void groupData(string type)
+			{
+				List<dataEntryStruct> list = new List<dataEntryStruct>();
+				var query = data.Rows.Cast<DataRow>().GroupBy(product => product[type]).Select(grouped => new {
+					name = grouped.Key,
+					total = grouped.Sum(product => (int)product["productAmount"])
+				});
+
+				foreach (var t in query)
+				{
+					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
+				}
+				output = list.ToArray();
+			}
 		}
 	}
 }
