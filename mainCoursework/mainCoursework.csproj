@@ -143,6 +143,7 @@
     <Content Include="productView.aspx" />
     <Content Include="registerEmployee.aspx" />
     <Content Include="Content\employee.css" />
+    <Content Include="staffOverview.aspx" />
     <Content Include="userConfig.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -170,7 +171,6 @@
     <Content Include="Customer.Mobile.Master" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="employeeLogin.aspx" />
-    <Content Include="staffOverview.aspx" />
     <Content Include="productsConfig.aspx" />
     <Content Include="registerCustomer.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -276,6 +276,13 @@
     <Compile Include="registerEmployee.aspx.designer.cs">
       <DependentUpon>registerEmployee.aspx</DependentUpon>
     </Compile>
+    <Compile Include="staffOverview.aspx.cs">
+      <DependentUpon>staffOverview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="staffOverview.aspx.designer.cs">
+      <DependentUpon>staffOverview.aspx</DependentUpon>
+    </Compile>
     <Compile Include="userConfig.aspx.cs">
       <DependentUpon>userConfig.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -297,13 +304,6 @@
     </Compile>
     <Compile Include="employeeLogin.aspx.designer.cs">
       <DependentUpon>employeeLogin.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="staffOverview.aspx.cs">
-      <DependentUpon>staffOverview.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="staffOverview.aspx.designer.cs">
-      <DependentUpon>staffOverview.aspx</DependentUpon>
     </Compile>
     <Compile Include="productsConfig.aspx.cs">
       <DependentUpon>productsConfig.aspx</DependentUpon>

@@ -93,86 +93,86 @@ namespace mainCoursework
 			}
 
 
-			//Initialize the needed variables
-			var data = getDataByType(startTime);
-			string[] xValues = new string[data.Length];
-			decimal[] yValues = new decimal[data.Length];
-			int i = 0;
-			//Transfer the data values into the array axes we've made
-			foreach (dataEntryStruct current in data)
-			{
-				xValues[i] = current.Xvalue;
-				yValues[i] = current.Yvalue;
-				i++;
-			}
-			//Insert the axes into the chart area
-			mainChart.ChartAreas["chartArea"].AxisX = new Axis(mainChart.ChartAreas["chartArea"], AxisName.X);
-			mainChart.ChartAreas["chartArea"].AxisY = new Axis(mainChart.ChartAreas["chartArea"], AxisName.Y);
-			mainChart.Series["Default"].Points.DataBindXY(xValues, yValues);
-			//Try to render the chart on the page, this doesn't work
-			//mainChart.SaveImage(System.IO.Directory.GetCurrentDirectory(), ChartImageFormat.Jpeg);
+			////Initialize the needed variables
+			//var data = getDataByType(startTime);
+			//string[] xValues = new string[data.Length];
+			//decimal[] yValues = new decimal[data.Length];
+			//int i = 0;
+			////Transfer the data values into the array axes we've made
+			//foreach (dataEntryStruct current in data)
+			//{
+			//	xValues[i] = current.Xvalue;
+			//	yValues[i] = current.Yvalue;
+			//	i++;
+			//}
+			////Insert the axes into the chart area
+			//mainChart.ChartAreas["chartArea"].AxisX = new Axis(mainChart.ChartAreas["chartArea"], AxisName.X);
+			//mainChart.ChartAreas["chartArea"].AxisY = new Axis(mainChart.ChartAreas["chartArea"], AxisName.Y);
+			//mainChart.Series["Default"].Points.DataBindXY(xValues, yValues);
+			////Try to render the chart on the page, this doesn't work
+			////mainChart.SaveImage(System.IO.Directory.GetCurrentDirectory(), ChartImageFormat.Jpeg);
 		}
 
-		//Get the data and format it ready to add to the chart
-		private dataEntryStruct[] getDataByType(DateTime startTime)
-		{
-			//Get the data
-			DataTable data = adaptor.GetData();
-			DateTime[] bounds = new DateTime[2];
-			dataEntryStruct[] output;
-			bounds[0] = startTime;
+		////Get the data and format it ready to add to the chart
+		//private dataEntryStruct[] getDataByType(DateTime startTime)
+		//{
+		//	//Get the data
+		//	DataTable data = adaptor.GetData();
+		//	DateTime[] bounds = new DateTime[2];
+		//	dataEntryStruct[] output;
+		//	bounds[0] = startTime;
 
-			//Filter out the unwanted data if the user isn't having time divisions on the X axis
-			if (dataFilterType.SelectedIndex < 1 && timeLength.SelectedValue != "forever")
-			{
-				DataView view = new DataView(data);
-				switch (timeLength.SelectedValue)
-				{
-					case "day":
-						bounds[1] = startTime.AddDays(1);
-						break;
-					case "week":
-						bounds[1] = startTime.AddDays(7);
-						break;
-					case "month":
-						bounds[1] = startTime.AddMonths(1);
-						break;
-					case "6month":
-						bounds[1] = startTime.AddMonths(6);
-						break;
-					case "year":
-						bounds[1] = startTime.AddYears(1);
-						break;
-				}
-				view.RowFilter = "#" + bounds[0].ToString() + "# < datePlaced < #" + bounds[1].ToString() + "#";
-				data = view.ToTable();
-			}
+		//	//Filter out the unwanted data if the user isn't having time divisions on the X axis
+		//	if (dataFilterType.SelectedIndex < 1 && timeLength.SelectedValue != "forever")
+		//	{
+		//		DataView view = new DataView(data);
+		//		switch (timeLength.SelectedValue)
+		//		{
+		//			case "day":
+		//				bounds[1] = startTime.AddDays(1);
+		//				break;
+		//			case "week":
+		//				bounds[1] = startTime.AddDays(7);
+		//				break;
+		//			case "month":
+		//				bounds[1] = startTime.AddMonths(1);
+		//				break;
+		//			case "6month":
+		//				bounds[1] = startTime.AddMonths(6);
+		//				break;
+		//			case "year":
+		//				bounds[1] = startTime.AddYears(1);
+		//				break;
+		//		}
+		//		view.RowFilter = "#" + bounds[0].ToString() + "# < datePlaced < #" + bounds[1].ToString() + "#";
+		//		data = view.ToTable();
+		//	}
 
-			groupData(dataFilterType.SelectedValue);
+		//	groupData(dataFilterType.SelectedValue);
 
-			//Sort the output and return it
-			Array.Sort(output);
-			return output;
+		//	//Sort the output and return it
+		//	Array.Sort(output);
+		//	return output;
 
-			//Group the data according to the type requested by the user
-			void groupData(string type)
-			{
-				//Make a list of the custom structure and define a query to group the data and sum the amounts
-				List<dataEntryStruct> list = new List<dataEntryStruct>();
-				var query = data.Rows.Cast<DataRow>()
-					.GroupBy(product => product[type])
-					.Select(grouped => new {
-						name = grouped.Key,
-						total = grouped.Sum(product => (int)product["productAmount"])
-				});
+		//	//Group the data according to the type requested by the user
+		//	void groupData(string type)
+		//	{
+		//		//Make a list of the custom structure and define a query to group the data and sum the amounts
+		//		List<dataEntryStruct> list = new List<dataEntryStruct>();
+		//		var query = data.Rows.Cast<DataRow>()
+		//			.GroupBy(product => product[type])
+		//			.Select(grouped => new {
+		//				name = grouped.Key,
+		//				total = grouped.Sum(product => (int)product["productAmount"])
+		//		});
 
-				//Populate the list by running the query and convert it into an array
-				foreach (var t in query)
-				{
-					list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
-				}
-				output = list.ToArray();
-			}
-		}
+		//		//Populate the list by running the query and convert it into an array
+		//		foreach (var t in query)
+		//		{
+		//			list.Add(new dataEntryStruct(Convert.ToString(t.name), Convert.ToDecimal(t.total)));
+		//		}
+		//		output = list.ToArray();
+		//	}
+		//}
 	}
 }
