@@ -10,6 +10,36 @@
 %Import package for images
 \usepackage{graphicx}
 
+%Import package for code
+\usepackage{listings}
+\usepackage{color}
+%Configure code syntax highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
 %Import package for drawing flowcharts
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -314,5 +344,4 @@
     \subsection{Usability Features}
     \subsection{Evaluation}
     \subsection{Maintenance}
-    
 \end{document}
