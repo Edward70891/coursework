@@ -5,9 +5,10 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{91DF22D1-3BB9-4D87-A201-D2543A653FD6}"
 	ProjectSection(SolutionItems) = preProject
-		Component 3 - Tom E.docx = Component 3 - Tom E.docx
-		Component 3 Harry Alderton Update.docx = Component 3 Harry Alderton Update.docx
-		Main Doc.docx = Main Doc.docx
+		Writeup\Component 3 - Tom E.docx = Writeup\Component 3 - Tom E.docx
+		Writeup\Component 3 Harry Alderton Update.docx = Writeup\Component 3 Harry Alderton Update.docx
+		Writeup\Main Doc.docx = Writeup\Main Doc.docx
+		Writeup\mainDoc.tex = Writeup\mainDoc.tex
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mainCoursework", "mainCoursework\mainCoursework.csproj", "{27930481-2AAA-44EE-BCAB-E42E3A3A9DA1}"
