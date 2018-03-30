@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}Analysis}{1}
+\contentsline {subsection}{\numberline {1.1}Description of the Problem}{1}
+\contentsline {paragraph}{•}{1}
+\contentsline {paragraph}{•}{1}
+\contentsline {subsection}{\numberline {1.2}Stakeholders}{2}
+\contentsline {subsection}{\numberline {1.3}Solving the Problem with Computational Methods}{2}
+\contentsline {paragraph}{•}{2}
+\contentsline {paragraph}{•}{2}
+\contentsline {paragraph}{•}{3}
+\contentsline {paragraph}{•}{3}
+\contentsline {subsection}{\numberline {1.4}Research}{3}
+\contentsline {subsection}{\numberline {1.5}Features of the Proposed Solution}{3}
+\contentsline {subsection}{\numberline {1.6}Software and Hardware Requirements}{3}
+\contentsline {paragraph}{•}{3}
+\contentsline {subsubsection}{\numberline {1.6.1}Client Computers}{3}
+\contentsline {subsubsection}{\numberline {1.6.2}Host Computer}{4}
+\contentsline {subsection}{\numberline {1.7}Success Criteria}{4}

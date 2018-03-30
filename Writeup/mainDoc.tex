@@ -1,0 +1,106 @@
+\documentclass{article}
+
+\title{GCE Computer Science Component 3}
+\author{Edward Robert Karol Demkowicz-Duffy}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \tableofcontents
+    \newpage
+    \pagenumbering{arabic}
+    
+    \section{Analysis}
+    
+    \subsection{Description of the Problem}
+    \paragraph{•}
+    My client is a personal friend and the owner of a business that is based around the sale of novelty clocks and coasters manufactured from or based on vinyl records. 
+    They buy (often) second hand vinyl records from various sources, cut out the album art in the middle and use that to mount a clock mechanism on, then package it in it’s original sleeve modified to become a box as a clock to be hung or place on a surface. 
+    They also manufacture sets of coasters which are artificially manufactured to appear as vinyl records, sold in sets of matching bands or contemporary albums. 
+    Their present sales solution is in three parts:
+    \begin{itemize}
+    \item Online sales through third party storefronts Etsy and eBay
+    \item Face-to-face sales at the client’s stall at the regular Manchester Christmas markets
+    \item Other face-to-face sales at any other events the client or their employees may wish to attend, irregularly
+    \end{itemize}
+    This solution is inconvenient for multiple reasons. 
+    The two storefronts provide quite different experiences and tools for people wanting to sell their products on their platforms and thus my client often finds it difficult to deduce trends and critical values like net profits in their overall online sales. 
+    Sales at the Christmas markets are difficult to keep track of as the square they are held in get crowded and the client/their employees frequently lose track of sales, which can be found at the end of the day by examining existing records, money gained and remaining stock; but is still an obstacle to clear analysis of the client’s sales. 
+    Stalls at other events are usually set up at short notice, and similar logistical problems tend to arise as with the Christmas markets, but with less pre planning time and available information they also tend to be more difficult to solve. 
+    \paragraph{•}
+    The client would like a web app which provides a quality sales experience to customers, and powerful management tools and information for employees. 
+    It must have an online storefront, a (modifiable) storage method to track products and all their related information (most importantly stock and price) and sales of said products. 
+    Users should have to register to make purchases. 
+    Employees should be to view and modify products. 
+    There should be easy tools that specialize in managing stock and sales both at the beginning and the end of a day when the client sells their products at an event, be it unexpected or scheduled. 
+    The client also specifically requests that employees be able to view statistics and basic analysis of sales displayed in an easy-to-understand way. 
+    Employees with special permission should also be able to modify the accounts of both customers and other employees and delete or add products to the program’s storage. 
+    Furthermore, the website must be secure, with both customers’ and employees’ data appropriately protected and must appear professional and easy to comprehend.
+    
+    \subsection{Stakeholders}
+    Stakeholders are identified here as being people who must use, or will be directly affected by, the program. 
+    There are three primary stakeholders, who must be born in mind during the creation of the web app:
+    \begin{itemize}
+    \item Customers.
+    These are the most important stakeholders as they as the client’s source of income. 
+    They must have the easiest and most convenient experience possible, to retain their attention on the products the client wishes to sell to them. 
+    They will benefit from the project by having a quick and easy way to exchange money for goods they wish to buy. 
+    As such, the interface they use should be carefully and logically laid out, with no unneeded features or artefacts on it. 
+    Products should be described clearly and concisely so the customers know exactly what they are buying and all other information relevant to it.
+    \item Staff. 
+    These are the people employed by the client who manage their stock and make sales in person. 
+    Their side of the web app will be used for swift and easy viewing of stock and statistics – they may also need to modify stock data. 
+    Therefore it must provide the quickest and most powerful ways to manage current stock and sales at physical stalls, and helpful processed sales data.
+    \item Administrators. 
+    These are senior employees who have all the responsibilities of other employees but have more power over the company’s assets. 
+    They have the same requirements as regular employees, but also need to be able to view the data of customers and ordinary employees, be able to add whole new products to the set (and delete existing ones), be able to change the passwords of and delete accounts (be they employee or customer) and be able to view technical data like logs.
+    \end{itemize}
+    
+    \subsection{Solving the Problem with Computational Methods}
+    \paragraph{•}
+    The client requires a centralised service for distributing their products en masse to customers who may be international – a website or web app is perfect for this purpose as it can be accessed anywhere, can be easily translated, and requires little to no uncommon knowledge to use and access. 
+    It can be accessed from many places at once and run in parallel in all these places without compromising at all in any.
+    \paragraph{•}
+    The client requires a service that will supply their company with processed data that will help them analyse their sales strategies and improve them. 
+    Computers excel at this as it is a repetitive numerical task which can be completed by a processor much faster than a human analyst. 
+    In addition to this, computers can scale easily to very large amounts of data, whereas other methods (aforementioned analyst) would likely struggle to cope in comparison.
+    \paragraph{•}
+    The client requires a method for organising all their stock in a central location, with the ability for it to be accessed and changed from anywhere at any time. 
+    An always-on, internet-connected data source is an exceptional solution for this problem because besides matching all the required criteria since it can be accessed from anywhere by anyone with the appropriate credentials, it can add useful functionality to them by logging all information transfers and enforcing logical rules like relationships between data and correct formatting. 
+    The same data source can store information about both the customers and employees who use it for increased availability of data. 
+    This ties in with the previous requirement as all the data needing to be processed being stored in one (digital) location is extremely helpful for any computerised process trying to access it, keeping time taken to do that processing short.
+    \paragraph{•}
+    Another advantage of the service being hosted online is that issues that may arise with the software are quick and easy to patch out as the patch can be deployed immediately to the only host with little to no downtime, meaning the service remains almost completely uninterrupted.
+    
+    \subsection{Research}
+    
+    \subsection{Features of the Proposed Solution}
+    
+    \subsection{Software and Hardware Requirements}
+    \paragraph{•}
+    As this software will be interacted with in different ways to how it is run at it’s actual location, I have included two sets of hardware requirements; one for the end user (be they employee or customer) and one for the server hosting the software:
+    
+    \subsubsection{Client Computers}
+    \begin{itemize}
+    \item The latest version of a modern browser. 
+    I recommend Google Chrome, Microsoft Edge, Mozilla Firefox, Opera or Safari.
+    \item A computer which can run that browser. For reference, I have taken the requirements for Mozilla Firefox, which is regarded as an industry standard:
+    \begin{itemize}
+    \item Pentium 4 or newer processor that supports SSE2
+    \item 512MB of RAM / 2GB of RAM for the 64-bit 
+    \item 200MB of hard drive space
+    \end{itemize}
+    \item An internet connection with download speed equal to or exceeding 5MB/s (megabits per second)
+    \end{itemize}
+    
+    \subsubsection{Host Computer}
+    \begin{itemize}
+    \item At least 5GB of available secondary storage with a high read/write rate
+    \item A modern high-performance server processor with 4 or more cores clocked at more than 3GHz
+    \item At least 16GB of RAM
+    \item An internet connection with download and upload speeds equal to or exceeding 1GB/s (gigabits per second)
+    \end{itemize}
+    
+    \subsection{Success Criteria}
+\end{document}
