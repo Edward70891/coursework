@@ -63,6 +63,7 @@ namespace mainCoursework
 
 		protected void startSortButton_Click(object sender, EventArgs e)
 		{
+			//Get whether the user wants ascending sort
 			bool ascending;
 			if (sortType.SelectedIndex == 0)
 			{
@@ -72,7 +73,30 @@ namespace mainCoursework
 			{
 				ascending = false;
 			}
+			//Run the sort and repopulate the page
 			productsDisplayList.sort(ascending, sortField.SelectedValue);
+			populatePage();
+		}
+
+		protected void searchButton_Click(object sender, EventArgs e)
+		{
+			string searchType = searchFieldDropdown.SelectedValue;
+			string searchText = searchBox.Text;
+			bool whitelist = Convert.ToBoolean(whitelistSelect.SelectedValue);
+			productsDisplayList.filter(searchType, searchBox.Text, whitelist);
+			populatePage();
+		}
+
+		protected void coasterClockButton_Click(object sender, EventArgs e)
+		{
+			string filterMode = coastersOrClocks.SelectedValue;
+			productsDisplayList.filter("stock", filterMode, true);
+			populatePage();
+		}
+
+		protected void resetFilter_Click(object sender, EventArgs e)
+		{
+			productsDisplayList.resetWorkingList();
 			populatePage();
 		}
 	}

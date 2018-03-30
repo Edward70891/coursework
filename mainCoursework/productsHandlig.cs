@@ -625,6 +625,33 @@ namespace mainCoursework
 			//Determines what field to sort by according to user input
 			switch (field)
 			{
+				case "productName":
+					for (int i = 0; i < masterList.Length; i++)
+					{
+						if (whitelist)
+						{
+							//Runs if it's whitelisting
+							if (masterList[i].productInfo.displayName.ToUpper() == value.ToUpper())
+							{
+								//If their band matches add them to the filtered list
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+						else
+						{
+							//Runs if it's blacklisting (ie whitelist=false)
+							if (masterList[i].productInfo.displayName.ToUpper() != value.ToUpper())
+							{
+								//If their band doesn't match add them to the filtered list
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+					}
+					//Set the working list to be the filtered list
+					WorkingList = filteredList.ToArray();
+					break;
 				case "band":
 					//Goes through all the objects in the master list
 					for (int i = 0; i < masterList.Length; i++)
@@ -682,25 +709,29 @@ namespace mainCoursework
 					//Set the working list to be the filtered list
 					WorkingList = filteredList.ToArray();
 					break;
-
-				case "stock":
-					//Goes through all the objects in the master list
-					for (int i = 0; i < masterList.Length; i++)
-					{
-						if (masterList[i].productInfo.stock > 0)
-						{
-							//If their stock isn't 0 add them to the filtered list
-							filteredList.Add(masterList[i]);
-							filteredIndex++;
-						}
-					}
-					//Set the working list to be the filtered list
-					WorkingList = filteredList.ToArray();
-					break;
 				//If incorrectly called this is thrown
 				default:
 					throw new ArgumentException("The filter field must be one of the specified values");
 			}
+		}
+
+		public void removeOutOfStock()
+		{
+			//Makes a new list
+			List<product> filteredList = new List<product>();
+			int filteredIndex = 0;
+			//Goes through all the objects in the master list
+			for (int i = 0; i < masterList.Length; i++)
+			{
+				if (masterList[i].productInfo.stock > 0)
+				{
+					//If their stock isn't 0 add them to the filtered list
+					filteredList.Add(masterList[i]);
+					filteredIndex++;
+				}
+			}
+			//Set the working list to be the filtered list
+			WorkingList = filteredList.ToArray();
 		}
 	}
 }
