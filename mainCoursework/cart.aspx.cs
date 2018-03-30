@@ -98,19 +98,7 @@ namespace mainCoursework
 				removeButton.Click += new EventHandler(removeButton_Click);
 				removeButton.Attributes.Add("runat", "server");
 				panel.Controls.Add(removeButton);
-				
-				//Button updateButton = new Button()
-				//{
-				//	CssClass = "updateButton",
-				//	ID = current.product.productInfo.productName + "CartUpdateButton",
-				//	Text = "Update Amount",
-				//	CommandArgument = current.product.productInfo.productName
-				//};
-				//updateButton.Click += new EventHandler(updateButton_Click);
-				//updateButton.Attributes.Add("runat", "server");
-				//panel.Controls.Add(updateButton);
 
-				//Add the filled panel to the page
 				panel.CssClass = "cartProductDisplayPanel";
 				productsListPanel.Controls.Add(panel);
 			}
