@@ -7,6 +7,9 @@
 %Define page margins with geometry
 \usepackage[a4paper, total={6.5in, 8.5in}]{geometry}
 
+%Import package for images
+\usepackage{graphicx}
+
 %Import package for drawing flowcharts
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -29,7 +32,7 @@
     \addtocontents{toc}{\setcounter{tocdepth}{2}}
     
     \section{Analysis}
-    \subsection{Description of the Problem}
+    \subsection{Problem Description}
     \paragraph{•}
     My client is a personal friend and the owner of a business that is based around the sale of novelty clocks and coasters manufactured from or based on vinyl records. 
     They buy (often) second hand vinyl records from various sources, cut out the album art in the middle and use that to mount a clock mechanism on, then package it in it’s original sleeve modified to become a box as a clock to be hung or place on a surface. 
@@ -55,6 +58,7 @@
     Furthermore, the website must be secure, with both customers’ and employees’ data appropriately protected and must appear professional and easy to comprehend.
     
     \subsection{Stakeholders}
+    \paragraph{•}
     Stakeholders are identified here as being people who must use, or will be directly affected by, the program. 
     There are three primary stakeholders, who must be born in mind during the creation of the web app:
     \paragraph{Customers}
@@ -88,6 +92,29 @@
     Another advantage of the service being hosted online is that issues that may arise with the software are quick and easy to patch out as the patch can be deployed immediately to the only host with little to no downtime, meaning the service remains almost completely uninterrupted.
     
     \subsection{Research}
+    \subsubsection{The Client's Current Solution}
+    \paragraph{•}
+    As mentioned in the problem description, the client employs eBay and Etsy to sell their products online; however as I have covered these examples below I will focus on the physical sales element in this section.
+    \paragraph{Advantages}
+    There are several advantages to this method of selling, most of which are related to the fact that the customer can talk to an employee in person and that they can view the product they wish to buy first hand.
+    \paragraph{•}
+    The customer can examine the product on site, and view properties of it that they may not be able to judge through a website like size, weight and "true" colour.
+    This increases the probability that the customer will make a purchase considerably, and so would be desirable to try to compensate for in the we application - the methods this could be accomplished through are essentially to ensure the product is represented on it's "page" as accurately and fully as possible.
+    Dimensions should be included along with multiple images of the product from different angles and in different lighting conditions.
+    \paragraph{•}
+    The customer can also talk to the employee for an extended period of time if they wish, which gives the employee the opportunity to convince them to purchase the product and to further enhance their image in the eyes of the customer (i.e. beyond what the customer has viewed of the array of products and the stall itself).
+    Again, it is hard to provide a comparable service on a website to this.
+    One solution would be to include a live text chat interface on the web application.
+    This would require constant employee presence which is not feasible for my client as their company is not large enough or well-known enough to warrant having a team of support staff available.
+    Another method would be to provide a phone number on the website and encourage people to call it if they have enquiries so as to reduce the requirements on the hosting machine and potentially the number of people needed to answer, but this would still suffer from the same problems as the first proposal (albeit less so).
+    \paragraph{Disadvantages}
+    Employees can only bring and display so much stock to a physical event, which means the choice and availability customers see is severely stunted.
+    A web application would inherently solve this issue because the entire inventory is displayed simultaneously so this does not need to be considered.
+    \paragraph{•}
+    Furthermore, the inventory the client takes with them is vulnerable to theft and damage while it is on display at the event.
+    This is another problem that is solved by developing a web application as a replacement because no stock is "exposed" until it has been sold to a customer.
+    \subsubsection{Existing Successful Examples}
+    \paragraph{•}
     This type of software is commonly used in ordinary life today.
     Multiple excellent examples already exist, some of which the client already utilizes.
     Three prominent extremely successful public examples are listed below:
@@ -96,50 +123,54 @@
     \item eBay
     \item Etsy
     \end{itemize}
-    \subsubsection{Existing Examples}
     \paragraph{Amazon}
-    Amazon is an enormous online marketplace which allows any verified entity to buy or sell goods there.
+    This site is an enormous online marketplace which allows any verified entity to buy or sell goods there.
     It features extensive methods for displaying information about the goods listed on it, including images, hand written descriptions, multiple variants, stock amounts, delivery information (cost, areas available to deliver to) and in depth public user reviews.
     It also contains algorithms designed to promote other products to the user, displayed in the form of recommendations, usually labelled "people who bought this bought" or other such categories.
     I would guess that these are generated from the logged-in user's purchase history and viewing history by categorising all products on the website, then suggesting the most popular products in the categories the user views and purchases from the most.
     This is an excellent method to retain user attention and encourage users to stay on the site and spend more money.
     The feature would be excellent to incorporate into my own application, however it could prove algorithmically quite complex to implement.
     \paragraph{•}
-    Amazon allows users to store payment information and delivery addresses for ease of use in future transactions - another great way to make user's experience much easier and quicker, which will in turn increase the chances of them making more purchases on the site.
+    The site allows users to store payment information and delivery addresses for ease of use in future transactions - another great way to make user's experience much easier and quicker, which will in turn increase the chances of them making more purchases on the site.
     The site stores customer's order history in depth with information pertaining to when they were ordered, how much was paid, when they were delivered and even who to.
     In addition, they provide live tracking of orders which are in the process of being delivered.
     \paragraph{•}
-    Amazon also display advertisements for currently running sales, new products and even new features.
+    Amazon also displays advertisements for currently running sales, new products and even new features.
     This draws the attention of users to popular products which they are more likely to buy.
     More so, the efficiency of shopping (i.e. the amount of time it takes to locate a specific product) is much improved by a large array of searching, sorting and filtering options when browsing available goods.
     Users can sort by price, name and search relevance to name but a few, and can search product names across the whole site or within specified categories.
     
     \paragraph{eBay}
-    eBay is a site similar to Amazon which allows buyers and sellers to make transactions in exchange for goods and services online.
+    This is a site similar to Amazon which allows buyers and sellers to make transactions in exchange for goods and services online.
     In contrast to Amazon, however, eBay facilitates time-limited auctions to be hosted which buyers can place bids on during a set time period, where the product will be sold to the highest bidder who will pay their named price to the seller.
     The user interface surrounding this feature is designed fantastically to make it as simple and easy as possible for customers to place bids - it shows them the starting price, the time remaining (live) and the current highest bid.
     It makes placing a bid as easy as entering a value in a text box and pressing a button with extremely low latency, so that competitive bidding can occur fairly towards the end of the time period which I frequently observed to drive the final price much higher within a small time frame.
     This means sellers can create highly competitive environments for optimum profit, something I thought my client would appreciate greatly, but upon contacting them they informed me they were not interested in auctioning their products.
     Still, there are definitely notes to be taken here as the design philosophies of the highly intuitive GUI displayed on the auction page can be applied well to the selling pages of my own project.
-    \paragraph{•}
+    \\
     eBay offers many of the features Amazon does, namely the recommendations of other products, all the delivery related features and the saving of information related to those deliveries (addresses and payment methods).
     \paragraph{Etsy}
-    Etsy is another online marketplace with a similar goal to the aforementioned two.
+    This is another online marketplace with a similar goal to the aforementioned two.
     It's distinguishing feature is that it allows sellers to design and construct their own personalised pages to display their products and their information, referred to as their "shop".
     This is a powerful function as it allows sellers to present themselves as they wish to prospective buyers, be it using particular colour palettes or shape designs, this sets the "attitude" of the seller and creates a "mood" relating to them.
     While this feature on it's own is not especially relevant to my client's needs as they wan to sell only as one entity in their own location, the core concept of presenting an impression to the user is a powerful way to get a consistent "feel" across the site which fits with my client's intended public image.
     \subsubsection{Conclusion}
-    Key features shared by all the examples are:
+    Key features shared by all the successful examples are:
     \begin{itemize}
     \item Algorithmically-generated recommendations for the customer based on their order and viewing history.
     While a full implementation of this may prove to be out of the scope of my project, it is clearly a useful feature to implement that may well increase the chance of purchases being made by users.
+    Alternatives could be to show users "buy it again" or "next in the set" options.
     \item Convenience-based features.
     All the websites I examined were obviously designed to make the user experience as slick as possible.
     This is very helpful for the seller and website because it encourages the user to spend more time browsing and buying due to the whole process being easier.
     As such, it should be an important success criterion that the user experience is as "smooth" as possible to promote the most time spent on the website.
-    \item Comprehensive searching and filtering tools to assist customers finding the product that suits their needs.
+    \item Comprehensive searching and filtering tools.
+    These are designed to assist customers finding the product that suits their needs.
     The products which will be displayed on my project will be more similar than those present on the websites examined, but the idea of searching through them can be carried over still.
     The web app I will build should offer similar functionality if it wants users to locate products as swiftly as possible.
+    \item Information-laden lists of products.
+    These worked exceptionally well when used in conjunction with the above tools.
+    Each product is represented in short with crucial information clearly available in a small space, which further assists in finding the desired products.
     \item Plentiful information related to the item the user is viewing.
     Each website has an individual page for each item the user views containing a plethora of data that they may want to find about the product.
     All three website showed a "slide show" of photographs or other images of the product they were viewing, and allowed them to zoom in and examine them.
@@ -230,13 +261,30 @@
     \newpage
     \section{Design}
     \subsection{Decompose the Problem}
-    \subsection{Structure of the Problem}
+    \subsection{Problem Structure}
     \subsection{Algorithms}
     \subsection{Key Variables and Structures}
     \subsection{Usability Features}
     \subsection{Test Data}
     \newpage
     
-    \section{Iterative Development of the Coded Solution}
+    \section{Development}
+    \subsection{Iterative Development}
+    \subsection{Prototyping}
+    \subsection{Annotated Code}
+    \subsection{Validation}
+    \subsection{Reviews}
     \newpage
+    
+    \section{Testing}
+    \subsection{To Inform Development}
+    \subsection{To Inform Evaluation}
+    \newpage
+    
+    \section{Evaluation}
+    \subsection{Testing}
+    \subsection{Usability Features}
+    \subsection{Evaluation}
+    \subsection{Maintenance}
+    
 \end{document}
