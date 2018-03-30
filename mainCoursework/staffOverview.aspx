@@ -2,8 +2,8 @@
 
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-	#
-	<asp:Panel ID="dataFilterTypePanel" runat="server">
+
+	<asp:Panel ID="dataFilterTypePanel" runat="server" CssClass="chartConfigPanel">
 		Filter:
 		<asp:RadioButtonList ID="dataFilterType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="dataFilterType_SelectedIndexChanged">
 			<asp:ListItem Value="customer">Per Customer</asp:ListItem>
@@ -15,7 +15,7 @@
 		</asp:RadioButtonList>
 	</asp:Panel>
 
-	<asp:Panel ID="yAxisSelectionPanel" runat="server">
+	<asp:Panel ID="yAxisSelectionPanel" runat="server" CssClass="chartConfigPanel">
 		Show:
 		<asp:RadioButtonList ID="yAxisSelection" runat="server">
 			<asp:ListItem Value="orderVolume">Order Volume</asp:ListItem>
@@ -23,7 +23,7 @@
 		</asp:RadioButtonList>
 	</asp:Panel>
 
-	<asp:Panel ID="timeLengthPanel" runat="server">
+	<asp:Panel ID="timeLengthPanel" runat="server" CssClass="chartConfigPanel">
 		Time Period:
 		<asp:RadioButtonList ID="timeLength" runat="server" OnSelectedIndexChanged="timeLength_SelectedIndexChanged" AutoPostBack="True">
 			<asp:ListItem Value="day">Day</asp:ListItem>

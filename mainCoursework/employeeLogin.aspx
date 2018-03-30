@@ -1,9 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Customer.Master" AutoEventWireup="true" CodeBehind="employeeLogin.aspx.cs" Inherits="mainCoursework.employeeLogin" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="jumbotron">
-		<h3>Please login to access the site</h3>
-    </div>
-
+	Employee Login
+	<br />
 	<div class="login">
 		<asp:TextBox ID="employeeUsernameBox" runat="server" placeholder ="Username"></asp:TextBox>
 		<br />

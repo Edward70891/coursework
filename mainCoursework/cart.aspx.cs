@@ -165,16 +165,21 @@ namespace mainCoursework
 		//Dummy checkout method
 		protected void makeOrder()
 		{
+			//If the person logged in isn't a customer, deny them
 			if (Convert.ToString(Session["userType"]) != "customer")
 			{
 				returnLabel.Text = "You're not a registered customer so you can't make an order!";
 				return;
 			}
+			//Log the purchase
+			commonClasses.customLogging.newEntry("Customer " + Convert.ToString(Session["currentUser"]) + " checked out");
+			//Open an adaptor and insert a new order for every purchase in the cart
 			var ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
 			foreach (cartItem current in cartArray)
 			{
 				ordersAdaptor.newOrder(DateTime.Now, current.product.productInfo.price * current.amount, current.amount, Convert.ToString(Session["currentUser"]), current.product.productInfo.productName);
 			}
+			//Clear the cart table of the user's old cart, refresh the page and thank the user
 			cartsTableAdapter.deleteCart(Convert.ToString(Session["CurrentUser"]));
 			populateList();
 			populatePage();

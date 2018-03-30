@@ -2,6 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 	<div class="login">
 		Customer Login
+		<br />
 		<asp:TextBox ID="customerUsernameBox" runat="server" placeholder ="Username"></asp:TextBox>
 		<br />
 		<asp:TextBox ID="customerPasswordBox" runat="server" TextMode="Password" placeholder ="Password"></asp:TextBox>
