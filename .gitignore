@@ -10,6 +10,11 @@ log.txt
 *.user
 *.userosscache
 *.sln.docstates
+mainDoc.aux
+mainDoc.log
+mainDoc.pdf
+mainDoc.synctex.gz
+mainDox.toc
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -288,3 +293,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/Writeup/mainDoc.toc
