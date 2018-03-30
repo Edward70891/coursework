@@ -95,9 +95,6 @@ namespace mainCoursework
 		}
 	}
 
-
-
-
 	/// <summary>
 	/// A struct for storing product info, highly recommended to use the product class instead of this as that includes logic
 	/// </summary>
@@ -183,17 +180,7 @@ namespace mainCoursework
 			this.Controls.Add(new LiteralControl("<br />"));
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
+	
 	/// <summary>
 	/// A class for holding a list of products; filtering and sorting them
 	/// </summary>

@@ -165,19 +165,31 @@ namespace mainCoursework
 		//Dummy checkout method
 		protected void makeOrder()
 		{
+			var productsAdaptor = new defaultDataSetTableAdapters.productsTableAdapter();
+			var ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
 			//If the person logged in isn't a customer, deny them
 			if (Convert.ToString(Session["userType"]) != "customer")
 			{
 				returnLabel.Text = "You're not a registered customer so you can't make an order!";
 				return;
 			}
+			//Check for each item that there is actually a sufficient amount of products in stock to make the purchase
+			foreach (cartItem current in cartArray)
+			{
+				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName));
+				if (currentStock < current.amount)
+				{
+					returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productInfo.productName + " in stock!";
+					return;
+				}
+			}
 			//Log the purchase
 			commonClasses.customLogging.newEntry("Customer " + Convert.ToString(Session["currentUser"]) + " checked out");
-			//Open an adaptor and insert a new order for every purchase in the cart
-			var ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
+			//Insert a new order and update the stock for all the items in the cart
 			foreach (cartItem current in cartArray)
 			{
 				ordersAdaptor.newOrder(DateTime.Now, current.product.productInfo.price * current.amount, current.amount, Convert.ToString(Session["currentUser"]), current.product.productInfo.productName);
+				productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName)) - current.amount, current.product.productInfo.productName);
 			}
 			//Clear the cart table of the user's old cart, refresh the page and thank the user
 			cartsTableAdapter.deleteCart(Convert.ToString(Session["CurrentUser"]));

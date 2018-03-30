@@ -31,20 +31,27 @@ namespace mainCoursework
 				//Checks there's no SQL related things in the boxes
 				if (customSecurity.sanitizeCheck(new string[] { submittedUsernameBox.Text, submittedPasswordBox.Text, forenameBox.Text, surnameBox.Text }))
 				{
-					using (defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter())
+					if (submittedUsernameBox.Text != "master" || submittedUsernameBox.Text != "Market")
 					{
-						try
+						using (defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter())
 						{
-							//Creates the new user, logs the creation of the user and notifies the current user
-							employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
-							registerReturn.Text = "New employee created";
-							customLogging.newEntry("Employee " + submittedUsernameBox.Text + " was created");
+							try
+							{
+								//Creates the new user, logs the creation of the user and notifies the current user
+								employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
+								registerReturn.Text = "New employee created";
+								customLogging.newEntry("Employee " + submittedUsernameBox.Text + " was created");
+							}
+							//Catches errors (hopefully only database related) and posts them to the user
+							catch (Exception except)
+							{
+								registerReturn.Text = "Database operation failed with error " + except.Message;
+							}
 						}
-						//Catches errors (hopefully only database related) and posts them to the user
-						catch (Exception except)
-						{
-							registerReturn.Text = "Database operation failed with error " + except.Message;
-						}
+					}
+					else
+					{
+						registerReturn.Text = "That is a reserved username!";
 					}
 				}
 				else

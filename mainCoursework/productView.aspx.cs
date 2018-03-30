@@ -11,7 +11,8 @@ namespace mainCoursework
 	{
 		//Create a new product
 		product currentProduct;
-		defaultDataSetTableAdapters.cartsTableAdapter adapter = new defaultDataSetTableAdapters.cartsTableAdapter();
+		defaultDataSetTableAdapters.cartsTableAdapter cartsAdaptor = new defaultDataSetTableAdapters.cartsTableAdapter();
+		defaultDataSetTableAdapters.productsTableAdapter productsAdaptor = new defaultDataSetTableAdapters.productsTableAdapter();
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
@@ -40,7 +41,16 @@ namespace mainCoursework
 				//Make sure they're not trying to add 0 of something to their cart
 				if (amountToAdd.Text != "0")
 				{
-					adapter.insertProduct(Convert.ToString(Session["currentUser"]), currentProduct.productInfo.productName, Convert.ToInt32(amountToAdd.Text));
+					//If isn't already an entry for that product in that cart, add it
+					if (cartsAdaptor.checkExisting(Convert.ToString(Session["currentUser"]), currentProduct.productInfo.productName) == null)
+					{
+						cartsAdaptor.insertProduct(Convert.ToString(Session["currentUser"]), currentProduct.productInfo.productName, Convert.ToInt32(amountToAdd.Text));
+					}
+					//If there is, add the amount they want onto it
+					else
+					{
+						cartsAdaptor.updateAmount(Convert.ToInt32(amountToAdd.Text), Convert.ToString(Session["currentUser"]), currentProduct.productInfo.productName);
+					}
 					returnLabel.Text = amountToAdd.Text + " " + currentProduct.productInfo.productName + "s added to your cart!";
 				}
 				else

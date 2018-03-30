@@ -138,6 +138,7 @@
     <Content Include="Content\customer.css" />
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
+    <Content Include="market.aspx" />
     <Content Include="orderHistory.aspx" />
     <Content Include="products.aspx" />
     <Content Include="productView.aspx" />
@@ -247,6 +248,13 @@
     </Compile>
     <Compile Include="Customer.Mobile.Master.designer.cs">
       <DependentUpon>Customer.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="market.aspx.cs">
+      <DependentUpon>market.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="market.aspx.designer.cs">
+      <DependentUpon>market.aspx</DependentUpon>
     </Compile>
     <Compile Include="orderHistory.aspx.cs">
       <DependentUpon>orderHistory.aspx</DependentUpon>
