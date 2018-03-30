@@ -150,6 +150,7 @@ namespace mainCoursework
 				if (current.product.productInfo.productName == productName)
 				{
 					index = i;
+					break;
 				}
 				i++;
 			}
