@@ -80,16 +80,20 @@ namespace mainCoursework
 
 		protected void searchButton_Click(object sender, EventArgs e)
 		{
+			//Get all the variables from the controls on the page
 			string searchType = searchFieldDropdown.SelectedValue;
 			string searchText = searchBox.Text;
 			bool whitelist = Convert.ToBoolean(whitelistSelect.SelectedValue);
+			//Apply the filter and refresh the page
 			productsDisplayList.filter(searchType, searchBox.Text, whitelist);
 			populatePage();
 		}
 
 		protected void coasterClockButton_Click(object sender, EventArgs e)
 		{
+			//Get the filter mode from the control
 			string filterMode = coastersOrClocks.SelectedValue;
+			//Apply the filter and refresh the page
 			productsDisplayList.filter("stock", filterMode, true);
 			populatePage();
 		}
