@@ -166,7 +166,7 @@ namespace mainCoursework
 			}
 			else
 			{
-				stockTag.Text = Convert.ToString(info.stock) + "in stock";
+				stockTag.Text = Convert.ToString(info.stock) + " in stock";
 			}
 			stockTag.Attributes.Add("runat", "server");
 			this.Controls.Add(stockTag);

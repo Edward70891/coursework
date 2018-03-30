@@ -134,8 +134,7 @@ namespace mainCoursework
 			var temp = new List<cartItem>(cartArray);
 			temp.RemoveAt(index);
 			cartArray = temp.ToArray();
-			//Session["productRedirectName"] = btn.CommandArgument;
-			////Other code for this goes here
+			populatePage();
 		}
 
 		protected void amountBox_TextChanged(object sender, EventArgs e)

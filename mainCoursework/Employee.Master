@@ -17,6 +17,7 @@
     <link runat="server" href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
 	<link runat="server" href="~/Content/employee.css" rel="stylesheet" type="text/css" />
+<%--	<script src="~/Scripts/WebForms/Chart.bundle.js" type="text/javascript""></script>--%>
 </head>
 <body>
     <form runat="server">

@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 	<div>
 		Products<br />
-		<asp:GridView ID="productsTable" runat="server" AutoGenerateColumns="False" DataKeyNames="productName" DataSourceID="productsDataSource" EmptyDataText="There are no data records to display." onrowcommand="productsTable_RowCommand">
+		<asp:GridView ID="productsTable" runat="server" AutoGenerateColumns="False" DataKeyNames="productName" DataSourceID="productsDataSource" EmptyDataText="There are no products in the database." onrowcommand="productsTable_RowCommand">
 			<Columns>
 				<asp:BoundField DataField="productName" HeaderText="Name" />
 				<asp:BoundField DataField="price" HeaderText="Price" SortExpression="price" />
