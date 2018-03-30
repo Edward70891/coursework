@@ -39,7 +39,7 @@
 				<asp:Parameter Name="ID" Type="Int32" />
 			</UpdateParameters>
 		</asp:AccessDataSource>
-		<asp:Label ID="returnLabel" runat="server"></asp:Label>
+		<asp:Label ID="returnLabel" runat="server" CssClass="returnLabel"></asp:Label>
 		<br />
 		<br />
 		Add Product<br />
@@ -59,10 +59,8 @@
 		<asp:TextBox ID="descriptionBox" runat="server" Rows="4" placeholder="Product Description"></asp:TextBox>
         <asp:FileUpload ID="imageUpload" runat="server" />
         <br />
-        <p>
-			<asp:Button ID="productAddButton" runat="server" Text="Add Product" OnClick="productAddButton_Click" />
-			<asp:Label ID="returnMessage" runat="server" Text=""></asp:Label>
-        </p>
+		<asp:Button ID="productAddButton" runat="server" Text="Add Product" OnClick="productAddButton_Click" />
+		<asp:Label ID="returnMessage" runat="server" Text="" CssClass="returnLabel"></asp:Label>
 
     </div>
 </asp:Content>

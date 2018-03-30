@@ -50,3 +50,8 @@ textarea {
 .stockTag{
 	text-align: right;
 }
+
+.returnLabel{
+	color: red;
+	font-weight: bold;
+}

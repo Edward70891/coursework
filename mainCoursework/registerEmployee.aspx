@@ -13,5 +13,5 @@
 	<asp:TextBox ID="surnameBox" runat="server" placeholder ="Surname"></asp:TextBox>
 	<br />
 	<asp:Button ID="newUser" runat="server" Text="Register New Employee" OnClick="newUser_Click" />
-	<asp:Label ID="registerReturn" runat="server" Text=""></asp:Label>
+	<asp:Label ID="registerReturn" runat="server" Text="" CssClass="returnLabel"></asp:Label>
 </asp:Content>

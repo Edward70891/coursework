@@ -4,6 +4,6 @@
 	<asp:Panel CssClass="productControls" runat="server">
 		<asp:TextBox ID="amountToAdd" runat="server" TextMode="Number" placeholder ="Amount"></asp:TextBox>
 		<asp:Button ID="cartButton" runat="server" Text="Add to Cart" OnClick="cartButton_Click" />
-		<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
+		<asp:Label ID="returnLabel" runat="server" Text="" CssClass="returnLabel"></asp:Label>
 	</asp:Panel>
 </asp:Content>

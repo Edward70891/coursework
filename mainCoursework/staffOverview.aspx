@@ -2,7 +2,7 @@
 
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-	<%-- Chart is held here --%>
+	#
 	<asp:Panel ID="dataFilterTypePanel" runat="server">
 		Filter:
 		<asp:RadioButtonList ID="dataFilterType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="dataFilterType_SelectedIndexChanged">
@@ -15,7 +15,6 @@
 		</asp:RadioButtonList>
 	</asp:Panel>
 
-	<%-- Apply button --%>
 	<asp:Panel ID="yAxisSelectionPanel" runat="server">
 		Show:
 		<asp:RadioButtonList ID="yAxisSelection" runat="server">
@@ -24,7 +23,6 @@
 		</asp:RadioButtonList>
 	</asp:Panel>
 
-	<%-- Chart is held here --%>
 	<asp:Panel ID="timeLengthPanel" runat="server">
 		Time Period:
 		<asp:RadioButtonList ID="timeLength" runat="server" OnSelectedIndexChanged="timeLength_SelectedIndexChanged" AutoPostBack="True">
@@ -45,7 +43,7 @@
 	<br />
 
 	<%-- The Chart itself --%>
-	<asp:Label ID="returnLabel" runat="server"></asp:Label>
+	<asp:Label ID="returnLabel" runat="server" CssClass="returnLabel"></asp:Label>
 	<asp:Chart ID="mainChart" runat="server">
 		<Series>
 			<asp:Series Name="Default" ChartType="Bar"></asp:Series>

@@ -43,3 +43,8 @@ body{
 .navbar-nav {
 	color: white;
 }
+
+.returnLabel {
+	color: red;
+	font-weight: bold;
+}

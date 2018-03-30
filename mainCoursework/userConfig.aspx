@@ -46,6 +46,6 @@
 		<br />
 		<asp:TextBox ID="confirmPassword" runat="server" TextMode="Password" placeholder="Confirm Password"></asp:TextBox>
 		<br />
-		<asp:Label ID="returnLabel" runat="server" Text=""></asp:Label>
+		<asp:Label ID="returnLabel" runat="server" Text="" CssClass="returnLabel"></asp:Label>
 	</asp:Panel>
 </asp:Content>
