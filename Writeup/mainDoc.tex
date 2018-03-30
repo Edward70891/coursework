@@ -75,7 +75,7 @@
     These are senior employees who have all the responsibilities of other employees but have more power over the company’s assets. 
     They have the same requirements as regular employees, but also need to be able to view the data of customers and ordinary employees, be able to add whole new products to the set (and delete existing ones), be able to change the passwords of and delete accounts (be they employee or customer) and be able to view technical data like logs.
     
-    \subsection{Solving the Problem with Computational Methods}
+    \subsection{Solving with Computational Methods}
     \paragraph{•}
     The client requires a centralised service for distributing their products en masse to customers who may be international – a website or web app is perfect for this purpose as it can be accessed anywhere, can be easily translated, and requires little to no uncommon knowledge to use and access. 
     It can be accessed from many places at once and run in parallel in all these places without compromising at all in any.
@@ -260,7 +260,35 @@
     \end{enumerate}
     \newpage
     \section{Design}
-    \subsection{Decompose the Problem}
+    \subsection{Problem Decomposition}
+    \paragraph{•}
+    This problem must be approached with computation in mind if I am to succeed.
+    \paragraph{•}
+    I will begin by abstractifying the components of the problem while sticking to my success criteria to keep my goals in sight.
+    For this I should focus on compartmentalising the key individual challenges of the project, i.e. login system, data storage method e.t.c.
+    As I do this, I will record a plan of the project either on paper or digitally which lays out the requirements of each section and the implementation methods I intend to use.
+    The plan should include a list of pages and background processes that the application needs to run.
+    \paragraph{•}
+    Once I firmly believe my plan is suitable to the problem, I will begin to think about the appearance of the web application.
+    I will prototype several sketches for the different pages that I think are appropriate, consult the client with them, use their feedback to improve some of them and show the client again.
+    I can repeat this process until we reach a prototype me and the client are both satisfied with.
+    When I have a final prototype, I will experiment with different core rules for all pages to follow based on that prototype - these is important because it retains a consistent look throughout the application, giving the user a smoother and more comfortable experience when interacting with it.
+    \paragraph{•}
+    Having finalised these rules (which will likely be implemented in Cascading Style Sheets files), I shall move onto selecting the devices and methods to employ to develop the application in.
+    Most prominently I need to choose a programming language or framework and a method for mass data storage.
+    After this, I will progress to actually developing the application using the devices I have chosen.
+    I should start with writing the central functions which many other processes or functions rely on first, like the handling of the products and the program's interaction with whatever data source I select, constantly referring to my plan to ensure I am conforming to it as well as adjusting it to compensate for any problems I may have to solve during development.
+    Once these are complete, I can move on to writing the code for each of the pages, beginning with the most vital first (probably the login page).
+    \paragraph{•}
+    At this point it would be wise to present the current working build to the client to gain their feedback, and adapt the application to it.
+    This is valuable to do at this point because the project will still be at a stage where I can easily change parts of it without damaging the functionality of any others, something that will not remain true once I have started finalising the interface and refactoring the code.
+    \paragraph{•}
+    Finally, I can fully implement the "nitty-gritty" of the user interface, adapting my rules to ensure no functionality on any page is compromised.
+    I will start this with layout and structure, making sure all the elements of the page are located on it so as to follow my rules.
+    The last step is configuring minor properties such as font and colour.
+    \paragraph{•}
+    The project will then move onto testing and review, detailed below.
+    
     \subsection{Problem Structure}
     \subsection{Algorithms}
     \subsection{Key Variables and Structures}
