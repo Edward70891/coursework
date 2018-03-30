@@ -1,7 +1,21 @@
 \documentclass{article}
 
+%Document Information
 \title{GCE Computer Science Component 3}
 \author{Edward Robert Karol Demkowicz-Duffy}
+
+%Define page margins with geometry
+\usepackage[a4paper, total={6.5in, 8.5in}]{geometry}
+
+%Import package for drawing flowcharts
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+%Define styles for the flowcharts
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
 \begin{document}
     \pagenumbering{gobble}
@@ -11,8 +25,10 @@
     \newpage
     \pagenumbering{arabic}
     
-    \section{Analysis}
+    %Set the table of contents depth to only show sections and subsections
+    \addtocontents{toc}{\setcounter{tocdepth}{2}}
     
+    \section{Analysis}
     \subsection{Description of the Problem}
     \paragraph{•}
     My client is a personal friend and the owner of a business that is based around the sale of novelty clocks and coasters manufactured from or based on vinyl records. 
@@ -41,21 +57,19 @@
     \subsection{Stakeholders}
     Stakeholders are identified here as being people who must use, or will be directly affected by, the program. 
     There are three primary stakeholders, who must be born in mind during the creation of the web app:
-    \begin{itemize}
-    \item Customers.
+    \paragraph{Customers}
     These are the most important stakeholders as they as the client’s source of income. 
     They must have the easiest and most convenient experience possible, to retain their attention on the products the client wishes to sell to them. 
     They will benefit from the project by having a quick and easy way to exchange money for goods they wish to buy. 
     As such, the interface they use should be carefully and logically laid out, with no unneeded features or artefacts on it. 
     Products should be described clearly and concisely so the customers know exactly what they are buying and all other information relevant to it.
-    \item Staff. 
+    \paragraph{Staff}
     These are the people employed by the client who manage their stock and make sales in person. 
     Their side of the web app will be used for swift and easy viewing of stock and statistics – they may also need to modify stock data. 
     Therefore it must provide the quickest and most powerful ways to manage current stock and sales at physical stalls, and helpful processed sales data.
-    \item Administrators. 
+    \paragraph{Administrators} 
     These are senior employees who have all the responsibilities of other employees but have more power over the company’s assets. 
     They have the same requirements as regular employees, but also need to be able to view the data of customers and ordinary employees, be able to add whole new products to the set (and delete existing ones), be able to change the passwords of and delete accounts (be they employee or customer) and be able to view technical data like logs.
-    \end{itemize}
     
     \subsection{Solving the Problem with Computational Methods}
     \paragraph{•}
@@ -74,9 +88,71 @@
     Another advantage of the service being hosted online is that issues that may arise with the software are quick and easy to patch out as the patch can be deployed immediately to the only host with little to no downtime, meaning the service remains almost completely uninterrupted.
     
     \subsection{Research}
+    This type of software is commonly used in ordinary life today.
+    Multiple excellent examples already exist, some of which the client already utilizes.
+    Three prominent extremely successful public examples are listed below:
+    \begin{itemize}
+    \item Amazon
+    \item eBay
+    \item Etsy
+    \end{itemize}
+    \subsubsection{Existing Examples}
+    \paragraph{Amazon}
+    Amazon is an enormous online marketplace which allows any verified entity to buy or sell goods there.
+    It features extensive methods for displaying information about the goods listed on it, including images, hand written descriptions, multiple variants, stock amounts, delivery information (cost, areas available to deliver to) and in depth public user reviews.
+    It also contains algorithms designed to promote other products to the user, displayed in the form of recommendations, usually labelled "people who bought this bought" or other such categories.
+    I would guess that these are generated from the logged-in user's purchase history and viewing history by categorising all products on the website, then suggesting the most popular products in the categories the user views and purchases from the most.
+    This is an excellent method to retain user attention and encourage users to stay on the site and spend more money.
+    The feature would be excellent to incorporate into my own application, however it could prove algorithmically quite complex to implement.
+    \paragraph{•}
+    Amazon allows users to store payment information and delivery addresses for ease of use in future transactions - another great way to make user's experience much easier and quicker, which will in turn increase the chances of them making more purchases on the site.
+    The site stores customer's order history in depth with information pertaining to when they were ordered, how much was paid, when they were delivered and even who to.
+    In addition, they provide live tracking of orders which are in the process of being delivered.
+    \paragraph{•}
+    Amazon also display advertisements for currently running sales, new products and even new features.
+    This draws the attention of users to popular products which they are more likely to buy.
+    More so, the efficiency of shopping (i.e. the amount of time it takes to locate a specific product) is much improved by a large array of searching, sorting and filtering options when browsing available goods.
+    Users can sort by price, name and search relevance to name but a few, and can search product names across the whole site or within specified categories.
     
-    \subsection{Features of the Proposed Solution}
-    
+    \paragraph{eBay}
+    eBay is a site similar to Amazon which allows buyers and sellers to make transactions in exchange for goods and services online.
+    In contrast to Amazon, however, eBay facilitates time-limited auctions to be hosted which buyers can place bids on during a set time period, where the product will be sold to the highest bidder who will pay their named price to the seller.
+    The user interface surrounding this feature is designed fantastically to make it as simple and easy as possible for customers to place bids - it shows them the starting price, the time remaining (live) and the current highest bid.
+    It makes placing a bid as easy as entering a value in a text box and pressing a button with extremely low latency, so that competitive bidding can occur fairly towards the end of the time period which I frequently observed to drive the final price much higher within a small time frame.
+    This means sellers can create highly competitive environments for optimum profit, something I thought my client would appreciate greatly, but upon contacting them they informed me they were not interested in auctioning their products.
+    Still, there are definitely notes to be taken here as the design philosophies of the highly intuitive GUI displayed on the auction page can be applied well to the selling pages of my own project.
+    \paragraph{•}
+    eBay offers many of the features Amazon does, namely the recommendations of other products, all the delivery related features and the saving of information related to those deliveries (addresses and payment methods).
+    \paragraph{Etsy}
+    Etsy is another online marketplace with a similar goal to the aforementioned two.
+    It's distinguishing feature is that it allows sellers to design and construct their own personalised pages to display their products and their information, referred to as their "shop".
+    This is a powerful function as it allows sellers to present themselves as they wish to prospective buyers, be it using particular colour palettes or shape designs, this sets the "attitude" of the seller and creates a "mood" relating to them.
+    While this feature on it's own is not especially relevant to my client's needs as they wan to sell only as one entity in their own location, the core concept of presenting an impression to the user is a powerful way to get a consistent "feel" across the site which fits with my client's intended public image.
+    \subsubsection{Conclusion}
+    Key features shared by all the examples are:
+    \begin{itemize}
+    \item Algorithmically-generated recommendations for the customer based on their order and viewing history.
+    While a full implementation of this may prove to be out of the scope of my project, it is clearly a useful feature to implement that may well increase the chance of purchases being made by users.
+    \item Convenience-based features.
+    All the websites I examined were obviously designed to make the user experience as slick as possible.
+    This is very helpful for the seller and website because it encourages the user to spend more time browsing and buying due to the whole process being easier.
+    As such, it should be an important success criterion that the user experience is as "smooth" as possible to promote the most time spent on the website.
+    \item Comprehensive searching and filtering tools to assist customers finding the product that suits their needs.
+    The products which will be displayed on my project will be more similar than those present on the websites examined, but the idea of searching through them can be carried over still.
+    The web app I will build should offer similar functionality if it wants users to locate products as swiftly as possible.
+    \item Plentiful information related to the item the user is viewing.
+    Each website has an individual page for each item the user views containing a plethora of data that they may want to find about the product.
+    All three website showed a "slide show" of photographs or other images of the product they were viewing, and allowed them to zoom in and examine them.
+    Descriptions written by the sellers featured markdown formatting to allow text effects such as bolding, italics, links and underlining which help express information the seller writes more effectively and strikingly.
+    Stock and prices are shown in depth, with exact numbers of stock left and the delivery costs displayed clearly and prominently in the foreground of the page's design.
+    These would all be good ideas to follow from.
+    \item Storage and easy access of the user's data.
+    This includes past payments and addresses so the user doesn't have to go and retrieve their cards when making a purchase, which in turn keeps them browsing longer and improves their experience making transactions.
+    The sites also store all a user's past orders and display them in a concise way upon request, with money spent, which product, the amount of that product and the date the order was placed all very visible.
+    This is a feature which I can and plan to implement in my own website very effectively, as I already planned to store extended data about any orders made within the program.
+    \end{itemize}
+    Appearance appears to play a key role in usability too - all the websites I examined had consistent colour palettes and designs across all pages which gave a distinct impression of professionalism.
+        
     \subsection{Software and Hardware Requirements}
     \paragraph{•}
     As this software will be interacted with in different ways to how it is run at it’s actual location, I have included two sets of hardware requirements; one for the end user (be they employee or customer) and one for the server hosting the software:
@@ -103,4 +179,64 @@
     \end{itemize}
     
     \subsection{Success Criteria}
+    \begin{enumerate}
+    \item Write a web application that holds information about orders, customers, products and employees. 
+    \item The web application must show users the appropriate data for their role in using the program; products data to customers, managerial data to employees, all data to administrators.
+    \item The web application must allow customers to create their own credential combinations which they must use to identify themselves when interacting with the web application.
+    \item The web application must allow customers to select products they would like to buy and purchase them. 
+    Furthermore, it must provide them adequate data to make this decision on. 
+    \item The web application must allow employees to view and edit information stored in the application which they are permitted to. They may view:
+    \begin{itemize}
+    \item All data related to all products
+    \item All data related to placed orders
+    \item The usernames of all registered customers
+    \end{itemize}
+    They may edit: 
+    \begin{itemize}
+    \item The stock value of all products
+    \item The passwords of registered customers
+    \end{itemize}
+    \item The web application must allow administrators to view and edit information stored in the application which is likely to be necessary. They may view:
+    \begin{itemize}
+    \item All data related to all products
+    \item All data related to placed orders
+    \item The usernames and personal data of all registered customers
+    \item The usernames and personal data of all registered employees
+    \item The background logs kept by the application
+    \end{itemize}
+    They may add:
+    \begin{itemize}
+    \item Employee accounts
+    \item Products
+    \end{itemize}
+    They may delete:
+    \begin{itemize}
+    \item Customer accounts
+    \item Employee accounts
+    \item Products
+    \end{itemize}
+    \item The web application should show employees helpful data on sales, including but not limited to:
+    \begin{itemize}
+    \item Sales per week
+    \item Sales per month
+    \item Sales per year
+    \item Sales per customer
+    \end{itemize}
+    It should also be able to show not just sales volume but total income for all of the above. It should display these data in a graphical visualisation which allows quick and easy interpretation of the data.
+    \item The web application should provide a facility for helping employees manage sales in person.
+    This facility should be able to track what products the employee has taken with them and "reserve" them from the main inventory.
+    It should be able to record what was sold at the end of the event as specially marked orders, and return all unsold "reserved" items to the main inventory.
+    \end{enumerate}
+    \newpage
+    \section{Design}
+    \subsection{Decompose the Problem}
+    \subsection{Structure of the Problem}
+    \subsection{Algorithms}
+    \subsection{Key Variables and Structures}
+    \subsection{Usability Features}
+    \subsection{Test Data}
+    \newpage
+    
+    \section{Iterative Development of the Coded Solution}
+    \newpage
 \end{document}
