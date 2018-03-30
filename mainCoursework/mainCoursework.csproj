@@ -139,6 +139,7 @@
     <Content Include="default.aspx" />
     <Content Include="customerLogin.aspx" />
     <Content Include="market.aspx" />
+    <Content Include="marketEnd.aspx" />
     <Content Include="orderHistory.aspx" />
     <Content Include="products.aspx" />
     <Content Include="productView.aspx" />
@@ -255,6 +256,13 @@
     </Compile>
     <Compile Include="market.aspx.designer.cs">
       <DependentUpon>market.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="marketEnd.aspx.cs">
+      <DependentUpon>marketEnd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="marketEnd.aspx.designer.cs">
+      <DependentUpon>marketEnd.aspx</DependentUpon>
     </Compile>
     <Compile Include="orderHistory.aspx.cs">
       <DependentUpon>orderHistory.aspx</DependentUpon>

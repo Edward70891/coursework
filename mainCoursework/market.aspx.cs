@@ -199,7 +199,8 @@ namespace mainCoursework
 
 		protected void endStallButton_Click(object sender, EventArgs e)
 		{
-			//Code to redirect to the market end page
+			//Send the user to the market end page
+			Server.Transfer("~/marketEnd.aspx", false);
 		}
 	}
 }
