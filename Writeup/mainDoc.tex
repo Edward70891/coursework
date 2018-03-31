@@ -44,10 +44,10 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
 %Define styles for the flowcharts
-\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black]
-\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black]
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
-\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1.5cm,text centered, text width=4cm, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1.5cm, text centered, text width=4cm, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1.5cm, text centered, text width=4cm, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, text width=4cm, draw=black, fill=green!30]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
 \begin{document}
@@ -311,7 +311,7 @@
     Once these are complete, I can move on to writing the code for each of the pages, beginning with the most vital first (probably the login page).
     \paragraph{•}
     At this point it would be wise to present the current working build to the client to gain their feedback, and adapt the application to it.
-    This is valuable to do at this point because the project will still be at a stage where I can easily change parts of it without damaging the functionality of any others, something that will not remain true once I have started finalising the interface and refactoring the code.
+    This is valuable to do at this point because the project will still be at a stage where I can easily change parts of it without damaging the functionality of any others, something that will not remain true once I have started finalising the interface and re factoring the code.
     \paragraph{•}
     Finally, I can fully implement the "nitty-gritty" of the user interface, adapting my rules to ensure no functionality on any page is compromised.
     I will start this with layout and structure, making sure all the elements of the page are located on it so as to follow my rules.
@@ -320,7 +320,65 @@
     The project will then move onto testing and review, detailed below.
     
     \subsection{Problem Structure}
-    \subsection{Algorithms}
+    \paragraph{•}
+    Here begins my documentation of the plan I talked about above.
+    I have decided to express the first part of my plan as a set of flowcharts, one for each discrete sub system within the application (please note that where user input is required followed by a decision, I have concatenated the input and decision elements into one decision element for the sake of brevity).
+    I have decided to compartmentalize the problem as follows.
+    \subsubsection{Pages and Areas}
+    \paragraph{User Authentication}
+    This is key to ensuring the function of the application remains organised and track able.
+    All major actions will be logged and tagged with the user that made them, which will help with identification of problems both in full operation, where administrators can trace problems to their source and find the perpetrator, and in development, where I can trace more obscure issues and help myself keep track of what I have done in debugging.
+    \begin{figure}[h]
+    \includegraphics[width=\textwidth]{loginSystem.png}
+    \centering
+    \end{figure}
+    \paragraph{•}
+    A Session refers to the user's connection to the host computer; it is persistent while the user remains connected to the web application and can have many properties and pieces of data attached to it.
+    The Active List is the conceptual area in memory where the hosting machine will keep track of all the currently active Sessions.
+    \newpage
+    \paragraph{Store Main Area}
+    This page/area represents the forefront of the website as it is presented to the customer, and thus must be "slick" and comprehensive.
+    According to my research, I have planned out filtering and sorting features within the page.
+    \begin{figure}[h]
+    \includegraphics[width=\textwidth]{storefrontMain.png}
+    \centering
+    \end{figure}
+    \paragraph{•}
+    The algorithms used for sorting and filtering will be covered in more details in the algorithms section below.
+    \newpage
+    \paragraph{Product View Page}
+    This page will be the "detailed" display of all the information regrading the product.
+    It will show a set of images and a written, plain text description.
+    Customers will be able to add a given amount of a product to their "cart" there.
+    It is \textit{imperative} that the information displayed on this page is plentiful, and very legible.
+    \begin{figure}[h]
+    \includegraphics[width=\textwidth]{productPage.png}
+    \centering
+    \end{figure}
+    \paragraph{•}
+    The cart should be a collection of products stored in a group labelled with what customer has them in their cart.
+    It should be independent of the Sessions so that customers can leave the website or sign out without losing the items in their cart.
+    Users who aren't logged in to a customer account may not possess a cart because employees are not authorized to make purchases on the site and people who are not logged in at all may not possess a cart because an account is needed to make a purchase (so purchases are track able).
+    \newpage
+    \paragraph{Cart Page}
+    The cart page shows the customer what they currently have in their cart, lets them edit amounts  and remove products.\\
+    More importantly, this is the page where users will make their actual purchases from.
+    There are several factors which should be considered in regard to this feature:
+    \begin{itemize}
+    \item Whether there is enough of all products in the inventory to supply the user's purchase
+    \item The user's payment method
+    \item The user's delivery address
+    \end{itemize}
+    After poring over these, I produced the following method.
+    \begin{figure}[h]
+    \includegraphics[width=\textwidth]{cartPage.png}
+    \centering
+    \end{figure}
+    \paragraph{•}
+    The transaction must be handled individually, as it's own process.
+    While I cannot guess yet, managing monetary transactions may well prove to be out of the scope of this project, but this is yet to be proved.
+    \newpage
+    \subsection{Algorithms}  
     \subsection{Key Variables and Structures}
     \subsection{Usability Features}
     \subsection{Test Data}
