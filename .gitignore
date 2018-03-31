@@ -15,6 +15,7 @@ mainDoc.log
 mainDoc.pdf
 mainDoc.synctex.gz
 mainDoc.toc
+.vscode/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
