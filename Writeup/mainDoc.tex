@@ -381,7 +381,7 @@
     \newpage
     \paragraph{Physical Market Management Page}
     This page will be where the employee interacts with all features related to managing stock at third party events.
-    Tt's appearnace could quickly get confusing, so careful UI design is important.
+    Tt's appearance could quickly get confusing, so careful UI design is important.
     \begin{figure}[h]
     \includegraphics[scale=0.5]{physicalMarket.png}
     \centering
@@ -389,6 +389,43 @@
     \paragraph{}
     \newpage
     \subsection{Algorithms}  
+    \paragraph{Quick Sort}
+    One of the complex algorithms I will employ will be a sorting algorithm to sort lists of products to be displayed on the store front in good time.
+    I chose the quick sort algorithm for this purpose because it is highly efficient across most datasets, having $O(log(n))$ average complexity and $O(n^2)$ worst case complexity, and because it offers the opportunity to be solved recursively.
+    My pseudocode for the algorithm is as follows:
+    \begin{lstlisting}
+        function quicksort(dataset)
+            switch input.length:
+                case 1:
+                    return dataset
+                case 2:
+                    if dataset[1] < dataset[0] then
+                        dataset[0], dataset[1] = dataset[1], dataset[0]
+                    endif
+                    return dataset
+            endswitch
+
+            pivotindex = dataset.length / 2
+            pivotindex = roundup(pivotindex)
+
+            list under
+            list over
+
+            for i = 0 to (dataset.length - 1)
+                if i == pivotindex then
+                    continue
+                elseif dataset[i] < dataset[pivotindex] then
+                    under.add(dataset[i])
+                elseif dataset[i] >= dataset[pivotindex] then
+                    over.add(dataset[i])
+                endif
+            next i
+
+            array underArray = quicksort(under.toarray())
+            array overArray = quicksort(over.toarray())
+            
+            return underArray + dataset[pivotindex] + overArray
+    \end{lstlisting}
     \subsection{Key Variables and Structures}
     \subsection{Usability Features}
     \subsection{Test Data}
