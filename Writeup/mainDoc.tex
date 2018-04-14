@@ -13,7 +13,8 @@
 
 %Import package for code
 \usepackage{listings}
-\usepackage{color}
+\lstset{defaultdialect=[Sharp]C}
+\usepackage{xcolor}
 %Configure code syntax highlighting
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -393,7 +394,7 @@
     One of the complex algorithms I will employ will be a sorting algorithm to sort lists of products to be displayed on the store front in good time.
     I chose the quick sort algorithm for this purpose because it is highly efficient across most datasets, having $O(log(n))$ average complexity and $O(n^2)$ worst case complexity, and because it offers the opportunity to be solved recursively.
     My pseudocode for the algorithm is as follows:
-    \begin{lstlisting}
+    \begin{lstlisting}[language=C]
         function quicksort(dataset)
             //If the dataset the function is passed is too short, the main code block won't function correctly.
             //This first block catches datasets which are only 1 or 2 elements; returning ones with 1 element immediately
