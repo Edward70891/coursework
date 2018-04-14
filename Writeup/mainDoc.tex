@@ -395,6 +395,9 @@
     My pseudocode for the algorithm is as follows:
     \begin{lstlisting}
         function quicksort(dataset)
+            //If the dataset the function is passed is too short, the main code block won't function correctly.
+            //This first block catches datasets which are only 1 or 2 elements; returning ones with 1 element immediately
+            //and swappinng them (where appropriate) when there are 2 (and returning them).
             switch input.length:
                 case 1:
                     return dataset
@@ -405,12 +408,23 @@
                     return dataset
             endswitch
 
+            //The method I chose for finding the pivot in my implementation of quick sort was just to find the element
+            //which was halfway through the array. I have used rounddown() as a placeholder for a function which rounds down
+            //non-integer numbers into integers. I choose this over rounding up because the arrays are zero based but I
+            //expect the lengths to be one based, and this function will compensate for both that and any .5s that may occur
+            //in datasets of odd length. 
             pivotindex = dataset.length / 2
-            pivotindex = roundup(pivotindex)
+            pivotindex = rounddown(pivotindex)
 
+            //Here I have used "lists" to represent open-ended arrays which can have any number of elements added to them.
+            //I have done this because in C#, the language I will write this algorithm in eventually, these types exist and
+            //are perfect for the task.
             list under
             list over
 
+            //This is the main block of code where the comparisons are made; if the current element is the pivot it is
+            //skipped, if it is smaller than the pivot it is added to the list of smaller elements and if it is higher
+            //or equal then it is added to the list of bigger elements.
             for i = 0 to (dataset.length - 1)
                 if i == pivotindex then
                     continue
@@ -421,6 +435,9 @@
                 endif
             next i
 
+            //".toarray()" is another placeholder for a function which converts a list into an array. This is also available
+            //by default in C#.
+            //The recursive part of the function. The function calls itself on the 
             array underArray = quicksort(under.toarray())
             array overArray = quicksort(over.toarray())
             
