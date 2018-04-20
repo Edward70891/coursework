@@ -466,33 +466,49 @@
     It is critical that the data source be able to store all information the website needs, and make it easily accessible and logically organised so that it can be searched, sorted and manipulated.
     To this end, I have chosen to use a data base as my data source.
     Within the database I will have six tables, they will be as follows:
-    \begin{itemize}
-        \item{Customers} I have chosen to store customers and employees in separate tables because the data attached to each type is different from the other.
+    \begin{description}
+        \item[Customers] I have chosen to store customers and employees in separate tables because the data attached to each type is different from the other.
         I am going to investigate the viability of different specific implementations of these tables during development because I do not presently know enough about Microsoft Access to predetermine the method I will use to store customers' data.
         It should, however, contain basic information:
-        \begin{itemize}
-            \item{User Name} The user name or handle the customer wishes to be identified by on the site.
+        \begin{description}
+            \item[User Name] The user name or handle the customer wishes to be identified by on the site.
             This should be unique.
-            \item{Real Name} The real name of the user in some format, so their online account can be easily linked to their real world identity for purposes such as shipping and customer support.
-            \item{Password} The private string which the customer uses to verify it is really them whenever they try to log in to the application.
+            \item[Real Name] The real name of the user in some format, so their online account can be easily linked to their real world identity for purposes such as shipping and customer support.
+            \item[Password] The private string which the customer uses to verify it is really them whenever they try to log in to the application.
             This information is very sensitive and so I will not store the password verbatim, instead, I will store a hash of the true password (a hash is a value that can be generated from a piece of data, but is generated so that the original data cannot be directly obtained from the hash).
             This means that if the data base's security is breached then attackers will only obtain the hashes, which are useless for logging into the website.
-            \item{Address} The address will allow me to implement the feature I described above where the website remembers the customer's delivery infomation for convenience during checkout.
+            \item[Address] The address will allow me to implement the feature I described above where the website remembers the customer's delivery infomation for convenience during checkout.
             It could also be used for user verification for customer support.
-            \item{Other Personal Info} These could be contact information such as phone numbers or email addresses.
+            \item[Other Personal Info] These could be contact information such as phone numbers or email addresses.
             It is generally helpful to my client's company that this information be attached to their customers, for the aforementioned customer support.
-        \end{itemize}
-        \item{Employees}
-        \begin{itemize}
-            \item{User Name} The user name or handle the customer wishes to be identified by on the site.
+        \end{description}
+        \item[Employees]
+        The employees table can be a little more concise since not as much personal information is required.
+        \begin{description}
+            \item[User Name] The user name or handle the customer wishes to be identified by on the site.
             This should be unique.
-            \item{Real Name} This is simply for the sake of simplicity and convenience.
+            \item[Real Name] This is simply for the sake of simplicity and convenience.
             It could be helpful for identifying employees when a lot are registered.
-            \item{Password} This will be a hash of the employee's actual password.
+            \item[Password] This will be a hash of the employee's actual password.
             It will be used for checking their credentials when they try to log in.
-            \item{Administrator} This is the boolean variable I described above.
-            It will simnply label whether or not the employee is an administrator.
-        \end{itemize}
+            \item[Administrator] This is the boolean variable I described above.
+            It will label whether or not the employee is an administrator.
+        \end{description}
+	\item[Products]
+        The products table is very important as it is the table most pages related to the web application's primary function will access.
+        \begin{description}
+            \item[Product Name] The name of the product; should be unique.
+            \item[Type] A string showing whether the product is a clock, coaster or other.
+            \item[Stock] An integer storing the amount of the product available in stock (not including the stock which has been taken to a physical market).
+            \item[Price] The amount of money, in GBP, that the product will cost a customer.
+            Stored as a currency format.
+            \item[Creator] The username of the employee who created it.
+            This helps with accountability for errors and keeps the history of the database traceable.
+            \item[Description] A long string with lots of details about the product which will be displayed on the individual product page.
+            \item[Image] Image file(s), one of which will be displayed as the product's thumbnail on the product listing page and all of which will displayed in a "slide show" on the individual product page.
+            \item[Band] A string containing the name of the band the product is linked to.
+            This allows products to be searched or sorted by what band they are based on.
+    \end{description}
     \subsection{Usability Features}
     \subsection{Test Data}
     \newpage
