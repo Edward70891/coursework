@@ -11,32 +11,76 @@
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 
+%Import package for handling enumeration and configure it
+\usepackage{enumitem}
+\setlist[description]{leftmargin=\parindent,labelindent=\parindent}
+
 %Import package for code
 \usepackage{listings}
 \lstset{defaultdialect=[Sharp]C}
 \usepackage{xcolor}
 %Configure code syntax highlighting
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
- 
+\definecolor{codenormal}{rgb}{0.862, 0.862, 0.862}
+\definecolor{codekeyword}{rgb}{0.337, 0.603, 0.839}
+\definecolor{codecomment}{rgb}{0.341, 0.650, 0.290}
+\definecolor{codestring}{rgb}{0.839, 0.615, 0.521}
+\definecolor{backcolour}{rgb}{0.117, 0.117, 0.117}
+%Define pseudocode
+\lstdefinelanguage{psuedocode}
+{
+  %Keywords
+  morekeywords={
+      global,
+      str,
+      int,
+      float,
+      list,
+      print,
+      input,
+      for,
+      to,
+      next,
+      do,
+      until,
+      AND,
+      OR,
+      NOT,
+      if,
+      then,
+      elseif,
+      endif,
+      switch,
+      case,
+      default,
+      endswitch,
+      function,
+      return,
+      endfunction,
+      procedure,
+      endprocedure,
+      array
+  },
+  sensitive=true, % keywords are not case-sensitive
+  morecomment=[l]{//}, % l is for line comment
+  morecomment=[s]{/*}{*/}, % s is for start and end delimiter
+  morestring=[b]" % defines that strings are enclosed in double quotes
+}
 \lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codecomment},
+    keywordstyle=\color{codekeyword},
     stringstyle=\color{codepurple},
-    basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
+    basicstyle=\footnotesize\color{codenormal},
+    numberstyle=\color{black},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
+    showtabs=false,
     tabsize=2
 }
 
@@ -394,12 +438,11 @@
     One of the complex algorithms I will employ will be a sorting algorithm to sort lists of products to be displayed on the store front in good time.
     I chose the quick sort algorithm for this purpose because it is highly efficient across most datasets, having $O(log(n))$ average complexity and $O(n^2)$ worst case complexity, and because it offers the opportunity to be solved recursively.
     My pseudocode for the algorithm is as follows:
-    \begin{lstlisting}[language=C]
+    \begin{lstlisting}[language=psuedocode]
+        
         function quicksort(dataset)
-            //If the dataset the function is passed is too short, the main code block won't function correctly.
-            //This first block catches datasets which are only 1 or 2 elements; returning ones with 1 element immediately
-            //and swappinng them (where appropriate) when there are 2 (and returning them).
-            switch input.length:
+            //Contingencies
+            switch dataset.length:
                 case 1:
                     return dataset
                 case 2:
@@ -409,23 +452,15 @@
                     return dataset
             endswitch
 
-            //The method I chose for finding the pivot in my implementation of quick sort was just to find the element
-            //which was halfway through the array. I have used rounddown() as a placeholder for a function which rounds down
-            //non-integer numbers into integers. I choose this over rounding up because the arrays are zero based but I
-            //expect the lengths to be one based, and this function will compensate for both that and any .5s that may occur
-            //in datasets of odd length. 
+            //Find the pivot
             pivotindex = dataset.length / 2
             pivotindex = rounddown(pivotindex)
 
-            //Here I have used "lists" to represent open-ended arrays which can have any number of elements added to them.
-            //I have done this because in C#, the language I will write this algorithm in eventually, these types exist and
-            //are perfect for the task.
+            //Define the two lists
             list under
             list over
 
-            //This is the main block of code where the comparisons are made; if the current element is the pivot it is
-            //skipped, if it is smaller than the pivot it is added to the list of smaller elements and if it is higher
-            //or equal then it is added to the list of bigger elements.
+            //Main code block
             for i = 0 to (dataset.length - 1)
                 if i == pivotindex then
                     continue
@@ -436,19 +471,34 @@
                 endif
             next i
 
-            //".toarray()" is another placeholder for a function which converts a list into an array. This is also available
-            //by default in C#.
-            //The recursive part of the function. The function calls itself on the 
+            //Convert to arrays and recur
             array underArray = quicksort(under.toarray())
             array overArray = quicksort(over.toarray())
             
+            //Return
             return underArray + dataset[pivotindex] + overArray
     \end{lstlisting}
+    If the dataset (array) the function is passed is too short, the main code block won't function correctly.
+    The first block of code labelled "Contingencies" is designed to circumvent this problem; if the function is passed a array of length 1, it will just return it immediately or if it is passed an array of length 2 it will check if they need swapping then return them concatenated into a new array.
+    \\
+    The method I chose for finding the pivot in my implementation of quick sort was just to find the element which was halfway through the array; there is much debate over what is the best method, but this one seems the simplest to implement and the most useful for the application at hand.
+    I have used rounddown() as a placeholder for a function which rounds down non-integer numbers into integers.
+    \footnote{I choose this over rounding up because the arrays are zero based but I expect the lengths to be one based, and this function will compensate for both that and any .5s that may occur in datasets of odd length.}
+    
+    Here I have used "lists" to represent open-ended arrays which can have any number of elements added to them.
+    I have done this because in C\#, the language I will write this algorithm in eventually, these types exist and are perfect for the task.
+    
+    This is the main block of code where the comparisons are made; if the current element is the pivot it is skipped, if it is smaller than the pivot it is added to the list of smaller elements and if it is higher or equal then it is added to the list of bigger elements.
+
+    ".toarray()" is another placeholder for a function which converts a list into an array.
+    This is also available by default in C\#.
+    The recursive part of the function.
+    The function calls itself on the 
     \subsection{Key Variables and Structures}
     Variables are named references to sections of memory.
     They are the label for a data value - referring to them or using them will return you the value of that section of memory.
     Due to this functionality, they are essential to developing a complex program like mine, for storing commonly accessed or changed sections of data and are in fact commonplace in all code scripts for practically all purposes.
-    \paragraph{Global Variables}
+    \subsubsection{Global Variables}
     The only variables which need to carry between pages are those related to the system controlling logged in users because all pages need to be able to "tell" information about the user that is viewing them, and all other variables will not be needed by \textit(all) pages.
     These variables will be:
     \begin{itemize}
@@ -461,53 +511,53 @@
         \item Optionally, a bool showing whether there is a user logged in or the current session is a "guest", ie. not authenticated or formally identified.
         The need for such a variable could be circumvented by simply setting the value of the string holding the user name to be blank or null, but that method could allow people to put exploits in their username string and perform unauthorized and/or unintended acts on the application.
     \end{itemize}
-    \paragraph{Structures}
+    \subsubsection{Structures}
     The data source is the single key structure in this project.
     It is critical that the data source be able to store all information the website needs, and make it easily accessible and logically organised so that it can be searched, sorted and manipulated.
-    To this end, I have chosen to use a data base as my data source.
+    To this end, I have chosen to use a relational data base as my data source.
+    The additional advantage of using this structure is that within a relational database, the database engine can force referential integrity, which reduces the need for consistency checks at the frontend.
     Within the database I will have six tables, they will be as follows:
+    \paragraph{Customers} I have chosen to store customers and employees in separate tables because the data attached to each type is different from the other.
+    I am going to investigate the viability of different specific implementations of these tables during development because I do not presently know enough about Microsoft Access to predetermine the method I will use to store customers' data.
+    It should, however, contain basic information:
     \begin{description}
-        \item[Customers] I have chosen to store customers and employees in separate tables because the data attached to each type is different from the other.
-        I am going to investigate the viability of different specific implementations of these tables during development because I do not presently know enough about Microsoft Access to predetermine the method I will use to store customers' data.
-        It should, however, contain basic information:
-        \begin{description}
-            \item[User Name] The user name or handle the customer wishes to be identified by on the site.
-            This should be unique.
-            \item[Real Name] The real name of the user in some format, so their online account can be easily linked to their real world identity for purposes such as shipping and customer support.
-            \item[Password] The private string which the customer uses to verify it is really them whenever they try to log in to the application.
-            This information is very sensitive and so I will not store the password verbatim, instead, I will store a hash of the true password (a hash is a value that can be generated from a piece of data, but is generated so that the original data cannot be directly obtained from the hash).
-            This means that if the data base's security is breached then attackers will only obtain the hashes, which are useless for logging into the website.
-            \item[Address] The address will allow me to implement the feature I described above where the website remembers the customer's delivery infomation for convenience during checkout.
-            It could also be used for user verification for customer support.
-            \item[Other Personal Info] These could be contact information such as phone numbers or email addresses.
-            It is generally helpful to my client's company that this information be attached to their customers, for the aforementioned customer support.
-        \end{description}
-        \item[Employees]
-        The employees table can be a little more concise since not as much personal information is required.
-        \begin{description}
-            \item[User Name] The user name or handle the customer wishes to be identified by on the site.
-            This should be unique.
-            \item[Real Name] This is simply for the sake of simplicity and convenience.
-            It could be helpful for identifying employees when a lot are registered.
-            \item[Password] This will be a hash of the employee's actual password.
-            It will be used for checking their credentials when they try to log in.
-            \item[Administrator] This is the boolean variable I described above.
-            It will label whether or not the employee is an administrator.
-        \end{description}
-	\item[Products]
-        The products table is very important as it is the table most pages related to the web application's primary function will access.
-        \begin{description}
-            \item[Product Name] The name of the product; should be unique.
-            \item[Type] A string showing whether the product is a clock, coaster or other.
-            \item[Stock] An integer storing the amount of the product available in stock (not including the stock which has been taken to a physical market).
-            \item[Price] The amount of money, in GBP, that the product will cost a customer.
-            Stored as a currency format.
-            \item[Creator] The username of the employee who created it.
-            This helps with accountability for errors and keeps the history of the database traceable.
-            \item[Description] A long string with lots of details about the product which will be displayed on the individual product page.
-            \item[Image] Image file(s), one of which will be displayed as the product's thumbnail on the product listing page and all of which will displayed in a "slide show" on the individual product page.
-            \item[Band] A string containing the name of the band the product is linked to.
-            This allows products to be searched or sorted by what band they are based on.
+        \item[User Name] The user name or handle the customer wishes to be identified by on the site.
+        This should be unique.
+        \item[Real Name] The real name of the user in some format, so their online account can be easily linked to their real world identity for purposes such as shipping and customer support.
+        \item[Password] The private string which the customer uses to verify it is really them whenever they try to log in to the application.
+        This information is very sensitive and so I will not store the password verbatim, instead, I will store a hash of the true password (a hash is a value that can be generated from a piece of data, but is generated so that the original data cannot be directly obtained from the hash).
+        This means that if the data base's security is breached then attackers will only obtain the hashes, which are useless for logging into the website.
+        \item[Address] The address will allow me to implement the feature I described above where the website remembers the customer's delivery infomation for convenience during checkout.
+        It could also be used for user verification for customer support.
+        \item[Other Personal Info] These could be contact information such as phone numbers or email addresses.
+        It is generally helpful to my client's company that this information be attached to their customers, for the aforementioned customer support.
+    \end{description}
+    \paragraph{Employees}
+    The employees table can be a little more concise since not as much personal information is required; that and the inclusion of the administrator boolean are the only differences between it and the customer table.
+    \begin{description}
+        \item[User Name] The user name or handle the customer wishes to be identified by on the site.
+        This should be unique.
+        \item[Real Name] This is simply for the sake of simplicity and convenience.
+        It could be helpful for identifying employees when a lot are registered.
+        \item[Password] This will be a hash of the employee's actual password.
+        It will be used for checking their credentials when they try to log in.
+        \item[Administrator] This is the boolean variable I described above.
+        It will label whether or not the employee is an administrator.
+    \end{description}
+	\paragraph{Products}
+    The products table is very important as it is the table most pages related to the web application's primary function will access.
+    \begin{description}
+        \item[Product Name] The name of the product; should be unique.
+        \item[Type] A string showing whether the product is a clock, coaster or other.
+        \item[Stock] An integer storing the amount of the product available in stock (not including the stock which has been taken to a physical market).
+        \item[Price] The amount of money, in GBP, that the product will cost a customer.
+        Stored as a currency format.
+        \item[Creator] The username of the employee who created it.
+        This helps with accountability for errors and keeps the history of the database traceable.
+        \item[Description] A long string with lots of details about the product which will be displayed on the individual product page.
+        \item[Image] Image file(s), one of which will be displayed as the product's thumbnail on the product listing page and all of which will displayed in a "slide show" on the individual product page.
+        \item[Band] A string containing the name of the band the product is linked to.
+        This allows products to be searched or sorted by what band they are based on.
     \end{description}
     \subsection{Usability Features}
     \subsection{Test Data}
