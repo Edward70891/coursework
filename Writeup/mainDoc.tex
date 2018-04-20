@@ -7,6 +7,9 @@
 %Define page margins with geometry
 \usepackage[a4paper, total={6.5in, 9in}]{geometry}
 
+%Remove footnote ruling
+\renewcommand*\footnoterule{}
+
 %Import package for forcing image locations
 \usepackage{float}
 
@@ -79,7 +82,7 @@
     commentstyle=\color{codecomment},
     keywordstyle=\color{codekeyword},
     stringstyle=\color{codepurple},
-    basicstyle=\footnotesize\color{codenormal},
+    basicstyle=\footnotesize\color{codenormal}\linespread{1.15},
     numberstyle=\color{black},
     breakatwhitespace=false,
     breaklines=true,
