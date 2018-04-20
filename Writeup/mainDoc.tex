@@ -11,6 +11,11 @@
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 
+%Import package for managing sections, configure to add a new page every section
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+\newcommand{\subsectionbreak}{\clearpage}
+
 %Import package for handling enumeration and configure it
 \usepackage{enumitem}
 \setlist[description]{leftmargin=\parindent,labelindent=\parindent}
@@ -99,14 +104,12 @@
 \begin{document}
     \pagenumbering{gobble}
     \maketitle
-    \newpage
+    
     \tableofcontents
-    \newpage
     \pagenumbering{arabic}
     
     %Set the table of contents depth to only show sections and subsections
     \addtocontents{toc}{\setcounter{tocdepth}{2}}
-    
     \section{Analysis}
     \subsection{Problem Description}
     \paragraph{•}
@@ -334,7 +337,7 @@
     This facility should be able to track what products the employee has taken with them and "reserve" them from the main inventory.
     It should be able to record what was sold at the end of the event as specially marked orders, and return all unsold "reserved" items to the main inventory.
     \end{enumerate}
-    \newpage
+    
     \section{Design}
     \subsection{Problem Decomposition}
     \paragraph{•}
@@ -432,59 +435,59 @@
     \centering
     \end{figure}
     \paragraph{}
-    \newpage
+    
     \subsection{Algorithms}  
     \paragraph{Quick Sort}
     One of the complex algorithms I will employ will be a sorting algorithm to sort lists of products to be displayed on the store front in good time.
     I chose the quick sort algorithm for this purpose because it is highly efficient across most datasets, having $O(log(n))$ average complexity and $O(n^2)$ worst case complexity, and because it offers the opportunity to be solved recursively.
     My pseudocode for the algorithm is as follows:
     \begin{lstlisting}[language=psuedocode]
-        
-        function quicksort(dataset)
-            //Contingencies
-            switch dataset.length:
-                case 1:
-                    return dataset
-                case 2:
-                    if dataset[1] < dataset[0] then
-                        dataset[0], dataset[1] = dataset[1], dataset[0]
-                    endif
-                    return dataset
-            endswitch
 
-            //Find the pivot
-            pivotindex = dataset.length / 2
-            pivotindex = rounddown(pivotindex)
-
-            //Define the two lists
-            list under
-            list over
-
-            //Main code block
-            for i = 0 to (dataset.length - 1)
-                if i == pivotindex then
-                    continue
-                elseif dataset[i] < dataset[pivotindex] then
-                    under.add(dataset[i])
-                elseif dataset[i] >= dataset[pivotindex] then
-                    over.add(dataset[i])
+    function quicksort(dataset)
+        //Contingencies
+        switch dataset.length:
+            case 1:
+                return dataset
+            case 2:
+                if dataset[1] < dataset[0] then
+                    dataset[0], dataset[1] = dataset[1], dataset[0]
                 endif
-            next i
+                return dataset
+        endswitch
 
-            //Convert to arrays and recur
-            array underArray = quicksort(under.toarray())
-            array overArray = quicksort(over.toarray())
-            
-            //Return
-            return underArray + dataset[pivotindex] + overArray
+        //Find the pivot
+        pivotindex = dataset.length / 2
+        pivotindex = rounddown(pivotindex)
+
+        //Define the two lists
+        list under
+        list over
+
+        //Main code block
+        for i = 0 to (dataset.length - 1)
+            if i == pivotindex then
+                continue
+            elseif dataset[i] < dataset[pivotindex] then
+                under.add(dataset[i])
+            elseif dataset[i] >= dataset[pivotindex] then
+                over.add(dataset[i])
+            endif
+        next i
+
+        //Convert to arrays and recur
+        array underArray = quicksort(under.toarray())
+        array overArray = quicksort(over.toarray())
+        
+        //Return
+        return underArray + dataset[pivotindex] + overArray
+    endfunction
     \end{lstlisting}
     If the dataset (array) the function is passed is too short, the main code block won't function correctly.
-    The first block of code labelled "Contingencies" is designed to circumvent this problem; if the function is passed a array of length 1, it will just return it immediately or if it is passed an array of length 2 it will check if they need swapping then return them concatenated into a new array.
+    The first block of code labelled "Contingencies" (beginning line 4) is designed to circumvent this problem; if the function is passed a array of length 1, it will just return it immediately or if it is passed an array of length 2 it will check if they need swapping then return them concatenated into a new array.
     \\
     The method I chose for finding the pivot in my implementation of quick sort was just to find the element which was halfway through the array; there is much debate over what is the best method, but this one seems the simplest to implement and the most useful for the application at hand.
     I have used rounddown() as a placeholder for a function which rounds down non-integer numbers into integers.
     \footnote{I choose this over rounding up because the arrays are zero based but I expect the lengths to be one based, and this function will compensate for both that and any .5s that may occur in datasets of odd length.}
-    
     Here I have used "lists" to represent open-ended arrays which can have any number of elements added to them.
     I have done this because in C\#, the language I will write this algorithm in eventually, these types exist and are perfect for the task.
     
@@ -561,7 +564,7 @@
     \end{description}
     \subsection{Usability Features}
     \subsection{Test Data}
-    \newpage
+    
     
     \section{Development}
     \subsection{Iterative Development}
@@ -569,12 +572,12 @@
     \subsection{Annotated Code}
     \subsection{Validation}
     \subsection{Reviews}
-    \newpage
+    
     
     \section{Testing}
     \subsection{To Inform Development}
     \subsection{To Inform Evaluation}
-    \newpage
+    
     
     \section{Evaluation}
     \subsection{Testing}
