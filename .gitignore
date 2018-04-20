@@ -18,6 +18,7 @@ mainDoc.toc
 mainDoc.bbl
 mainDoc.blg
 .vscode/
+*.docx
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
