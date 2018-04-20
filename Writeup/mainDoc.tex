@@ -5,7 +5,10 @@
 \author{Edward Robert Karol Demkowicz-Duffy}
 
 %Define page margins with geometry
-\usepackage[a4paper, total={6.5in, 8.5in}]{geometry}
+\usepackage[a4paper, total={6.5in, 9in}]{geometry}
+
+%Import package for forcing image locations
+\usepackage{float}
 
 %Import package for images and set graphics path to /images
 \usepackage{graphicx}
@@ -70,6 +73,7 @@
   morecomment=[s]{/*}{*/}, % s is for start and end delimiter
   morestring=[b]" % defines that strings are enclosed in double quotes
 }
+%Define style
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},
     commentstyle=\color{codecomment},
@@ -88,7 +92,7 @@
     showtabs=false,
     tabsize=2
 }
-
+%Apply style
 \lstset{style=mystyle}
 
 %Import package for drawing flowcharts
@@ -431,10 +435,9 @@
     This page will be where the employee interacts with all features related to managing stock at third party events.
     Tt's appearance could quickly get confusing, so careful UI design is important.
     \begin{figure}[h]
-    \includegraphics[scale=0.5]{physicalMarket.png}
+    \includegraphics[scale=0.6]{physicalMarket.png}
     \centering
     \end{figure}
-    \paragraph{}
     
     \subsection{Algorithms}  
     \paragraph{Quick Sort}
