@@ -596,7 +596,25 @@
         \item[Volume] The amount of the product which has been taken out.
         \item[Employee] The username of the employee who is currently responsible for/in possession of these products.
     \end{description}
-    \subsection{Usability Features}
+    \subsubsection{Intended Implementation}
+    \paragraph{Microsoft Access}
+    I have chosen the Microsoft Access software to create and manage the database which will support the application.
+    Access is freely accessible to me as a student and provides professional level database software which integrates perfectly with my other choices for implementation.
+    It allows me to create an automatically enforced relational database which can be queried at any time by any MySQL-compatible code.
+    \paragraph{C\#}
+    I have chosen the .NET-based language Visual C\# to implement the majority of all logic-based algorithms and scripts in this project.
+    My reasoning for this is:
+    \begin{itemize}
+        \item I am already familiar with C\# and it's syntax, types and object-oriented problem solving method.
+        This reduces the possibility of coming across problems I haven't encountered before meaning development wil hopefully be faster.
+        It is still inevitable that I will encounter such obstacles, but C\# show throw fewer than other choices.
+        \item The .NET foundation provides the excellent ASP.NET libray which contains a set of elements for .NET languages to be used for web development.
+        ASP.NET comprises a set of JavaScript elements that imitate HTML elements while simultaneously giving them "hooks" (methods and properties) which are accessible by the .NET-based language behind each page.
+        \item ASP also provides the functionality of Master pages, which are a perfect method of implementing the base layouts I describe in a later section.
+        These are pages with set elements on them which all pages inherit from, and add their own content to.
+        \item C\# integrates well with the Microsoft Access database engine with the use fothe Microsoft-provided OleDB library, which contains many functions for running powerful SQL queries on MS access databases.
+    \end{itemize}
+        \subsection{Usability Features}
     \paragraph{}
     Since this project is a web application with a public-facing GUI, usability features are a vital consideration at all stages of development.
     The primary focus of that consideration will be UI layout and design; all pages must only show what they need to, with no excess information, in a clear and concise format.
@@ -608,9 +626,26 @@
     \paragraph{Nav-Bar}
     A nav bar is an area at the top of the page containing links for navigating the web application.
     These links will be relevant on all pages, they will include a link to the home page, login page and product browsing page; or the statistics page and market page on the employee pages.
+    It will also show an element showing the real name of the currently logged in user, with options to sign out and view their profile.
+    If no user is logged in, it will show a login button in place of this.
     I plan to implement this feature as the central component of both base layouts.
+    \paragraph{Content}
+    This is a reserved area of the page where the unique content of each page will be shown, according to the page the user is viewing, for example: on the analytics page graphs will be shown whereas on the product browsing page the product list will be shown.
+    It will be the only place each individual page is allowed to place elements and content.
+    \paragraph{Background}
+    While this may not strictly be a usability "feature", I think there should be an image background at the edges of the page to break up the monotonous colours.
+    This has the dual advantage of both making the website more pleasing to look at and easier to read.
+    \paragraph{}
+    Since this is a web application, the best method to implement these features is, without a doubt, Cascading Style Sheets.
+    CSS is a styling language that dictates the appearance, colour and layout of web pages.
+    I have chosen it because:
+    \begin{itemize}
+        \item It allows powerful control of many aspects of web pages as mentioned above with only a few lines of code
+        \item It is simple to read, learn and understand because it has little to no syntax variation
+        \item It can set presets for elements of particular user defined classes, allowing it to retain consistency across the site with minimal extra effort
+    \end{itemize}
     \newpage
-    \subsubsection{Customer Basic Page}
+    \subsubsection{Customer Base Layout}
     \begin{figure}[h]
         \includegraphics[width=\textwidth]{customerBasic.png}
         \centering
@@ -618,7 +653,7 @@
     \paragraph{}
 
     \newpage
-    \subsubsection{Employee Basic Page}
+    \subsubsection{Employee Base Layout}
     \begin{figure}[h]
         \includegraphics[width=\textwidth]{employeeBasic.png}
         \centering
