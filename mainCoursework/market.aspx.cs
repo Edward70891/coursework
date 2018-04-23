@@ -9,35 +9,40 @@ using System.Data;
 
 namespace mainCoursework
 {
+	/// <summary>
+	/// A custom market item with an amount attached
+	/// </summary>
+	public struct marketItem
+	{
+		public product product;
+		public int amount;
+	}
+
+	public static class marketPersistent
+	{
+		public static marketItem[] takingItems;
+		public static productList productsList;
+		public static bool initialized = false;
+	}
+
 	public partial class market : System.Web.UI.Page
 	{
-		/// <summary>
-		/// A custom market item with an amount attached
-		/// </summary>
-		struct marketItem
-		{
-			public product product;
-			public int amount;
-		}
-
 		//The product list that will be displayed on the page
-		productList productsList;
-		marketItem[] takingItems;
-		bool initialized = false;
 		defaultDataSetTableAdapters.marketTableAdapter adaptor = new defaultDataSetTableAdapters.marketTableAdapter();
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//If the page has already been loaded, don't refresh the product list
-			if (initialized)
+			if (marketPersistent.initialized)
 			{
 				populatePage();
 			}
 			else
 			{
-				productsList = new productList();
+				marketPersistent.productsList = new productList();
+				marketPersistent.takingItems = new marketItem[0];
 				populatePage();
-				initialized = true;
+				marketPersistent.initialized = true;
 			}
 		}
 
@@ -56,7 +61,7 @@ namespace mainCoursework
 		private void populateMainPanel()
 		{
 			//Generate the controls and clear out any already on the page
-			var controlSet = productsList.generateControls();
+			var controlSet = marketPersistent.productsList.generateControls();
 			productsListPanel.Controls.Clear();
 			//Modify the controls as necessary and add them all to the page
 			int i = 0;
@@ -65,9 +70,9 @@ namespace mainCoursework
 				//A button to add them to the stall list
 				Button addToStall = new Button()
 				{
-					ID = productsList.list[i].productInfo.productName + "AddToStall",
+					ID = marketPersistent.productsList.list[i].productInfo.productName + "AddToStall",
 					Text = "Add",
-					CommandArgument = productsList.list[i].productInfo.productName
+					CommandArgument = marketPersistent.productsList.list[i].productInfo.productName
 				};
 				addToStall.Click += new EventHandler(addToStall_Click);
 				addToStall.Attributes.Add("runat", "server");
@@ -83,6 +88,7 @@ namespace mainCoursework
 		/// </summary>
 		private void populateTakingPanel()
 		{
+			//Accesses the database to add all the existing items the employee has reserved
 			//Open an adaptor
 			var data = adaptor.getStallItems(Convert.ToString(Session["currentUser"]));
 			//Make a temporary list to hold all the items we're going to generate from the query we're going to run
@@ -95,8 +101,8 @@ namespace mainCoursework
 				tempItem.amount = Convert.ToInt32(current[2]);
 				tempList.Add(tempItem);
 			}
-			//Convert the temporary list to be an array and set it to be the page's global variable, clear the controls in the list
-			takingItems = tempList.ToArray();
+			//Convert the temporary list to be an array and add it to the page's global variable
+			marketPersistent.takingItems = common.appendArray(marketPersistent.takingItems, tempList.ToArray());
 			generateTakingControls();
 		}
 
@@ -107,7 +113,7 @@ namespace mainCoursework
 		{
 			takingPanel.Controls.Clear();
 			//Generate the productPanel for all the items and add an amount text box to it with a text change event
-			foreach (marketItem current in takingItems)
+			foreach (marketItem current in marketPersistent.takingItems)
 			{
 				productPanel panel = new productPanel(current.product.productInfo);
 				TextBox amountBox = new TextBox()
@@ -130,7 +136,7 @@ namespace mainCoursework
 			Button btn = (Button)sender;
 			//Check if that product is already in their cart
 			bool existing = false;
-			foreach (marketItem current in takingItems)
+			foreach (marketItem current in marketPersistent.takingItems)
 			{
 				if (current.product.productInfo.productName == btn.CommandArgument)
 				{
@@ -148,7 +154,7 @@ namespace mainCoursework
 				marketItem newItem = new marketItem();
 				newItem.amount = 1;
 				newItem.product = new product(btn.CommandArgument);
-				common.appendArray(takingItems, newItem);
+				common.appendArray(marketPersistent.takingItems, newItem);
 				generateTakingControls();
 			}
 		}
@@ -160,7 +166,7 @@ namespace mainCoursework
 			string productName = box.ID.Split('_')[0];
 			//Find the index of that product in the taking list
 			int index = 0;
-			foreach (marketItem current in takingItems)
+			foreach (marketItem current in marketPersistent.takingItems)
 			{
 				if (current.product.productInfo.productName == productName)
 				{
@@ -169,14 +175,14 @@ namespace mainCoursework
 				index++;
 			}
 			//Change the amount value
-			takingItems[index].amount = Convert.ToInt32(box.Text);
+			marketPersistent.takingItems[index].amount = Convert.ToInt32(box.Text);
 		}
 
 		protected void applyButton_Click(object sender, EventArgs e)
 		{
 			defaultDataSetTableAdapters.productsTableAdapter productsAdaptor = new defaultDataSetTableAdapters.productsTableAdapter();
 			//Check that there's enough stock in the database to take that much to the stall and if there isn't, don't take anything out
-			foreach (marketItem current in takingItems)
+			foreach (marketItem current in marketPersistent.takingItems)
 			{
 				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName));
 				if (currentStock < current.amount)
@@ -187,7 +193,7 @@ namespace mainCoursework
 			}
 			//Use the bootleg method of clearing the table of all that employee's stall items then adding them all back updated
 			adaptor.deleteStall(Convert.ToString(Session["currentUser"]));
-			foreach (marketItem current in takingItems)
+			foreach (marketItem current in marketPersistent.takingItems)
 			{
 				//Insert a stall item
 				adaptor.newStallItem(current.product.productInfo.productName, current.amount, Convert.ToString(Session["currentUser"]));

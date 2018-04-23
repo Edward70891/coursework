@@ -5,7 +5,7 @@
 \author{Edward Robert Karol Demkowicz-Duffy}
 
 %Define page margins with geometry
-\usepackage[a4paper, total={6.5in, 9in}]{geometry}
+\usepackage[a4paper, total={6.75in, 9in}]{geometry}
 
 %Remove footnote ruling
 \renewcommand*\footnoterule{}
@@ -81,7 +81,7 @@
     backgroundcolor=\color{backcolour},
     commentstyle=\color{codecomment},
     keywordstyle=\color{codekeyword},
-    stringstyle=\color{codepurple},
+    stringstyle=\color{codestring},
     basicstyle=\footnotesize\color{codenormal}\linespread{1.15},
     numberstyle=\color{black},
     breakatwhitespace=false,
@@ -668,6 +668,198 @@
     \subsection{Iterative Development}
     \subsection{Prototyping}
     \subsection{Annotated Code}
+    \subsubsection{Preface}
+    \paragraph{Code Structure}
+    My project is a web application, with the web pages written in ASP.NET and the logic behind them in Visual C\#; as such, an optimal structure and organisation of the code is available.
+    Points to remember:
+    \begin{enumerate}
+        \item All pages are composed of a .aspx file, and a .cs file.
+        The .aspx file stores the markup language style code (ASP) that dictates what elements are permanently present on the page, and all their properties.
+        The .cs file stores the logic attached to those elements and contains all the C\# code which can refer to all elements present on the ASP page as if they were ordinary objects.
+        \item There is a master file (in my case two) which all pages inherit from.
+        This has common elements like the nav-bar and the content at the bottom of the page.
+        It, just like all other pages, has a .cs file attached containing code which applies elements on that page, which are active on all pages dependant on that master file.        
+    \end{enumerate}
+    \paragraph{Sessions}
+    Within ASP, the Session object refers to a class containing an array of objects which are universal across all pages - a set of global variables, if you will.
+    This is helpful for implementing code which keeps the user authenticated, as described in the design section and is conveniently named the same thing.
+    There are four variables stored in it which I refer to constantly:
+    \begin{description}
+        \item[isLoggedIn] This is a boolean simply representing whether there is currently a user logged in.
+        \item[currentUser] This is a string storing the username of the user currently logged in.
+        It's default value (i.e. when no one is logged in) is "" (nothing).
+        \item[userType] This is another string storing whether the logged in user is an employee, or a customer.
+        It's default value is also "".
+        \item[userIsAdmin] A boolean storing whether the logged in user is an administrator.
+        Default value false.
+    \end{description}
+    \subsubsection{Common Classes}
+    These are all the classes which contain code needed by many different pages for similar reasons.
+    They are not in the master files because not all pages need them, and those that do will likely not need all of them.
+    Instead, they are grouped into their own .cs file in order to keep them accessible and grouped together without any other logic making them more difficult to read and change.
+    \paragraph{Logging}
+    The following code controls all the logging of all actions in the software, all log entries are processed through this class.
+    \begin{lstlisting}[language=C]
+        public class customLogging
+        {
+            public static void newSession()
+            {
+                string result;
+                string dividerASCII = "------------------------------------------";
+                result = dividerASCII + generateTimestamp() + dividerASCII;
+                writeEntry("");
+                writeEntry(result);
+            }
+
+            public static void newEntry(string entryText)
+            {
+                string result = generateTimestamp() + " " + entryText;
+                writeEntry(result);
+            }
+
+            public static void newException(Exception except)
+            {
+                string result = generateTimestamp() + " An error occurred in " + except.Source + " with message " + except.Message;
+                writeEntry(result);
+            }
+
+            private static void writeEntry(string entryText)
+            {
+                try
+                {
+                    using (StreamWriter logFile = new StreamWriter(@"\\albert \2011\R04637\Computer Science\coursework\mainCoursework\App_Data\log.txt", true))
+                    {
+                        logFile.WriteLine(entryText);
+                    }
+                }
+                catch (IOException)
+                {
+                    using (StreamWriter logFile = new StreamWriter(@"C:\Users\Edward\Source\Repos\coursework\mainCoursework\App_Data\log.txt", true))
+                    {
+                        logFile.WriteLine(entryText);
+                    }
+                }
+            }
+
+            private static string generateTimestamp()
+            {
+                string output = "[" + Convert.ToString(DateTime.Now) + "]";
+                return output;
+            }
+        }
+    \end{lstlisting}
+    The methods are as follows:
+    \begin{description}
+        \item[writeEntry] The method that writes the text passed to it to the log file.
+        Here, I have used a try-catch statement to bypass a problem I encountered when working on this project between two workstation in different locations - at school and at home.
+        Since the application does not run out of the directory containing the pages it is showing (the same directory which contains the logfile) because it executes on the pre installed IIS express server, referential file paths serve no purpose.
+        My solution to this was to simply try the file path which would ordinarily contain the logfile on the school hard drive, and switch to that at home if it failed.
+        \\
+        The method takes a string containing the text it should enter into the file, opens a StreamWriter class (the system class for writing to binary files) and uses it to send the requested text to the file.
+        \item[generateTimestamp] This is a string method that returns the current time with square brackets around it, ready to be prefixed onto a log entry.
+        \item[newSession] A void method which puts a dividing line in the log file indicating that the server has just started, and the history below it until the next divider is a new instance of the server.
+        It also tags it with generateTimestamp's output to mark when the session started.
+        This method is only called by the master page constructor.
+        \item[newEntry] Another void method which creates a string from the string it is passed and the output of generateTimestamp, and writes it to the log with writeEntry.
+        \item[newException] Similar to newEntry but it writes an exception's contents to the log.
+        It uses the properties of the exception passed to it "source" and "message" to generate an appropriate entry to the log, timestamp it and write it.
+    \end{description}
+    \paragraph{Custom Security}
+    The customSecurity class only covers MD5 hashing and SQL injection checking.
+    \begin{lstlisting}
+        public class customSecurity
+        {
+            public const string sanitizeErrorMessage = "All fields must be full. The (, ), +, -, = and ' characters are not allowed in ANY fields";
+
+            public static bool sanitizeCheck(string[] input)
+            {
+                bool isClean = true;
+                foreach (string i in input)
+                {
+                    if (i.Contains("(") || i.Contains(")") || i.Contains("'") || i.Contains("=") || i.Contains("-") || i.Contains("+"))
+                    {
+                        isClean = false;
+                        break;
+                    }
+                    if (i == "")
+                    {
+                        isClean = false;
+                        break;
+                    }
+
+                }
+                return isClean;
+            }
+
+            public static string generateMD5(string input)
+            {
+                var md5 = System.Security.Cryptography.MD5.Create();
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hash = md5.ComputeHash(inputBytes);
+                string output = "";
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    output = output + hash[i].ToString("x2");
+                }
+                return output;
+            }
+        }
+    \end{lstlisting}
+    \subsubsection{Log In}
+    \begin{lstlisting}[language=C]
+
+    public partial class customerLogin : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Convert.ToString(Session["isLoggedIn"]) == "True")
+            {
+                Server.Transfer("~/default.aspx", false);
+            }
+        }
+
+        protected void submitCustomerCredentialsButton_Click(object sender, EventArgs e)
+        {
+            if (customSecurity.sanitizeCheck(new string[] { customerUsernameBox.Text, customerPasswordBox.Text }))
+            {
+                string attemptedName = customerUsernameBox.Text;
+                using (var checkCredentials = new defaultDataSetTableAdapters.customersTableAdapter())
+                {
+                    if (checkCredentials.loginCheck(attemptedName, customSecurity.generateMD5(customerPasswordBox.Text)) != null)
+                    {
+                        Session["isLoggedIn"] = "True";
+                        Session["currentUser"] = attemptedName;
+                        Session["userType"] = "customer";
+                        Session["userIsAdmin"] = "False";
+                        customLogging.newEntry("Customer " + attemptedName + " logged in");
+                        Server.Transfer("~/default.aspx", false);
+                    }
+                    else
+                    {
+                        customerLoginReturnLabel.Text = "The Username or Password is incorrect.";
+                        customLogging.newEntry("Someone attempted to login as a customer with username '" + attemptedName + "' but the credentials were incorrect");
+                    }
+                }
+            }
+            else
+            {
+                customerLoginReturnLabel.Text = customSecurity.sanitizeErrorMessage;
+            }
+        }
+
+        protected void registerButton_Click(object sender, EventArgs e)
+        {
+            Server.Transfer("registerCustomer.aspx", false);
+        }
+
+        protected void employeeRedirect_Click(object sender, EventArgs e)
+        {
+            Server.Transfer("employeeLogin.aspx", false);
+        }
+    }
+    \end{lstlisting}
+    The above code handles the customer log in page.
+
     \subsection{Validation}
     \subsection{Reviews}
     
