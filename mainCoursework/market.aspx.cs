@@ -17,32 +17,28 @@ namespace mainCoursework
 		public product product;
 		public int amount;
 	}
-
-	public static class marketPersistent
-	{
-		public static marketItem[] takingItems;
-		public static productList productsList;
-		public static bool initialized = false;
-	}
-
+	
 	public partial class market : System.Web.UI.Page
 	{
 		//The product list that will be displayed on the page
 		defaultDataSetTableAdapters.marketTableAdapter adaptor = new defaultDataSetTableAdapters.marketTableAdapter();
+		
+		public static marketItem[] takingItems = new marketItem[0];
+		public static productList productsList;
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//If the page has already been loaded, don't refresh the product list
-			if (marketPersistent.initialized)
+			if (Convert.ToInt32(Session["marketInitialized"]) == 1)
 			{
 				populatePage();
 			}
 			else
 			{
-				marketPersistent.productsList = new productList();
-				marketPersistent.takingItems = new marketItem[0];
+				productsList = new productList();
+				takingItems = new marketItem[0];
 				populatePage();
-				marketPersistent.initialized = true;
+				Session["marketInitialized"] = 1;
 			}
 		}
 
@@ -61,7 +57,7 @@ namespace mainCoursework
 		private void populateMainPanel()
 		{
 			//Generate the controls and clear out any already on the page
-			var controlSet = marketPersistent.productsList.generateControls();
+			var controlSet = productsList.generateControls();
 			productsListPanel.Controls.Clear();
 			//Modify the controls as necessary and add them all to the page
 			int i = 0;
@@ -70,9 +66,9 @@ namespace mainCoursework
 				//A button to add them to the stall list
 				Button addToStall = new Button()
 				{
-					ID = marketPersistent.productsList.list[i].productInfo.productName + "AddToStall",
+					ID = productsList.list[i].productInfo.productName + "AddToStall",
 					Text = "Add",
-					CommandArgument = marketPersistent.productsList.list[i].productInfo.productName
+					CommandArgument = productsList.list[i].productInfo.productName
 				};
 				addToStall.Click += new EventHandler(addToStall_Click);
 				addToStall.Attributes.Add("runat", "server");
@@ -102,7 +98,7 @@ namespace mainCoursework
 				tempList.Add(tempItem);
 			}
 			//Convert the temporary list to be an array and add it to the page's global variable
-			marketPersistent.takingItems = common.appendArray(marketPersistent.takingItems, tempList.ToArray());
+			takingItems = common.appendArray(takingItems, tempList.ToArray());
 			generateTakingControls();
 		}
 
@@ -113,9 +109,17 @@ namespace mainCoursework
 		{
 			takingPanel.Controls.Clear();
 			//Generate the productPanel for all the items and add an amount text box to it with a text change event
-			foreach (marketItem current in marketPersistent.takingItems)
+			foreach (marketItem current in takingItems)
 			{
 				productPanel panel = new productPanel(current.product.productInfo);
+				panel.ID = panel.ID + "Taking";
+				foreach (Control currentControl in panel.Controls)
+				{
+					if (currentControl.ID != "" && currentControl.ID != null)
+					{
+						currentControl.ID = currentControl.ID + "Taking";
+					}
+				}
 				TextBox amountBox = new TextBox()
 				{
 					ID = current.product.productInfo.productName + "_AmountBox",
@@ -136,7 +140,7 @@ namespace mainCoursework
 			Button btn = (Button)sender;
 			//Check if that product is already in their cart
 			bool existing = false;
-			foreach (marketItem current in marketPersistent.takingItems)
+			foreach (marketItem current in takingItems)
 			{
 				if (current.product.productInfo.productName == btn.CommandArgument)
 				{
@@ -154,7 +158,7 @@ namespace mainCoursework
 				marketItem newItem = new marketItem();
 				newItem.amount = 1;
 				newItem.product = new product(btn.CommandArgument);
-				common.appendArray(marketPersistent.takingItems, newItem);
+				takingItems = common.appendArray(takingItems, newItem);
 				generateTakingControls();
 			}
 		}
@@ -166,7 +170,7 @@ namespace mainCoursework
 			string productName = box.ID.Split('_')[0];
 			//Find the index of that product in the taking list
 			int index = 0;
-			foreach (marketItem current in marketPersistent.takingItems)
+			foreach (marketItem current in takingItems)
 			{
 				if (current.product.productInfo.productName == productName)
 				{
@@ -175,14 +179,14 @@ namespace mainCoursework
 				index++;
 			}
 			//Change the amount value
-			marketPersistent.takingItems[index].amount = Convert.ToInt32(box.Text);
+			takingItems[index].amount = Convert.ToInt32(box.Text);
 		}
 
 		protected void applyButton_Click(object sender, EventArgs e)
 		{
 			defaultDataSetTableAdapters.productsTableAdapter productsAdaptor = new defaultDataSetTableAdapters.productsTableAdapter();
 			//Check that there's enough stock in the database to take that much to the stall and if there isn't, don't take anything out
-			foreach (marketItem current in marketPersistent.takingItems)
+			foreach (marketItem current in takingItems)
 			{
 				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName));
 				if (currentStock < current.amount)
@@ -193,7 +197,7 @@ namespace mainCoursework
 			}
 			//Use the bootleg method of clearing the table of all that employee's stall items then adding them all back updated
 			adaptor.deleteStall(Convert.ToString(Session["currentUser"]));
-			foreach (marketItem current in marketPersistent.takingItems)
+			foreach (marketItem current in takingItems)
 			{
 				//Insert a stall item
 				adaptor.newStallItem(current.product.productInfo.productName, current.amount, Convert.ToString(Session["currentUser"]));
