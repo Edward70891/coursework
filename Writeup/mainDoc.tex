@@ -890,7 +890,7 @@
         This checks the session "isLoggedIn", and if it tagged as true then it redirects the user to the relevant homepage with the Server.Transfer method (this is used on almost all pages to redirect people - it's arguments are the path of the page to redirect to and whether to "preserve" the form it is currently loading, for my purposes this is always false).
         In the employee file, it will redirect to the employee homepage, which will then redirect to the customer homepage if it is a customer logged in.
         \item[submitCustomerCredentialsButton_click] A method called when the submit button is clicked (ASP automatically generates blank methods linked to each button's onclick event, comprised of the name of the button followed by "_click").
-        Within this method, I have used a series of 
+        Within this method, I have used two nested if statements
     \subsection{Validation}
     \subsection{Reviews}
     
