@@ -269,7 +269,10 @@
     This is a feature which I can and plan to implement in my own website very effectively, as I already planned to store extended data about any orders made within the program.
     \end{itemize}
     Appearance appears to play a key role in usability too - all the websites I examined had consistent colour palettes and designs across all pages which gave a distinct impression of professionalism.
-        
+    \subsubsection{Laws}
+    There are several laws pertaining to data hosted online.
+    Since the service I intend to construct will store sensitive personal information, the Data Protection Act 1998 dictates that the service provider is responsible for any damage or theft of that data.
+    My solution must be secure enough that the client can be confident their user's data is safe from people who shouldn't see it as they would be held liable should it be stolen.
     \subsection{Software and Hardware Requirements}
     \paragraph{•}
     As this software will be interacted with in different ways to how it is run at it’s actual location, I have included two sets of hardware requirements; one for the end user (be they employee or customer) and one for the server hosting the software:
@@ -343,6 +346,7 @@
     \item The web application should provide a facility for helping employees manage sales in person.
     This facility should be able to track what products the employee has taken with them and "reserve" them from the main inventory.
     It should be able to record what was sold at the end of the event as specially marked orders, and return all unsold "reserved" items to the main inventory.
+    \item All the above should be accomplished such that it is hard enough for outside hostile elements to access sensitive data to allow the client to be confident that the service won't breach the Data Protection Act 1998.
     \end{enumerate}
     
     \section{Design}
@@ -664,9 +668,7 @@
     \subsection{Test Data}
     
     
-    \section{Development}
-    \subsection{Iterative Development}
-    \subsection{Prototyping}
+    \section{Iterative Development}
     \subsection{Annotated Code}
     \newpage
     \subsubsection{Preface}
@@ -676,7 +678,7 @@
     \begin{enumerate}
         \item All pages are composed of a .aspx file, and a .cs file.
         The .aspx file stores the markup language style code (ASP) that dictates what elements are permanently present on the page, and all their properties.
-        The .cs file stores the logic attached to those elements and contains all the C\# code which can refer to all elements present on the ASP page as if they were ordinary objects.
+        The .cs file stores the logic attached to those elements and contains all the C\# code which can refer to all elements present on the ASP page as if they were ordinary objects; it always contains a predefined method called Page_Load which will be called when the page loads.
         \item There is a master file (in my case two) which all pages inherit from.
         This has common elements like the nav-bar and the content at the bottom of the page.
         It, just like all other pages, has a .cs file attached containing code which applies elements on that page, which are active on all pages dependant on that master file.        
@@ -695,12 +697,12 @@
         Default value false.
     \end{description}
     \newpage
-    \subsubsection{Common Classes}
     These are all the classes which contain code needed by many different pages for similar reasons.
     They are not in the master files because not all pages need them, and those that do will likely not need all of them.
     Instead, they are grouped into their own .cs file in order to keep them accessible and grouped together without any other logic making them more difficult to read and change.
-    \paragraph{Logging}
+    \subsubsection{Logging}
     The following code controls all the logging of all actions in the software, all log entries are processed through this class.
+    This is not a webpage, this is just a section of shared code.
     \begin{lstlisting}[language=C]
         public class customLogging
         {
@@ -766,7 +768,7 @@
         \item[newException] Similar to newEntry but it writes an exception's contents to the log.
         It uses the properties of the exception passed to it "source" and "message" to generate an appropriate entry to the log, timestamp it and write it.
     \end{description}
-    \paragraph{Custom Security}
+    \subsubsection{Custom Security}
     The customSecurity class only covers MD5 hashing and SQL injection checking.
     \begin{lstlisting}[language=C]
         public class customSecurity
@@ -807,6 +809,26 @@
             }
         }
     \end{lstlisting}
+    \paragraph{sanitizeErrorMessage}
+    A custom error message stored so that error returns can use it.
+    This exists to retain consistency, i.e. all returns show the same message when SQL - relevant characters are found.
+    \paragraph{sanitizeCheck}
+    According to my success criteria, the application must adequately protect the users' data.
+    A common method of trying to breach application which use SQL to interact with their databases is called "SQL Injection" - this is when an attacker enters an SQL command into an input they think will be checked against the database.
+    This can be used to issue commands to the database without correct authentication - attackers can log in, drop tables and commit other destructive actions.
+    The most common way to prevent this is referred to as Sanitization, when inputs are checked for characters that could be used in an SQL statement and either remove them or refuse the input if they are found.
+    I have adopted this as no inputs require any of these characters as part of their function; this code takes an array of input box contents and returns true or false depending on if any of those inputs contain SQL sensitive characters (specifically (,),=,-,+).
+    It also serves to make inputs required as it will return false if any of them are blank.
+    \paragraph{generateMD5}
+    As stated in the key structures section of my design, all passwords stored in the database will be hashed so in the event that they are comnpromised, the password values are of little use.
+    \\
+    The code uses the System.Security.Crypography library to access the algorithms required to generate MD5 hashes from byte data.
+    The function takes a string and creates a new instance of the MD5 class from the cryptography library.
+    It converts the input into an array of bytes using the System.Text.Encoding.ASCII class (which changes ASCII values into byte data, i.e. strings into binary)
+    Another array of bytes is generated using the ComputeHash method of our Cryptography.MD5 instance (called md5).
+    The string output is defined and assigned as "" (this is because the next for loop requires an already existing string to append to).
+    A for loop is run up to the length of the array of bytes (the output data) which appends the string output with each byte using the .ToString method which most objects in C# possess.
+    The "x2" argument specifies that each string output should be capitalised (I use this for consistency).
     \subsubsection{Log In}
     \begin{lstlisting}[language=C]
 
@@ -860,8 +882,15 @@
         }
     }
     \end{lstlisting}
-    The above code handles the customer log in page.
-
+    There are two log in pages in my project, one for the customers and one for the employees; because the customer and employee tables are seperate, it is more convenient to seperate the logic for each table into two seperate pages/files.
+    In terms of appearance, the two pages are identical but for the inclusion of a button on the customer page which redirects the user to the customer register page.
+    Otherwise, both pages contain a text box for the user name of the user and their password (customerUsernameBox and customerPasswordBox or equivalent), a submit credentials button (submitCustomerCredentialsButton or equivalent) and finally a button to redirect the user to the employee login or customer login as appropriate (employeeRedirect or equivalent).
+    \begin{description}
+        \item[Page_Load] This page should not be accessible by people that are already logged in, as logging in again is unnecessary if they are already logged in and could cause unforeseen problems.
+        This checks the session "isLoggedIn", and if it tagged as true then it redirects the user to the relevant homepage with the Server.Transfer method (this is used on almost all pages to redirect people - it's arguments are the path of the page to redirect to and whether to "preserve" the form it is currently loading, for my purposes this is always false).
+        In the employee file, it will redirect to the employee homepage, which will then redirect to the customer homepage if it is a customer logged in.
+        \item[submitCustomerCredentialsButton_click] A method called when the submit button is clicked (ASP automatically generates blank methods linked to each button's onclick event, comprised of the name of the button followed by "_click").
+        Within this method, I have used a series of 
     \subsection{Validation}
     \subsection{Reviews}
     
