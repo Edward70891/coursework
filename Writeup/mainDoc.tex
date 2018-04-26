@@ -670,7 +670,6 @@
     
     \section{Iterative Development}
     \subsection{Annotated Code}
-    \newpage
     \subsubsection{Preface}
     \paragraph{Code Structure}
     My project is a web application, with the web pages written in ASP.NET and the logic behind them in Visual C\#; as such, an optimal structure and organisation of the code is available.
@@ -678,7 +677,7 @@
     \begin{enumerate}
         \item All pages are composed of a .aspx file, and a .cs file.
         The .aspx file stores the markup language style code (ASP) that dictates what elements are permanently present on the page, and all their properties.
-        The .cs file stores the logic attached to those elements and contains all the C\# code which can refer to all elements present on the ASP page as if they were ordinary objects; it always contains a predefined method called Page_Load which will be called when the page loads.
+        The .cs file stores the logic attached to those elements and contains all the C\# code which can refer to all elements present on the ASP page as if they were ordinary objects; it always contains a predefined method called Page\_Load which will be called when the page loads.
         \item There is a master file (in my case two) which all pages inherit from.
         This has common elements like the nav-bar and the content at the bottom of the page.
         It, just like all other pages, has a .cs file attached containing code which applies elements on that page, which are active on all pages dependant on that master file.        
@@ -700,6 +699,7 @@
     These are all the classes which contain code needed by many different pages for similar reasons.
     They are not in the master files because not all pages need them, and those that do will likely not need all of them.
     Instead, they are grouped into their own .cs file in order to keep them accessible and grouped together without any other logic making them more difficult to read and change.
+    \newpage
     \subsubsection{Logging}
     The following code controls all the logging of all actions in the software, all log entries are processed through this class.
     This is not a webpage, this is just a section of shared code.
@@ -753,21 +753,20 @@
         }
     \end{lstlisting}
     The methods are as follows:
-    \begin{description}
-        \item[writeEntry] The method that writes the text passed to it to the log file.
-        Here, I have used a try-catch statement to bypass a problem I encountered when working on this project between two workstation in different locations - at school and at home.
-        Since the application does not run out of the directory containing the pages it is showing (the same directory which contains the logfile) because it executes on the pre installed IIS express server, referential file paths serve no purpose.
-        My solution to this was to simply try the file path which would ordinarily contain the logfile on the school hard drive, and switch to that at home if it failed.
-        \\
-        The method takes a string containing the text it should enter into the file, opens a StreamWriter class (the system class for writing to binary files) and uses it to send the requested text to the file.
-        \item[generateTimestamp] This is a string method that returns the current time with square brackets around it, ready to be prefixed onto a log entry.
-        \item[newSession] A void method which puts a dividing line in the log file indicating that the server has just started, and the history below it until the next divider is a new instance of the server.
-        It also tags it with generateTimestamp's output to mark when the session started.
-        This method is only called by the master page constructor.
-        \item[newEntry] Another void method which creates a string from the string it is passed and the output of generateTimestamp, and writes it to the log with writeEntry.
-        \item[newException] Similar to newEntry but it writes an exception's contents to the log.
-        It uses the properties of the exception passed to it "source" and "message" to generate an appropriate entry to the log, timestamp it and write it.
-    \end{description}
+    \paragraph{writeEntry} The method that writes the text passed to it to the log file.
+    Here, I have used a try-catch statement to bypass a problem I encountered when working on this project between two workstation in different locations - at school and at home.
+    Since the application does not run out of the directory containing the pages it is showing (the same directory which contains the logfile) because it executes on the pre installed IIS express server, referential file paths serve no purpose.
+    My solution to this was to simply try the file path which would ordinarily contain the logfile on the school hard drive, and switch to that at home if it failed.
+    \\
+    The method takes a string containing the text it should enter into the file, opens a StreamWriter class (the system class for writing to binary files) and uses it to send the requested text to the file.
+    \paragraph{generateTimestamp} This is a string method that returns the current time with square brackets around it, ready to be prefixed onto a log entry.
+    \paragraph{newSession} A void method which puts a dividing line in the log file indicating that the server has just started, and the history below it until the next divider is a new instance of the server.
+    It also tags it with generateTimestamp's output to mark when the session started.
+    This method is only called by the master page constructor.
+    \paragraph{newEntry} Another void method which creates a string from the string it is passed and the output of generateTimestamp, and writes it to the log with writeEntry.
+    \paragraph{newException} Similar to newEntry but it writes an exception's contents to the log.
+    It uses the properties of the exception passed to it "source" and "message" to generate an appropriate entry to the log, timestamp it and write it.
+    \newpage
     \subsubsection{Custom Security}
     The customSecurity class only covers MD5 hashing and SQL injection checking.
     \begin{lstlisting}[language=C]
@@ -827,8 +826,9 @@
     It converts the input into an array of bytes using the System.Text.Encoding.ASCII class (which changes ASCII values into byte data, i.e. strings into binary)
     Another array of bytes is generated using the ComputeHash method of our Cryptography.MD5 instance (called md5).
     The string output is defined and assigned as "" (this is because the next for loop requires an already existing string to append to).
-    A for loop is run up to the length of the array of bytes (the output data) which appends the string output with each byte using the .ToString method which most objects in C# possess.
+    A for loop is run up to the length of the array of bytes (the output data) which appends the string output with each byte using the .ToString method which most objects in C\# possess.
     The "x2" argument specifies that each string output should be capitalised (I use this for consistency).
+    \newpage
     \subsubsection{Log In}
     \begin{lstlisting}[language=C]
 
@@ -882,15 +882,126 @@
         }
     }
     \end{lstlisting}
-    There are two log in pages in my project, one for the customers and one for the employees; because the customer and employee tables are seperate, it is more convenient to seperate the logic for each table into two seperate pages/files.
+    \paragraph{}There are two log in pages in my project, one for the customers and one for the employees; because the customer and employee tables are seperate, it is more convenient to seperate the logic for each table into two seperate pages/files.
     In terms of appearance, the two pages are identical but for the inclusion of a button on the customer page which redirects the user to the customer register page.
     Otherwise, both pages contain a text box for the user name of the user and their password (customerUsernameBox and customerPasswordBox or equivalent), a submit credentials button (submitCustomerCredentialsButton or equivalent) and finally a button to redirect the user to the employee login or customer login as appropriate (employeeRedirect or equivalent).
-    \begin{description}
-        \item[Page_Load] This page should not be accessible by people that are already logged in, as logging in again is unnecessary if they are already logged in and could cause unforeseen problems.
-        This checks the session "isLoggedIn", and if it tagged as true then it redirects the user to the relevant homepage with the Server.Transfer method (this is used on almost all pages to redirect people - it's arguments are the path of the page to redirect to and whether to "preserve" the form it is currently loading, for my purposes this is always false).
-        In the employee file, it will redirect to the employee homepage, which will then redirect to the customer homepage if it is a customer logged in.
-        \item[submitCustomerCredentialsButton_click] A method called when the submit button is clicked (ASP automatically generates blank methods linked to each button's onclick event, comprised of the name of the button followed by "_click").
-        Within this method, I have used two nested if statements
+    \paragraph{Page\_Load} This page should not be accessible by people that are already logged in, as logging in again is unnecessary if they are already logged in and could cause unforeseen problems.
+    This checks the session "isLoggedIn", and if it tagged as true then it redirects the user to the relevant homepage with the Server.Transfer method (this is used on almost all pages to redirect people - it's arguments are the path of the page to redirect to and whether to "preserve" the form it is currently loading, for my purposes this is always false).
+    In the employee file, it will redirect to the employee homepage, which will then redirect to the customer homepage if it is a customer logged in.
+    \paragraph{submitCustomerCredentialsButton\_click} A method called when the submit button is clicked (ASP automatically generates blank methods linked to each button's onclick event, comprised of the name of the button followed by "\_click").
+    Within this method, I have used two nested if statements with boolean logic to check the inputs for validity.
+    The first ensures that both input boxes are free of SQL characters with customSecurity.sanitizeCheck and returns the appropriate error message to the return box if not, while the second runs a query against the database:
+    \begin{lstlisting}[language=SQL]
+
+        SELECT COUNT(*) AS Expr1
+        FROM customers
+        GROUP BY username, [password]
+        HAVING (username = ?) AND ([password] = ?)
+    \end{lstlisting}
+    This query will return a DataRow type if an entry with matching credentials is found, and null if not.
+    The boolean logic in the if statement checks if something was returned, and if it was it runs the code within it.
+    If null is returned then it will not run anything and change the error message label to inform the user they have input incorrect credentials.
+    The code within the if statement sets all the appropriate session data as described previously, using the username string the user gave as the username and setting the administrator \& type values to false and customer respectively on this page.
+    It will also log the user entering the site.
+    On the employee page, lines 24 to 26 are replaced with:
+    \begin{lstlisting}[language=C]
+
+        Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
+        if (Convert.ToBoolean(Session["userIsAdmin"]))
+        {
+            customLogging.newEntry("Admin " + attemptedName + " logged in");
+        }
+        else
+        {
+            customLogging.newEntry("Employee " + attemptedName + " logged in");
+        }
+        Server.Transfer("~/staffOverview.aspx", false);
+    \end{lstlisting}
+    The changes this code introduces are that the return of the query is converted into a boolean with the default static class Convert - this works because the query run for that page is
+    \begin{lstlisting}[language=SQL]
+
+        SELECT admin
+        FROM employees
+        GROUP BY username, [password], admin
+        HAVING (username = ?) AND ([password] = ?)
+    \end{lstlisting}
+    Which returns just the value of the admin field instead of the whole DataRow so the only value for Convert to operate on is the one we want.
+    The resulting value is stored in the userIsAdmin session.
+    The same session is immediately checked again to decide what to post to the log; if it returns true then the log is told an administrator logged on and if false that an employee logged on.
+    The last line redirects the newly-logged in user to the staff overview page instead of the customer home page.
+    \newpage
+    \subsubsection{Product Handling Logic}
+    My project needs to deal with lots of information about the products of the client constantly as part of it's base function.
+    The code which deals with this is best abstracted enough to be omni-purpose across the site, with little modification needed to use it on different pages for different purposes.
+    Most pages related to products need to be able to display a list of products which can be sorted and filtered - to this end I decided to write a instantiable class representing one product and attach code to it that would let it gather it's data for itself.
+    Eventually, I wrote the following:
+    \begin{lstlisting}[language=C]
+        public class product
+        {
+            private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
+
+            private productStruct ProductInfo = new productStruct();
+            public productStruct productInfo
+            {
+                get
+                {
+                    return ProductInfo;
+                }
+            }
+            public int newStock { get; set; }
+
+            public product(string iniName)
+            {
+                getData(iniName);
+            }
+            public product(DataRow row)
+            {
+                ProductInfo.productName = Convert.ToString(row[0]);
+                ProductInfo.displayName = Convert.ToString(row[3]);
+                ProductInfo.stock = Convert.ToInt32(row[1]);
+                ProductInfo.price = Convert.ToDecimal(row[2]);
+                ProductInfo.band = Convert.ToString(row[7]);
+                ProductInfo.description = Convert.ToString(row[8]);
+                ProductInfo.imagePath = Convert.ToString(row[6]);
+                ProductInfo.type = Convert.ToString(row[4]);
+            }
+            
+            public void saveStock()
+            {
+                adapter.updateStock(newStock, ProductInfo.productName);
+                ProductInfo.stock = newStock;
+                newStock = 0;
+            }
+
+            public void refresh()
+            {
+                getData(ProductInfo.productName);
+            }
+
+            private void getData(string searchName)
+            {
+                var rows = adapter.getDataTable(searchName);
+                DataRow row = rows[0];
+                ProductInfo.productName = searchName;
+                ProductInfo.displayName = Convert.ToString(row[3]);
+                ProductInfo.stock = Convert.ToInt32(row[1]);
+                ProductInfo.price = Convert.ToDecimal(row[2]);
+                ProductInfo.band = Convert.ToString(row[7]);
+                ProductInfo.description = Convert.ToString(row[8]);
+                ProductInfo.imagePath = Convert.ToString(row[6]);
+                ProductInfo.type = Convert.ToString(row[4]);
+            }
+        }
+    \end{lstlisting}
+    \paragraph{Properties and Variables}
+    A property in C\# is an attribute of a class which allows outside code to read and write to objects within it.
+    This can be used to make certain values read-only or write-only, or attach code to such events to control what conditions the object(s) can be accessed under.
+    It is good practice to implement properties instead of tagging objects within as public because it ensures outside code cannot accidently or deliberately interfere with the objects within the class; while I will be the only contributor to this application's codebase this is not strictly necessary because I know how the class works and don't need to interfere with it, it remains good practice to implement.
+    The properties and variables defined in lines 3 to 13 are as follows:
+    \begin{itemize}
+        \item \textbf{adapter} is the adaptor which the product will use to pull information from.
+        \item \textbf{productStruct}
+    \end{itemize}
     \subsection{Validation}
     \subsection{Reviews}
     
