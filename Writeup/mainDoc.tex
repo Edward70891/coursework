@@ -1060,7 +1060,7 @@ public partial class customerLogin : System.Web.UI.Page
         \item \textbf{refresh} runs getData again using the productName variable in ProductInfo.
         \item \textbf{getData} is a private method for use only within the class which runs the query getDataTable using adaptor.
         getDataTable contains:
-        \begin{lstlisting}[language=C]
+        \begin{lstlisting}[language=SQL]
     SELECT productName, stock, price, displayName, productType, creator, [image], [band], description
     FROM products
     WHERE (productName = ?)
