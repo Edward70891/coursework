@@ -1031,9 +1031,21 @@ public partial class customerLogin : System.Web.UI.Page
         public string type;
     }
         \end{lstlisting}
+        \begin{itemize}
+            \item productName is the camel case name of the product - camel case does not contain spaces and capitalizes the first letter of all words/components but the first.
+            I chose this because it maximizes compatibility since it doesn't have any spaces, which can make string manipulation on it easier, and so that strange capitalizations won't allow duplicate products in the data base.
+            Also, it is in keeping with my method of using camel case for all my variables and objects in my code.
+            \item displayName is the original name the employee who created the product set as the name.
+            \item stock is an integer value showing how much stock is left in the inventory.
+            \item price is a decimal detailing how much, in GBP, one unit of the product costs.
+            \item description is a written description of the product which is defined when the product is created.
+            \item imagePath is a file path to the image of the product.
+            It should ideally be images/productname.png.
+            \item type is the type of product it is, i.e. coaster or clock.
+        \end{itemize}
         An additional advantage is that using a struct like this allows me to assign a name to each field instead of having to check by index.
         \\
-        \textbf{productInfo} is the property used to access the information is ProductInfo.
+        \item \textbf{productInfo} is the property used to access the information is ProductInfo.
         It is read only.
         \item \textbf{newStock} This is a simple integer that can be read or written to which a later method will use to change the stock value of a product in the database.
     \end{itemize}
@@ -1068,9 +1080,10 @@ public partial class customerLogin : System.Web.UI.Page
         getData uses that information to populate ProductInfo using the appropriate data fields.
     \end{itemize}
     The product class itself is relatively barebones since most of the logic related to organising and presenting products is contained in later objects.
+    \newpage
     \subsubsection{productPanel Class}
     I needed a way to show products consistently across all pages and manually writing the code for displaying products on every page that needed it would take more time and be less efficient than alternative solutions.
-    To accomplish this, I wrote the following class:
+    To accomplish this, I wrote a class which inherits from the ASP.NET Panel, giving me the advantage of just being able to add the object as it is to forms so it will just render itself.
     \begin{lstlisting}[language=C]
     public class productPanel : System.Web.UI.WebControls.Panel
     {
@@ -1142,6 +1155,37 @@ public partial class customerLogin : System.Web.UI.Page
         }
     }
     \end{lstlisting}
+
+    \paragraph{Properties}
+    The only property in this class is productInfo, which is just a productStruct initialized in the constructor.
+    \paragraph{Contructor}
+    This class has only one constructor, which serves a double purpose as the only method in the class.
+    The constructor initializes a set of controls which together make up the whole panel and contain all information the panel should display.
+    First, the ID and CssClass of the panel itself using the dynamic referrer "this".
+    For each individual control:
+    \begin{enumerate}
+        \item The ID and CssClass are set.
+        The ID is set to be the name of the product the panel is being generated ofr appended with the name of the control (for the panel, an example ID would be "sampleClock3Panel").
+        The CSS class is simply the name of the object because all similar objects need the same CSS class to have the same styling applied to them.
+        \item Specific properties for each control are set - see below for these.
+        \item The control has the runat Attribute set to "server" using Attributes.Add() so that it runs server-side, not client-side, which would cause persistency problems.
+        \item The control is added to the panel's controls array using this.Controls.Add() - the controls array is an array in productPanel inherited from Panel which contains all the controls which are displayed within the panel.
+        \item An HTML $<$br /$>$ (breakline, essentially a manual "return" key) is added by instantiating a LiteralControl in order to create some space between elements.
+    \end{enumerate}
+    \paragraph{}
+    The individual controls are:
+    \begin{itemize}
+        \item \textbf{displayedImage} is the thumbnail (small cover image) for the product.
+        It is set to display the image at the path at the imagePath property of the info productStruct and to be 500\*500 so all thumbnails are the same size.4
+        \item \textbf{nameTag} is the label which will show the name of the product.
+        It's Text property is set to the displayName property of info.
+        \item \textbf{priceTag} displays the price of 1 unit of that product.
+        It's Text property is set to the stored price of the product from info and prefixed with a "£" character.
+        \item \textbf{stockTag} is a label which just shows the integer value of how much of that product is left in the inventory.
+        It's Text property is set to the stock value of info.
+        \item \textbf{descriptionTag} is a label which will hold the description of the product.
+        It's Text property is set to the description of the product using info.
+    \end{itemize}
     \subsubsection{productList Class}
     \subsection{Validation}
     \subsection{Reviews}
