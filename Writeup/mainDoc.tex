@@ -1045,7 +1045,7 @@ public partial class customerLogin : System.Web.UI.Page
         \end{itemize}
         An additional advantage is that using a struct like this allows me to assign a name to each field instead of having to check by index.
         \\
-        \item \textbf{productInfo} is the property used to access the information is ProductInfo.
+        \item \textbf{productInfo} is the property used to access the information in ProductInfo.
         It is read only.
         \item \textbf{newStock} This is a simple integer that can be read or written to which a later method will use to change the stock value of a product in the database.
     \end{itemize}
@@ -1186,7 +1186,457 @@ public partial class customerLogin : System.Web.UI.Page
         \item \textbf{descriptionTag} is a label which will hold the description of the product.
         It's Text property is set to the description of the product using info.
     \end{itemize}
+    \newpage
     \subsubsection{productList Class}
+    This class contains all the logic for sorting, filtering and otherwise comparing products.
+    Since the class is extremely large, I have split it up into groups of similar functions; each section has an accompanying code block, all of which are in order.
+    I have omitted the class declaration to make the beginning and end sections easier to read, all of the following is encapsulated in ordinary "class productList {}" tags.
+    \paragraph{Properties and Variables}
+    \begin{lstlisting}[language=C]
+		private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
+		private product[] masterList;
+		private product[] WorkingList;
+		public product[] list
+		{
+			get
+			{
+				return WorkingList;
+			}
+		}
+    \end{lstlisting}
+    
+    \begin{lstlisting}[language=C]
+		public void resetWorkingList()
+		{
+			WorkingList = masterList;
+		}
+
+		public Panel[] generateControls()
+		{
+			Panel[] result = new Panel[WorkingList.Length];
+			for (int i = 0; i < WorkingList.Length; i++)
+			{
+				result[i] = new productPanel(WorkingList[i].productInfo);
+			}
+			return result;
+		}
+
+		public void setWorkingList(product[] array)
+		{
+			WorkingList = array;
+		}
+
+		public productList()
+		{
+			var data = adapter.GetData();
+			int i = 0;
+			masterList = new product[data.Rows.Count];
+			foreach (DataRow row in data.Rows)
+			{
+				masterList[i] = new product(row);
+				i++;
+			}
+			WorkingList = masterList;
+		}
+		public productList(string[] productNames)
+		{
+			int i = 0;
+			foreach (string str in productNames)
+			{
+				masterList[i] = new product(str);
+				i++;
+			}
+		}
+		public productList(DataTable data)
+		{
+			int i = 0;
+			foreach (DataRow row in data.Rows)
+			{
+				masterList[i] = new product(row);
+				i++;
+			}
+			WorkingList = masterList;
+		}
+		public productList(product[] products)
+		{
+			masterList = products;
+			WorkingList = masterList;
+		}
+
+		public void sort(bool ascending, string sortType)
+		{
+			switch (sortType)
+			{
+				case "price":
+					WorkingList = sortPrice(WorkingList, ascending);
+					break;
+				case "stock":
+					WorkingList = sortStock(WorkingList, ascending);
+					break;
+				case "name":
+					WorkingList = sortName(WorkingList, ascending);
+					break;
+				case "band":
+					WorkingList = sortBand(WorkingList, ascending);
+					break;
+				default:
+					throw new System.ArgumentException("The sort type must be one of the specified values.");
+			}
+		}
+
+		private static product[] sortPrice(product[] input, bool ascending)
+		{
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			else if (input.Length == 2)
+			{
+				if ((input[0].productInfo.price > input[1].productInfo.price && ascending) || (input[0].productInfo.price < input[1].productInfo.price && !ascending))
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+			}
+
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			for (int i = 0; i < input.Length; i++)
+			{
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				else if (input[i].productInfo.price <= input[pivotIndex].productInfo.price)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				else if (input[i].productInfo.price > input[pivotIndex].productInfo.price)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortPrice(subArray, ascending);
+			superArray = sortPrice(superArray, ascending);
+
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			return result;
+		}
+
+		private static product[] sortStock(product[] input, bool ascending)
+		{
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			else if (input.Length == 2)
+			{
+				if ((input[0].productInfo.stock > input[1].productInfo.stock && ascending) || (input[0].productInfo.stock < input[1].productInfo.stock && !ascending))
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
+
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			for (int i = 0; i < input.Length; i++)
+			{
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				else if (input[i].productInfo.stock <= input[pivotIndex].productInfo.stock)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				else if (input[i].productInfo.stock > input[pivotIndex].productInfo.stock)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortStock(subArray, ascending);
+			superArray = sortStock(superArray, ascending);
+
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			return result;
+		}
+
+		private static product[] sortBand(product[] input, bool ascending)
+		{
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			else if (input.Length == 2)
+			{
+				if ((input[0].productInfo.band.CompareTo(input[1].productInfo.band) > 0 && ascending) || (input[0].productInfo.band.CompareTo(input[1].productInfo.band) < 0 && !ascending))
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
+
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			for (int i = 0; i < input.Length; i++)
+			{
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				else if (input[i].productInfo.band.CompareTo(input[pivotIndex].productInfo.band) <= 0)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				else if (input[i].productInfo.band.CompareTo(input[pivotIndex].productInfo.band) > 0)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortName(subArray, ascending);
+			superArray = sortName(superArray, ascending);
+
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			return result;
+		}
+
+		private static product[] sortName(product[] input, bool ascending)
+		{
+			if (input.Length <= 1)
+			{
+				return input;
+			}
+			else if (input.Length == 2)
+			{
+				if ((input[0].productInfo.displayName.CompareTo(input[1].productInfo.displayName) > 0 && ascending) || (input[0].productInfo.displayName.CompareTo(input[1].productInfo.displayName) < 0 && !ascending))
+				{
+					product temp = input[0];
+					input[0] = input[1];
+					input[1] = temp;
+				}
+				return input;
+			}
+
+			product[] subArray;
+			List<product> subList = new List<product>();
+			product[] superArray;
+			List<product> superList = new List<product>();
+			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+			for (int i = 0; i < input.Length; i++)
+			{
+				if (i == pivotIndex)
+				{
+					continue;
+				}
+				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex].productInfo.displayName) <= 0)
+				{
+					if (ascending)
+					{
+						subList.Add(input[i]);
+					}
+					else
+					{
+						superList.Add(input[i]);
+					}
+				}
+				else if (input[i].productInfo.displayName.CompareTo(input[pivotIndex].productInfo.displayName) > 0)
+				{
+					if (ascending)
+					{
+						superList.Add(input[i]);
+					}
+					else
+					{
+						subList.Add(input[i]);
+					}
+				}
+			}
+
+			subArray = subList.ToArray();
+			superArray = superList.ToArray();
+			subArray = sortName(subArray, ascending);
+			superArray = sortName(superArray, ascending);
+
+			product[] result;
+			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+			result = commonClasses.common.appendArray(result, superArray);
+
+			return result;
+		}
+
+		public void filter(string field, string value, bool whitelist)
+		{
+			List<product> filteredList = new List<product>();
+			int filteredIndex = 0;
+			switch (field)
+			{
+				case "productName":
+					for (int i = 0; i < masterList.Length; i++)
+					{
+						if (whitelist)
+						{
+							if (masterList[i].productInfo.displayName.ToUpper() == value.ToUpper())
+							{
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+						else
+						{
+							if (masterList[i].productInfo.displayName.ToUpper() != value.ToUpper())
+							{
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+					}
+					WorkingList = filteredList.ToArray();
+					break;
+				case "band":
+					for (int i = 0; i < masterList.Length; i++)
+					{
+						if (whitelist)
+						{
+							if (masterList[i].productInfo.band.ToUpper() == value.ToUpper())
+							{
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+						else
+						{
+							if (masterList[i].productInfo.band.ToUpper() != value.ToUpper())
+							{
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+					}
+					WorkingList = filteredList.ToArray();
+					break;
+
+				case "type":
+					for (int i = 0; i < masterList.Length; i++)
+					{
+						if (whitelist)
+						{
+							if (masterList[i].productInfo.type.ToUpper() == value.ToUpper())
+							{
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+						else
+						{
+							if (masterList[i].productInfo.type.ToUpper() != value.ToUpper())
+							{
+								filteredList.Add(masterList[i]);
+								filteredIndex++;
+							}
+						}
+					}
+					WorkingList = filteredList.ToArray();
+					break;
+				default:
+					throw new ArgumentException("The filter field must be one of the specified values");
+			}
+		}
+
+		public void removeOutOfStock()
+		{
+			List<product> filteredList = new List<product>();
+			int filteredIndex = 0;
+			for (int i = 0; i < masterList.Length; i++)
+			{
+				if (masterList[i].productInfo.stock > 0)
+				{
+					filteredList.Add(masterList[i]);
+					filteredIndex++;
+				}
+			}
+			WorkingList = filteredList.ToArray();
+		}
+    }
+    \end{lstlisting}
     \subsection{Validation}
     \subsection{Reviews}
     
