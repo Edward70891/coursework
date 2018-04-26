@@ -126,9 +126,11 @@ namespace mainCoursework
 			Image displayedImage = new Image()
 			{
 				CssClass = "productImage",
-				ID = info.productName + "ImageTag"
+				ID = info.productName + "ImageTag",
+				ImageUrl = info.imagePath,
+				Height = 400,
+				Width = 400
 			};
-			//Configure image here
 			displayedImage.Attributes.Add("runat", "server");
 			this.Controls.Add(displayedImage);
 			this.Controls.Add(new LiteralControl("<br />"));

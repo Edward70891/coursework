@@ -946,7 +946,7 @@ public partial class customerLogin : System.Web.UI.Page
     The same session is immediately checked again to decide what to post to the log; if it returns true then the log is told an administrator logged on and if false that an employee logged on.
     The last line redirects the newly-logged in user to the staff overview page instead of the customer home page.
     \newpage
-    \subsubsection{Product Handling Logic}
+    \subsubsection{Product Class}
     My project needs to deal with lots of information about the products of the client constantly as part of it's base function.
     The code which deals with this is best abstracted enough to be omni-purpose across the site, with little modification needed to use it on different pages for different purposes.
     Most pages related to products need to be able to display a list of products which can be sorted and filtered - to this end I decided to write a instantiable class representing one product and attach code to it that would let it gather it's data for itself.
@@ -1019,7 +1019,6 @@ public partial class customerLogin : System.Web.UI.Page
         \item \textbf{ProductInfo} a custom structure which holds all the information about the product in an uncomplicated, grouped object.
         It's structure is:
         \begin{lstlisting}[language=C]
-
     public struct productStruct
     {
         public string productName;
@@ -1068,6 +1067,82 @@ public partial class customerLogin : System.Web.UI.Page
         This searches for productName in the table and returns the entire contents of the table when it finds a match.
         getData uses that information to populate ProductInfo using the appropriate data fields.
     \end{itemize}
+    The product class itself is relatively barebones since most of the logic related to organising and presenting products is contained in later objects.
+    \subsubsection{productPanel Class}
+    I needed a way to show products consistently across all pages and manually writing the code for displaying products on every page that needed it would take more time and be less efficient than alternative solutions.
+    To accomplish this, I wrote the following class:
+    \begin{lstlisting}[language=C]
+    public class productPanel : System.Web.UI.WebControls.Panel
+    {
+        public productStruct info;
+        public productPanel(productStruct productInfo)
+        {
+            info = productInfo;
+
+            this.CssClass = "productDisplayPanel";
+            this.ID = info.productName + "Panel";
+
+            Image displayedImage = new Image()
+            {
+                CssClass = "productImage",
+                ID = info.productName + "ImageTag",
+                ImageUrl = info.imagePath,
+                Height = 400,
+                Width = 400
+            };
+            displayedImage.Attributes.Add("runat", "server");
+            this.Controls.Add(displayedImage);
+            this.Controls.Add(new LiteralControl("<br />"));
+
+            Label nameTag = new Label()
+            {
+                CssClass = "nameTag",
+                Text = info.displayName,
+                ID = info.productName + "NameTag"
+            };
+            nameTag.Attributes.Add("runat", "server");
+            this.Controls.Add(nameTag);
+            this.Controls.Add(new LiteralControl("<br />"));
+
+            Label priceTag = new Label()
+            {
+                CssClass = "priceTag",
+                Text = "£" + commonClasses.common.formatPrice(info.price),
+                ID = info.productName + "PriceTag"
+            };
+            priceTag.Attributes.Add("runat", "server");
+            this.Controls.Add(priceTag);
+
+            Label stockTag = new Label()
+            {
+                CssClass = "stockTag",
+                ID = info.productName + "StockTag"
+            };
+            if (info.stock == 0)
+            {
+                stockTag.Text = "Out of stock";
+            }
+            else
+            {
+                stockTag.Text = Convert.ToString(info.stock) + " in stock";
+            }
+            stockTag.Attributes.Add("runat", "server");
+            this.Controls.Add(stockTag);
+            this.Controls.Add(new LiteralControl("<br />"));
+
+            Label descriptionTag = new Label()
+            {
+                CssClass = "descriptionTag",
+                Text = Convert.ToString(info.description),
+                ID = info.productName + "DescriptionTag"
+            };
+            descriptionTag.Attributes.Add("runat", "server");
+            this.Controls.Add(descriptionTag);
+            this.Controls.Add(new LiteralControl("<br />"));
+        }
+    }
+    \end{lstlisting}
+    \subsubsection{productList Class}
     \subsection{Validation}
     \subsection{Reviews}
     
