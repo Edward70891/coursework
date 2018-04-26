@@ -669,6 +669,8 @@
     
     
     \section{Iterative Development}
+    \subsection{Data Base}
+
     \subsection{Annotated Code}
     \subsubsection{Preface}
     \paragraph{Code Structure}
@@ -770,43 +772,43 @@
     \subsubsection{Custom Security}
     The customSecurity class only covers MD5 hashing and SQL injection checking.
     \begin{lstlisting}[language=C]
-        public class customSecurity
+    public class customSecurity
+    {
+        public const string sanitizeErrorMessage = "All fields must be full. The (, ), +, -, = and ' characters are not allowed in ANY fields";
+
+        public static bool sanitizeCheck(string[] input)
         {
-            public const string sanitizeErrorMessage = "All fields must be full. The (, ), +, -, = and ' characters are not allowed in ANY fields";
-
-            public static bool sanitizeCheck(string[] input)
+            bool isClean = true;
+            foreach (string i in input)
             {
-                bool isClean = true;
-                foreach (string i in input)
+                if (i.Contains("(") || i.Contains(")") || i.Contains("'") || i.Contains("=") || i.Contains("-") || i.Contains("+"))
                 {
-                    if (i.Contains("(") || i.Contains(")") || i.Contains("'") || i.Contains("=") || i.Contains("-") || i.Contains("+"))
-                    {
-                        isClean = false;
-                        break;
-                    }
-                    if (i == "")
-                    {
-                        isClean = false;
-                        break;
-                    }
-
+                    isClean = false;
+                    break;
                 }
-                return isClean;
-            }
-
-            public static string generateMD5(string input)
-            {
-                var md5 = System.Security.Cryptography.MD5.Create();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-                byte[] hash = md5.ComputeHash(inputBytes);
-                string output = "";
-                for (int i = 0; i < hash.Length; i++)
+                if (i == "")
                 {
-                    output = output + hash[i].ToString("x2");
+                    isClean = false;
+                    break;
                 }
-                return output;
+
             }
+            return isClean;
         }
+
+        public static string generateMD5(string input)
+        {
+            var md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+            string output = "";
+            for (int i = 0; i < hash.Length; i++)
+            {
+                output = output + hash[i].ToString("x2");
+            }
+            return output;
+        }
+    }
     \end{lstlisting}
     \paragraph{sanitizeErrorMessage}
     A custom error message stored so that error returns can use it.
@@ -829,58 +831,72 @@
     A for loop is run up to the length of the array of bytes (the output data) which appends the string output with each byte using the .ToString method which most objects in C\# possess.
     The "x2" argument specifies that each string output should be capitalised (I use this for consistency).
     \newpage
+    \subsubsection{Data Set}
+    \paragraph{}
+    C\# and the .NET framework in general provide DataSets for the use of developers to easily interface with a data source.
+    The DataSet automatically generates code using OleDB (the Microsoft database engine) for each query you add to it.
+    I have constructed one central DataSet which holds all my tables and several queries for each.
+    The SQL query statements will be shown and annotated as they are used.
+    The full dataset is shown below:
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{defaultDataSet.png}
+    \end{figure}
+    Each table is shown in a box, with the adaptor (the containing object with all the user-defined queries in it) in an adjoining box below that
+    Data relationships are shown with lines connecting the tables, data fields by rows in the table box and queries in the adaptor box.
+    \newpage
     \subsubsection{Log In}
     \begin{lstlisting}[language=C]
 
-    public partial class customerLogin : System.Web.UI.Page
+public partial class customerLogin : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
     {
-        protected void Page_Load(object sender, EventArgs e)
+        if (Convert.ToString(Session["isLoggedIn"]) == "True")
         {
-            if (Convert.ToString(Session["isLoggedIn"]) == "True")
-            {
-                Server.Transfer("~/default.aspx", false);
-            }
-        }
-
-        protected void submitCustomerCredentialsButton_Click(object sender, EventArgs e)
-        {
-            if (customSecurity.sanitizeCheck(new string[] { customerUsernameBox.Text, customerPasswordBox.Text }))
-            {
-                string attemptedName = customerUsernameBox.Text;
-                using (var checkCredentials = new defaultDataSetTableAdapters.customersTableAdapter())
-                {
-                    if (checkCredentials.loginCheck(attemptedName, customSecurity.generateMD5(customerPasswordBox.Text)) != null)
-                    {
-                        Session["isLoggedIn"] = "True";
-                        Session["currentUser"] = attemptedName;
-                        Session["userType"] = "customer";
-                        Session["userIsAdmin"] = "False";
-                        customLogging.newEntry("Customer " + attemptedName + " logged in");
-                        Server.Transfer("~/default.aspx", false);
-                    }
-                    else
-                    {
-                        customerLoginReturnLabel.Text = "The Username or Password is incorrect.";
-                        customLogging.newEntry("Someone attempted to login as a customer with username '" + attemptedName + "' but the credentials were incorrect");
-                    }
-                }
-            }
-            else
-            {
-                customerLoginReturnLabel.Text = customSecurity.sanitizeErrorMessage;
-            }
-        }
-
-        protected void registerButton_Click(object sender, EventArgs e)
-        {
-            Server.Transfer("registerCustomer.aspx", false);
-        }
-
-        protected void employeeRedirect_Click(object sender, EventArgs e)
-        {
-            Server.Transfer("employeeLogin.aspx", false);
+            Server.Transfer("~/default.aspx", false);
         }
     }
+
+    protected void submitCustomerCredentialsButton_Click(object sender, EventArgs e)
+    {
+        if (customSecurity.sanitizeCheck(new string[] { customerUsernameBox.Text, customerPasswordBox.Text }))
+        {
+            string attemptedName = customerUsernameBox.Text;
+            using (var checkCredentials = new defaultDataSetTableAdapters.customersTableAdapter())
+            {
+                if (checkCredentials.loginCheck(attemptedName, customSecurity.generateMD5(customerPasswordBox.Text)) != null)
+                {
+                    Session["isLoggedIn"] = "True";
+                    Session["currentUser"] = attemptedName;
+                    Session["userType"] = "customer";
+                    Session["userIsAdmin"] = "False";
+                    customLogging.newEntry("Customer " + attemptedName + " logged in");
+                    Server.Transfer("~/default.aspx", false);
+                }
+                else
+                {
+                    customerLoginReturnLabel.Text = "The Username or Password is incorrect.";
+                    customLogging.newEntry("Someone attempted to login as a customer with username '" + attemptedName + "' but the credentials were incorrect");
+                }
+            }
+        }
+        else
+        {
+            customerLoginReturnLabel.Text = customSecurity.sanitizeErrorMessage;
+        }
+    }
+
+    protected void registerButton_Click(object sender, EventArgs e)
+    {
+        Server.Transfer("registerCustomer.aspx", false);
+    }
+
+    protected void employeeRedirect_Click(object sender, EventArgs e)
+    {
+        Server.Transfer("employeeLogin.aspx", false);
+    }
+}
     \end{lstlisting}
     \paragraph{}There are two log in pages in my project, one for the customers and one for the employees; because the customer and employee tables are seperate, it is more convenient to seperate the logic for each table into two seperate pages/files.
     In terms of appearance, the two pages are identical but for the inclusion of a button on the customer page which redirects the user to the customer register page.
@@ -936,62 +952,62 @@
     Most pages related to products need to be able to display a list of products which can be sorted and filtered - to this end I decided to write a instantiable class representing one product and attach code to it that would let it gather it's data for itself.
     Eventually, I wrote the following:
     \begin{lstlisting}[language=C]
-        public class product
+    public class product
+    {
+        private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
+
+        private productStruct ProductInfo = new productStruct();
+        public productStruct productInfo
         {
-            private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
-
-            private productStruct ProductInfo = new productStruct();
-            public productStruct productInfo
+            get
             {
-                get
-                {
-                    return ProductInfo;
-                }
-            }
-            public int newStock { get; set; }
-
-            public product(string iniName)
-            {
-                getData(iniName);
-            }
-            public product(DataRow row)
-            {
-                ProductInfo.productName = Convert.ToString(row[0]);
-                ProductInfo.displayName = Convert.ToString(row[3]);
-                ProductInfo.stock = Convert.ToInt32(row[1]);
-                ProductInfo.price = Convert.ToDecimal(row[2]);
-                ProductInfo.band = Convert.ToString(row[7]);
-                ProductInfo.description = Convert.ToString(row[8]);
-                ProductInfo.imagePath = Convert.ToString(row[6]);
-                ProductInfo.type = Convert.ToString(row[4]);
-            }
-            
-            public void saveStock()
-            {
-                adapter.updateStock(newStock, ProductInfo.productName);
-                ProductInfo.stock = newStock;
-                newStock = 0;
-            }
-
-            public void refresh()
-            {
-                getData(ProductInfo.productName);
-            }
-
-            private void getData(string searchName)
-            {
-                var rows = adapter.getDataTable(searchName);
-                DataRow row = rows[0];
-                ProductInfo.productName = searchName;
-                ProductInfo.displayName = Convert.ToString(row[3]);
-                ProductInfo.stock = Convert.ToInt32(row[1]);
-                ProductInfo.price = Convert.ToDecimal(row[2]);
-                ProductInfo.band = Convert.ToString(row[7]);
-                ProductInfo.description = Convert.ToString(row[8]);
-                ProductInfo.imagePath = Convert.ToString(row[6]);
-                ProductInfo.type = Convert.ToString(row[4]);
+                return ProductInfo;
             }
         }
+        public int newStock { get; set; }
+
+        public product(string iniName)
+        {
+            getData(iniName);
+        }
+        public product(DataRow row)
+        {
+            ProductInfo.productName = Convert.ToString(row[0]);
+            ProductInfo.displayName = Convert.ToString(row[3]);
+            ProductInfo.stock = Convert.ToInt32(row[1]);
+            ProductInfo.price = Convert.ToDecimal(row[2]);
+            ProductInfo.band = Convert.ToString(row[7]);
+            ProductInfo.description = Convert.ToString(row[8]);
+            ProductInfo.imagePath = Convert.ToString(row[6]);
+            ProductInfo.type = Convert.ToString(row[4]);
+        }
+        
+        public void saveStock()
+        {
+            adapter.updateStock(newStock, ProductInfo.productName);
+            ProductInfo.stock = newStock;
+            newStock = 0;
+        }
+
+        public void refresh()
+        {
+            getData(ProductInfo.productName);
+        }
+
+        private void getData(string searchName)
+        {
+            var rows = adapter.getDataTable(searchName);
+            DataRow row = rows[0];
+            ProductInfo.productName = searchName;
+            ProductInfo.displayName = Convert.ToString(row[3]);
+            ProductInfo.stock = Convert.ToInt32(row[1]);
+            ProductInfo.price = Convert.ToDecimal(row[2]);
+            ProductInfo.band = Convert.ToString(row[7]);
+            ProductInfo.description = Convert.ToString(row[8]);
+            ProductInfo.imagePath = Convert.ToString(row[6]);
+            ProductInfo.type = Convert.ToString(row[4]);
+        }
+    }
     \end{lstlisting}
     \paragraph{Properties and Variables}
     A property in C\# is an attribute of a class which allows outside code to read and write to objects within it.
@@ -1000,7 +1016,57 @@
     The properties and variables defined in lines 3 to 13 are as follows:
     \begin{itemize}
         \item \textbf{adapter} is the adaptor which the product will use to pull information from.
-        \item \textbf{productStruct}
+        \item \textbf{ProductInfo} a custom structure which holds all the information about the product in an uncomplicated, grouped object.
+        It's structure is:
+        \begin{lstlisting}[language=C]
+
+    public struct productStruct
+    {
+        public string productName;
+        public string displayName;
+        public int stock;
+        public decimal price;
+        public string band;
+        public string description;
+        public string imagePath;
+        public string type;
+    }
+        \end{lstlisting}
+        An additional advantage is that using a struct like this allows me to assign a name to each field instead of having to check by index.
+        \\
+        \textbf{productInfo} is the property used to access the information is ProductInfo.
+        It is read only.
+        \item \textbf{newStock} This is a simple integer that can be read or written to which a later method will use to change the stock value of a product in the database.
+    \end{itemize}
+    \paragraph{Constructors}
+    In C\#, constructors are declared with "public objectName(arguments)", without a type specifier and with the same name as the parent object.
+    There are two contructors in this class - they are overloaded (i.e. the compiler chooses which one to use based on what parameters are given when the object is instantiated):
+    \begin{enumerate}
+        \item Beginning line 15, the base constructor takes a string holding the productName of the product to load into the new instance.
+        It runs the getData() method using this, explained below.
+        \item Beginning line 19, the secondary constructor takes a full datarow which would typically be returned by a DataSet query and assigns all of the information in productStruct to the correct fields in that row.
+    \end{enumerate}
+    \paragraph{Methods}
+    There are three methods in the product class:
+    \begin{itemize}
+        \item \textbf{saveStock} uses adaptor to write the value of newStock to the database with the query updateStock, which consists of:
+        \begin{lstlisting}[language=SQL]
+    UPDATE products
+    SET stock = ?
+    WHERE (productName = ?)
+        \end{lstlisting}
+        This changes the value of the stock field in all entries where productName matches what is given.
+        saveStock also updates the stock value in ProductInfo and resets the value of newStock to 0.
+        \item \textbf{refresh} runs getData again using the productName variable in ProductInfo.
+        \item \textbf{getData} is a private method for use only within the class which runs the query getDataTable using adaptor.
+        getDataTable contains:
+        \begin{lstlisting}[language=C]
+    SELECT productName, stock, price, displayName, productType, creator, [image], [band], description
+    FROM products
+    WHERE (productName = ?)
+        \end{lstlisting}
+        This searches for productName in the table and returns the entire contents of the table when it finds a match.
+        getData uses that information to populate ProductInfo using the appropriate data fields.
     \end{itemize}
     \subsection{Validation}
     \subsection{Reviews}
