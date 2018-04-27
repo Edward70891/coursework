@@ -34,24 +34,55 @@ textarea {
 /* Custom CSS */
 .productPanel {
 	font-family: Arial, Helvetica, sans-serif;
+	border: 5px solid grey;
+	width: 1px;
+	margin: auto;
+}
+
+.displayedImage{
+	float: left;
+}
+
+.textWrapper{
+	float:right;
 }
 
 .nameTag {
 	font-size: large;
 	font-weight: bold;
-}
-.productImage{
-	width: 100px;
-	height: 100px;
-}
-.detailsButton{
-	/*Align right here*/
-}
-.stockTag{
-	text-align: right;
+	float:left;
 }
 
+.priceTag{
+	float:left;
+}
+
+.detailsButton{
+	float: right;
+}
+
+.stockTag{
+	float: right;
+}
+
+/*Generic Custom CSS*/
 .returnLabel{
 	color: red;
 	font-weight: bold;
+}
+
+#filteringControls{
+	float:right;
+}
+
+.content{
+	background-color: white;
+}
+
+body {
+	background-image: url(../images/bg.jpg);
+}
+
+#sortingControls{
+	float:left;
 }

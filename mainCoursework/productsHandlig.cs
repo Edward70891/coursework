@@ -127,13 +127,19 @@ namespace mainCoursework
 			{
 				CssClass = "productImage",
 				ID = info.productName + "ImageTag",
-				ImageUrl = info.imagePath,
-				Height = 400,
-				Width = 400
+				ImageUrl = "~/images/" + info.imagePath,
+				Height = 100,
+				Width = 100
 			};
 			displayedImage.Attributes.Add("runat", "server");
 			this.Controls.Add(displayedImage);
-			this.Controls.Add(new LiteralControl("<br />"));
+
+			Panel textWrapper = new Panel()
+			{
+				CssClass = "textWrapper",
+				ID = info.productName + "TextWrapper"
+			};
+			textWrapper.Attributes.Add("runat", "server");
 
 			Label nameTag = new Label()
 			{
@@ -142,8 +148,7 @@ namespace mainCoursework
 				ID = info.productName + "NameTag"
 			};
 			nameTag.Attributes.Add("runat", "server");
-			this.Controls.Add(nameTag);
-			this.Controls.Add(new LiteralControl("<br />"));
+			textWrapper.Controls.Add(nameTag);
 
 			Label priceTag = new Label()
 			{
@@ -152,7 +157,7 @@ namespace mainCoursework
 				ID = info.productName + "PriceTag"
 			};
 			priceTag.Attributes.Add("runat", "server");
-			this.Controls.Add(priceTag);
+			textWrapper.Controls.Add(priceTag);
 
 			Label stockTag = new Label()
 			{
@@ -168,8 +173,7 @@ namespace mainCoursework
 				stockTag.Text = Convert.ToString(info.stock) + " in stock";
 			}
 			stockTag.Attributes.Add("runat", "server");
-			this.Controls.Add(stockTag);
-			this.Controls.Add(new LiteralControl("<br />"));
+			textWrapper.Controls.Add(stockTag);
 
 			Label descriptionTag = new Label()
 			{
@@ -178,8 +182,9 @@ namespace mainCoursework
 				ID = info.productName + "DescriptionTag"
 			};
 			descriptionTag.Attributes.Add("runat", "server");
-			this.Controls.Add(descriptionTag);
-			this.Controls.Add(new LiteralControl("<br />"));
+			textWrapper.Controls.Add(descriptionTag);
+
+			this.Controls.Add(textWrapper);
 		}
 	}
 	

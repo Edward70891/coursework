@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Customer.Master" AutoEventWireup="true" CodeBehind="products.aspx.cs" Inherits="mainCoursework.products1" %>
 
 <%@ Register Assembly="mainCoursework" Namespace="mainCoursework" TagPrefix="cc1" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server" CssClass="content">
 	<asp:Panel ID="sortingControls" runat="server">
 		Sort By:
 		<br />

@@ -1209,7 +1209,9 @@ public partial class customerLogin : System.Web.UI.Page
 			}
 		}
     \end{lstlisting}
-    
+    \begin{itemize}
+        \item \textbf{adapter} is, as before, the adapter the productList will use to interface with the database.
+        \item \textbf{masterList} is one of two arrays of type product; this one stores the whole contents of the database table when the class is initialized
     \begin{lstlisting}[language=C]
 		public void resetWorkingList()
 		{
