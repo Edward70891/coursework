@@ -75,8 +75,8 @@ textarea {
 	float:right;
 }
 
-.content{
-	background-color: white;
+.container body-content {
+	background: white;
 }
 
 body {
