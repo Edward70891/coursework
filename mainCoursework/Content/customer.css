@@ -86,3 +86,7 @@ body {
 #sortingControls{
 	float:left;
 }
+
+.contentplace {
+	height: 100%;
+}

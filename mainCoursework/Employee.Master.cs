@@ -24,13 +24,8 @@ namespace mainCoursework
 			{
 				loginNavbar.Visible = false;
 			}
-			//Show who is logged in, whether they are an admin and make sure the sign out button is visible
-			string admin = "";
-			if (Convert.ToString(Session["userIsAdmin"]) == "True")
-			{
-				admin = " You are an admin!";
-			}
-			usernameLabel.Text = "Welcome, employee " + Session["currentUser"] + "!" + admin;
+			//Show who is logged in and make sure the sign out button is visible
+			usernameLabel.Text = "Welcome\n, employee " + Session["currentUser"] + "!";
 			signOut.Visible = true;
 		}
 

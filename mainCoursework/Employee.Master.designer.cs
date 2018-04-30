@@ -22,15 +22,6 @@ namespace mainCoursework {
         protected global::System.Web.UI.HtmlControls.HtmlAnchor loginNavbar;
         
         /// <summary>
-        /// MainContent control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
-        
-        /// <summary>
         /// usernameLabel control.
         /// </summary>
         /// <remarks>
@@ -38,6 +29,15 @@ namespace mainCoursework {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label usernameLabel;
+        
+        /// <summary>
+        /// MainContent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
         
         /// <summary>
         /// signOut control.

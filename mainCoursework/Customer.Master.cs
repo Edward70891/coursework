@@ -25,7 +25,7 @@ namespace mainCoursework
 			else
 			{
 				//Show who is logged in and make sure the sign out button is visible
-				usernameLabel.Text = "Welcome, " + Session["currentUser"] + "!";
+				usernameLabel.Text = "Welcome,\n" + Session["currentUser"] + "!";
 				signOut.Visible = true;
 			}
 
