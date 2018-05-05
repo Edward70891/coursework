@@ -1762,6 +1762,199 @@ public partial class customerLogin : System.Web.UI.Page
     \end{lstlisting}
     This last piece of code is still designed for filtering but exists as it's own method because it is more convenient.
     The method simply makes a new list and adds all the objects from the masterlist which are not out of stock using a for loop, converts it to an array and sets that to be the working list.
+    \paragraph{Revision 18/04/18}
+    I have made multiple changes to the product handling code since writing this annotation.
+    \begin{enumerate}
+        \item I have completely removed productStruct as it served little purpose but to be a slave to product.
+        All code which references productStruct can easily be either deleted or modified by just removing the ".productInfo" from "product.productInfo.field".
+        Instead, the product class now just contains all the information as individual properties, the code initializing a productStruct in product has been replaced with this:
+        \begin{lstlisting}
+            public readonly string productName;
+            public readonly string displayName;
+            private int Stock;
+            public int stock { get { return Stock; } }
+            public readonly decimal price;
+            public readonly string band;
+            public readonly string description;
+            public readonly string imagePath;
+            public readonly string type;
+            public int newStock { get; set; }
+        \end{lstlisting}
+        These are all the needed variables for the product just as they were in productStruct but on their own.
+        Stock needs to be written to in some code within the class so I have created the variable "Stock" alongside the property "stock" which allows outside code to view it but not edit while still retaining that functionality for inside code.
+        \item In the "sort" and "filter" methods, I have implemented what I described above; the switches now rely on an enum instead of a string which means the default case can be removed.
+        The relevant code:
+        \begin{lstlisting}
+            public enum sortType { name,band,stock,price }
+            public enum filterType { name,band,type }
+
+            public void sort(bool ascending, sortType type)
+            {
+                switch (type)
+                {
+                    case sortType.price:
+                        WorkingList = sortPrice(WorkingList, ascending);
+                        break;
+                    case sortType.stock:
+                        WorkingList = sortStock(WorkingList, ascending);
+                        break;
+                    case sortType.name:
+                        WorkingList = sortName(WorkingList, ascending);
+                        break;
+                    case sortType.band:
+                        WorkingList = sortBand(WorkingList, ascending);
+                        break;
+                }
+            }
+
+            public void filter(filterType field, string value, bool whitelist)
+            {
+                List<product> filteredList = new List<product>();
+                int filteredIndex = 0;
+                switch (field)
+                {
+                    case filterType.name:
+                        for (int i = 0; i < masterList.Length; i++)
+                        {
+                            if (whitelist)
+                            {
+                                if (masterList[i].displayName.ToUpper() == value.ToUpper())
+                                {
+                                    filteredList.Add(masterList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            else
+                            {
+                                if (masterList[i].displayName.ToUpper() != value.ToUpper())
+                                {
+                                    filteredList.Add(masterList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                        }
+                        break;
+                    case filterType.band:
+                        for (int i = 0; i < masterList.Length; i++)
+                        {
+                            if (whitelist)
+                            {
+                                if (masterList[i].band.ToUpper() == value.ToUpper())
+                                {
+                                    filteredList.Add(masterList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            else
+                            {
+                                if (masterList[i].band.ToUpper() != value.ToUpper())
+                                {
+                                    filteredList.Add(masterList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                        }
+                        break;
+
+                    case filterType.type:
+                        for (int i = 0; i < masterList.Length; i++)
+                        {
+                            if (whitelist)
+                            {
+                                if (masterList[i].type.ToUpper() == value.ToUpper())
+                                {
+                                    filteredList.Add(masterList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            else
+                            {
+                                if (masterList[i].type.ToUpper() != value.ToUpper())
+                                {
+                                    filteredList.Add(masterList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                        }
+                        break;
+                }
+                WorkingList = filteredList.ToArray();
+            }
+        \end{lstlisting}
+        \item I refactored the "filter" method.
+        I moved the for loop out of the switch to shorten the code and moved the statement that sent the final list to the working list outside also.
+        Furthermore, I changed the filter to get it's source information from the working list instead of the master list.
+        This is good because it means multiple filters can be applied, without resetting the last one as it would have done before.
+        The new code:
+        \begin{lstlisting}
+            public void filter(filterType field, string value, bool whitelist)
+            {
+                List<product> filteredList = new List<product>();
+                int filteredIndex = 0;
+                for (int i = 0; i < WorkingList.Length; i++)
+                {
+                    switch (field)
+                    {
+                        case filterType.name:
+                            if (whitelist)
+                            {
+                                if (WorkingList[i].displayName.ToUpper() == value.ToUpper())
+                                {
+                                    filteredList.Add(WorkingList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            else
+                            {
+                                if (WorkingList[i].displayName.ToUpper() != value.ToUpper())
+                                {
+                                    filteredList.Add(WorkingList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            break;
+                        case filterType.band:
+                            if (whitelist)
+                            {
+                                if (WorkingList[i].band.ToUpper() == value.ToUpper())
+                                {
+                                    filteredList.Add(WorkingList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            else
+                            {
+                                if (WorkingList[i].band.ToUpper() != value.ToUpper())
+                                {
+                                    filteredList.Add(WorkingList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            break;
+                        case filterType.type:
+                            if (whitelist)
+                            {
+                                if (WorkingList[i].type.ToUpper() == value.ToUpper())
+                                {
+                                    filteredList.Add(WorkingList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            else
+                            {
+                                if (WorkingList[i].type.ToUpper() != value.ToUpper())
+                                {
+                                    filteredList.Add(WorkingList[i]);
+                                    filteredIndex++;
+                                }
+                            }
+                            break;
+                    }
+                }
+                WorkingList = filteredList.ToArray();
+            }
+        \end{lstlisting}
+    \end{enumerate}
     \subsection{Validation}
     \subsection{Reviews}
     

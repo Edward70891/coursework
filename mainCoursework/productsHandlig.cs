@@ -486,77 +486,70 @@ namespace mainCoursework
 			
 			return result;
 		}
-		
+
 		public void filter(filterType field, string value, bool whitelist)
 		{
 			List<product> filteredList = new List<product>();
 			int filteredIndex = 0;
-			switch (field)
+			for (int i = 0; i < WorkingList.Length; i++)
 			{
-				case filterType.name:
-					for (int i = 0; i < masterList.Length; i++)
-					{
+				switch (field)
+				{
+					case filterType.name:
 						if (whitelist)
 						{
-							if (masterList[i].displayName.ToUpper() == value.ToUpper())
+							if (WorkingList[i].displayName.ToUpper() == value.ToUpper())
 							{
-								filteredList.Add(masterList[i]);
+								filteredList.Add(WorkingList[i]);
 								filteredIndex++;
 							}
 						}
 						else
 						{
-							if (masterList[i].displayName.ToUpper() != value.ToUpper())
+							if (WorkingList[i].displayName.ToUpper() != value.ToUpper())
 							{
-								filteredList.Add(masterList[i]);
+								filteredList.Add(WorkingList[i]);
 								filteredIndex++;
 							}
 						}
-					}
-					break;
-				case filterType.band:
-					for (int i = 0; i < masterList.Length; i++)
-					{
+						break;
+					case filterType.band:
 						if (whitelist)
 						{
-							if (masterList[i].band.ToUpper() == value.ToUpper())
+							if (WorkingList[i].band.ToUpper() == value.ToUpper())
 							{
-								filteredList.Add(masterList[i]);
+								filteredList.Add(WorkingList[i]);
 								filteredIndex++;
 							}
 						}
 						else
 						{
-							if (masterList[i].band.ToUpper() != value.ToUpper())
+							if (WorkingList[i].band.ToUpper() != value.ToUpper())
 							{
-								filteredList.Add(masterList[i]);
+								filteredList.Add(WorkingList[i]);
 								filteredIndex++;
 							}
 						}
-					}
-					break;
-
-				case filterType.type:
-					for (int i = 0; i < masterList.Length; i++)
-					{
+						break;
+					case filterType.type:
 						if (whitelist)
 						{
-							if (masterList[i].type.ToUpper() == value.ToUpper())
+							if (WorkingList[i].type.ToUpper() == value.ToUpper())
 							{
-								filteredList.Add(masterList[i]);
+								filteredList.Add(WorkingList[i]);
 								filteredIndex++;
 							}
 						}
 						else
 						{
-							if (masterList[i].type.ToUpper() != value.ToUpper())
+							if (WorkingList[i].type.ToUpper() != value.ToUpper())
 							{
-								filteredList.Add(masterList[i]);
+								filteredList.Add(WorkingList[i]);
 								filteredIndex++;
 							}
 						}
-					}
-					break;
+						break;
+				}
 			}
 			WorkingList = filteredList.ToArray();
 		}
