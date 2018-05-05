@@ -1959,7 +1959,8 @@ public void filter(filterType field, string value, bool whitelist)
         This is \textit{indispensable} because it means I can completely refactor the sorting and filtering code.
         Note that I reverted to using the strings and switches method, I found I needed it this way in another page.
         The sorting methods can now only be 95 lines without losing any functionality:
-        \begin{lstlisting}
+        \begin{lstlisting}[language=C]
+public void sort(bool ascending, string type)
     Func<product, IComparable> referrer = null;
     switch (type)
     {
@@ -2051,44 +2052,44 @@ public void filter(filterType field, string value, bool whitelist)
         I can set it to any property of product, then calling "referrer(product1).CompareTo(product2)" will return an integer; if it is 0 the two are equal, if above 0 product1's property is bigger than product2's and if below 0 it is smaller.
         Replacing the appropriate lines in the new quicksort function with this but replacing product1 and product2 with the items being compared makes the function perfectly generic and a good example of abstracted code.
         \begin{lstlisting}[language=C]
-    public void filter(string field, string value, bool whitelist)
+public void filter(string field, string value, bool whitelist)
+{
+    List<product> filteredList = new List<product>();
+    Func<product, string> referrer = null;
+    int filteredIndex = 0;
+    switch (field)
     {
-        List<product> filteredList = new List<product>();
-        Func<product, string> referrer = null;
-        int filteredIndex = 0;
-        switch (field)
-        {
-            case "productName":
-                referrer = x => x.productName;
-                break;
-            case "band":
-                referrer = x => x.band;
-                break;
-            case "type":
-                referrer = x => x.type;
-                break;
-        }
-        for (int i = 0; i < WorkingList.Length; i++)
-        {
-            if (whitelist)
-            {
-                if (referrer(WorkingList[i]).ToUpper() == value.ToUpper())
-                {
-                    filteredList.Add(WorkingList[i]);
-                    filteredIndex++;
-                }
-            }
-            else
-            {
-                if (referrer(WorkingList[i]).ToUpper() != value.ToUpper())
-                {
-                    filteredList.Add(WorkingList[i]);
-                    filteredIndex++;
-                }
-            }
-        }
-        WorkingList = filteredList.ToArray();
+        case "productName":
+            referrer = x => x.productName;
+            break;
+        case "band":
+            referrer = x => x.band;
+            break;
+        case "type":
+            referrer = x => x.type;
+            break;
     }
+    for (int i = 0; i < WorkingList.Length; i++)
+    {
+        if (whitelist)
+        {
+            if (referrer(WorkingList[i]).ToUpper() == value.ToUpper())
+            {
+                filteredList.Add(WorkingList[i]);
+                filteredIndex++;
+            }
+        }
+        else
+        {
+            if (referrer(WorkingList[i]).ToUpper() != value.ToUpper())
+            {
+                filteredList.Add(WorkingList[i]);
+                filteredIndex++;
+            }
+        }
+    }
+    WorkingList = filteredList.ToArray();
+}
         \end{lstlisting}
         I have overhauled the filtering logic as well to use a similar method with \textbf{Func<product, string>} which does the same as above but will only operate on properties that are of type string, which I can do because the filter class only needs to operate on strings.
     \end{enumerate}
@@ -2097,7 +2098,87 @@ public void filter(filterType field, string value, bool whitelist)
     The store front page is the heart of my application.
     The C\# code is as follows:
     \begin{lstlisting}[language=C]
+productList productsDisplayList;
+Panel[] panels;
+bool initialized = false;
 
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (initialized)
+    {
+        populatePage();
+    }
+    else
+    {
+        productsDisplayList = new productList();
+        populatePage();
+        initialized = true;
+    }
+}
+
+private void populatePage()
+{
+    panels = productsDisplayList.generateControls();
+    productsListPanel.Controls.Clear();
+    for (int i = 0; i < panels.Length; i++)
+    {
+        Button detailsButton = new Button()
+        {
+            CssClass = "detailsButton",
+            Text = "View",
+            ID = productsDisplayList.list[i].productName + "DetailsLinkButton",
+            CommandArgument = productsDisplayList.list[i].productName
+        };
+        detailsButton.Click += new EventHandler(detailsButton_Click);
+        detailsButton.Attributes.Add("runat", "server");
+        panels[i].Controls.Add(detailsButton);
+        productsListPanel.Controls.Add(panels[i]);
+    }
+}
+
+protected void detailsButton_Click(object sender, EventArgs e)
+{
+    Button btn = (Button)sender;
+    Session["productRedirectName"] = btn.CommandArgument;
+    Server.Transfer("~/productView.aspx", false);
+}
+
+protected void startSortButton_Click(object sender, EventArgs e)
+{
+    bool ascending;
+    if (sortType.SelectedIndex == 0)
+    {
+        ascending = true;
+    }
+    else
+    {
+        ascending = false;
+    }
+    productsDisplayList.sort(ascending, sortField.SelectedValue);
+    populatePage();
+}
+
+protected void searchButton_Click(object sender, EventArgs e)
+{
+    string searchType = searchFieldDropdown.SelectedValue;
+    string searchText = searchBox.Text;
+    bool whitelist = Convert.ToBoolean(whitelistSelect.SelectedValue);
+    productsDisplayList.filter(searchType, searchBox.Text, whitelist);
+    populatePage();
+}
+
+protected void coasterClockButton_Click(object sender, EventArgs e)
+{
+    string filterMode = coastersOrClocks.SelectedValue;
+    productsDisplayList.filter("stock", filterMode, true);
+    populatePage();
+}
+
+protected void resetFilter_Click(object sender, EventArgs e)
+{
+    productsDisplayList.resetWorkingList();
+    populatePage();
+}
     \end{lstlisting}
 
     \subsection{Validation}
