@@ -43,8 +43,8 @@ namespace mainCoursework
 				{
 					CssClass = "detailsButton",
 					Text = "View",
-					ID = productsDisplayList.list[i].productInfo.productName + "DetailsLinkButton",
-					CommandArgument = productsDisplayList.list[i].productInfo.productName
+					ID = productsDisplayList.list[i].productName + "DetailsLinkButton",
+					CommandArgument = productsDisplayList.list[i].productName
 				};
 				detailsButton.Click += new EventHandler(detailsButton_Click);
 				detailsButton.Attributes.Add("runat", "server");

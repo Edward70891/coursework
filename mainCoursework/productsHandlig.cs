@@ -136,8 +136,6 @@ namespace mainCoursework
 		private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
 		private product[] masterList;
 		private product[] WorkingList;
-		public enum sortType { name,band,stock,price }
-		public enum filterType { name,band,type }
 		public product[] list
 		{
 			get
@@ -209,346 +207,126 @@ namespace mainCoursework
 			WorkingList = masterList;
 		}
 		
-		public void sort(bool ascending, sortType type)
+		public void sort(bool ascending, string type)
 		{
+			Func<product, IComparable> referrer = null;
 			switch (type)
 			{
-				case sortType.price:
-					WorkingList = sortPrice(WorkingList, ascending);
+				case "price":
+					referrer = x => x.price;
 					break;
-				case sortType.stock:
-					WorkingList = sortStock(WorkingList, ascending);
+				case "stock":
+					referrer = x => x.stock;
 					break;
-				case sortType.name:
-					WorkingList = sortName(WorkingList, ascending);
+				case "name":
+					referrer = x => x.displayName;
 					break;
-				case sortType.band:
-					WorkingList = sortBand(WorkingList, ascending);
+				case "band":
+					referrer = x => x.band;
 					break;
 			}
+			WorkingList = quicksort(WorkingList);
+
+
+			product[] quicksort(product[] input)
+			{
+				if (input.Length <= 1)
+				{
+					return input;
+				}
+				else if (input.Length == 2)
+				{
+					if (referrer(input[0]).CompareTo(referrer(input[1])) > 0 && ascending || (referrer(input[0]).CompareTo(referrer(input[1])) < 0) && !ascending)
+					{
+						product temp = input[0];
+						input[0] = input[1];
+						input[1] = temp;
+					}
+				}
+
+				product[] subArray;
+				List<product> subList = new List<product>();
+				product[] superArray;
+				List<product> superList = new List<product>();
+				int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
+
+				for (int i = 0; i < input.Length; i++)
+				{
+					if (i == pivotIndex)
+					{
+						continue;
+					}
+					else if (referrer(input[0]).CompareTo(referrer(input[1])) < 0)
+					{
+						if (ascending)
+						{
+							subList.Add(input[i]);
+						}
+						else
+						{
+							superList.Add(input[i]);
+						}
+					}
+					else if (referrer(input[0]).CompareTo(referrer(input[1])) > 0)
+					{
+						if (ascending)
+						{
+							superList.Add(input[i]);
+						}
+						else
+						{
+							subList.Add(input[i]);
+						}
+					}
+				}
+
+				subArray = subList.ToArray();
+				superArray = superList.ToArray();
+				subArray = quicksort(subArray);
+				superArray = quicksort(superArray);
+
+				product[] result;
+				result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
+				result = commonClasses.common.appendArray(result, superArray);
+
+				return result;
+			}
 		}
 
-		private static product[] sortPrice(product[] input, bool ascending)
-		{
-			if (input.Length <= 1)
-			{
-				return input;
-			}
-			else if (input.Length == 2)
-			{
-				if ((input[0].price > input[1].price && ascending) || (input[0].price < input[1].price && !ascending))
-				{
-					product temp = input[0];
-					input[0] = input[1];
-					input[1] = temp;
-				}
-			}
-			
-			product[] subArray;
-			List<product> subList = new List<product>();
-			product[] superArray;
-			List<product> superList = new List<product>();
-			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
-			
-			for (int i = 0; i < input.Length; i++)
-			{
-				if (i == pivotIndex)
-				{
-					continue;
-				}
-				else if (input[i].price <= input[pivotIndex].price)
-				{
-					if (ascending)
-					{
-						subList.Add(input[i]);
-					}
-					else
-					{
-						superList.Add(input[i]);
-					}
-				}
-				else if (input[i].price > input[pivotIndex].price)
-				{
-					if (ascending)
-					{
-						superList.Add(input[i]);
-					}
-					else
-					{
-						subList.Add(input[i]);
-					}
-				}
-			}
-
-			subArray = subList.ToArray();
-			superArray = superList.ToArray();
-			subArray = sortPrice(subArray, ascending);
-			superArray = sortPrice(superArray, ascending);
-
-			product[] result;
-			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
-			result = commonClasses.common.appendArray(result, superArray);
-
-			return result;
-		}
-
-		private static product[] sortStock(product[] input, bool ascending)
-		{
-			if (input.Length <= 1)
-			{
-				return input;
-			}
-			else if (input.Length == 2)
-			{
-				if ((input[0].stock > input[1].stock && ascending) || (input[0].stock < input[1].stock && !ascending))
-				{
-					product temp = input[0];
-					input[0] = input[1];
-					input[1] = temp;
-				}
-				return input;
-			}
-
-			product[] subArray;
-			List<product> subList = new List<product>();
-			product[] superArray;
-			List<product> superList = new List<product>();
-			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
-
-			for (int i = 0; i < input.Length; i++)
-			{
-				if (i == pivotIndex)
-				{
-					continue;
-				}
-				else if (input[i].stock <= input[pivotIndex].stock)
-				{
-					if (ascending)
-					{
-						subList.Add(input[i]);
-					}
-					else
-					{
-						superList.Add(input[i]);
-					}
-				}
-				else if (input[i].stock > input[pivotIndex].stock)
-				{
-					if (ascending)
-					{
-						superList.Add(input[i]);
-					}
-					else
-					{
-						subList.Add(input[i]);
-					}
-				}
-			}
-
-			subArray = subList.ToArray();
-			superArray = superList.ToArray();
-			subArray = sortStock(subArray, ascending);
-			superArray = sortStock(superArray, ascending);
-
-			product[] result;
-			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
-			result = commonClasses.common.appendArray(result, superArray);
-
-			return result;
-		}
-
-		private static product[] sortBand(product[] input, bool ascending)
-		{
-			if (input.Length <= 1)
-			{
-				return input;
-			}
-			else if (input.Length == 2)
-			{
-				if ((input[0].band.CompareTo(input[1].band) > 0 && ascending) || (input[0].band.CompareTo(input[1].band) < 0 && !ascending))
-				{
-					product temp = input[0];
-					input[0] = input[1];
-					input[1] = temp;
-				}
-				return input;
-			}
-
-			product[] subArray;
-			List<product> subList = new List<product>();
-			product[] superArray;
-			List<product> superList = new List<product>();
-			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
-
-			for (int i = 0; i < input.Length; i++)
-			{
-				if (i == pivotIndex)
-				{
-					continue;
-				}
-				else if (input[i].band.CompareTo(input[pivotIndex].band) <= 0)
-				{
-					if (ascending)
-					{
-						subList.Add(input[i]);
-					}
-					else
-					{
-						superList.Add(input[i]);
-					}
-				}
-				else if (input[i].band.CompareTo(input[pivotIndex].band) > 0)
-				{
-					if (ascending)
-					{
-						superList.Add(input[i]);
-					}
-					else
-					{
-						subList.Add(input[i]);
-					}
-				}
-			}
-
-			subArray = subList.ToArray();
-			superArray = superList.ToArray();
-			subArray = sortName(subArray, ascending);
-			superArray = sortName(superArray, ascending);
-
-			product[] result;
-			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
-			result = commonClasses.common.appendArray(result, superArray);
-			
-			return result;
-		}
-
-		private static product[] sortName(product[] input, bool ascending)
-		{
-			if (input.Length <= 1)
-			{
-				return input;
-			}
-			else if (input.Length == 2)
-			{
-				if ((input[0].displayName.CompareTo(input[1].displayName) > 0 && ascending) || (input[0].displayName.CompareTo(input[1].displayName) < 0 && !ascending))
-				{
-					product temp = input[0];
-					input[0] = input[1];
-					input[1] = temp;
-				}
-				return input;
-			}
-			
-			product[] subArray;
-			List<product> subList = new List<product>();
-			product[] superArray;
-			List<product> superList = new List<product>();
-			int pivotIndex = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 2)) - 1;
-			
-			for (int i = 0; i < input.Length; i++)
-			{
-				if (i == pivotIndex)
-				{
-					continue;
-				}
-				else if (input[i].displayName.CompareTo(input[pivotIndex].displayName) <= 0)
-				{
-					if (ascending)
-					{
-						subList.Add(input[i]);
-					}
-					else
-					{
-						superList.Add(input[i]);
-					}
-				}
-				else if (input[i].displayName.CompareTo(input[pivotIndex].displayName) > 0)
-				{
-					if (ascending)
-					{
-						superList.Add(input[i]);
-					}
-					else
-					{
-						subList.Add(input[i]);
-					}
-				}
-			}
-			
-			subArray = subList.ToArray();
-			superArray = superList.ToArray();
-			subArray = sortName(subArray, ascending);
-			superArray = sortName(superArray, ascending);
-			
-			product[] result;
-			result = commonClasses.common.appendArray(subArray, input[pivotIndex]);
-			result = commonClasses.common.appendArray(result, superArray);
-			
-			return result;
-		}
-
-		public void filter(filterType field, string value, bool whitelist)
+		public void filter(string field, string value, bool whitelist)
 		{
 			List<product> filteredList = new List<product>();
+			Func<product, string> referrer = null;
 			int filteredIndex = 0;
+			switch (field)
+			{
+				case "productName":
+					referrer = x => x.productName;
+					break;
+				case "band":
+					referrer = x => x.band;
+					break;
+				case "type":
+					referrer = x => x.type;
+					break;
+			}
 			for (int i = 0; i < WorkingList.Length; i++)
 			{
-				switch (field)
+				if (whitelist)
 				{
-					case filterType.name:
-						if (whitelist)
-						{
-							if (WorkingList[i].displayName.ToUpper() == value.ToUpper())
-							{
-								filteredList.Add(WorkingList[i]);
-								filteredIndex++;
-							}
-						}
-						else
-						{
-							if (WorkingList[i].displayName.ToUpper() != value.ToUpper())
-							{
-								filteredList.Add(WorkingList[i]);
-								filteredIndex++;
-							}
-						}
-						break;
-					case filterType.band:
-						if (whitelist)
-						{
-							if (WorkingList[i].band.ToUpper() == value.ToUpper())
-							{
-								filteredList.Add(WorkingList[i]);
-								filteredIndex++;
-							}
-						}
-						else
-						{
-							if (WorkingList[i].band.ToUpper() != value.ToUpper())
-							{
-								filteredList.Add(WorkingList[i]);
-								filteredIndex++;
-							}
-						}
-						break;
-					case filterType.type:
-						if (whitelist)
-						{
-							if (WorkingList[i].type.ToUpper() == value.ToUpper())
-							{
-								filteredList.Add(WorkingList[i]);
-								filteredIndex++;
-							}
-						}
-						else
-						{
-							if (WorkingList[i].type.ToUpper() != value.ToUpper())
-							{
-								filteredList.Add(WorkingList[i]);
-								filteredIndex++;
-							}
-						}
-						break;
+					if (referrer(WorkingList[i]).ToUpper() == value.ToUpper())
+					{
+						filteredList.Add(WorkingList[i]);
+						filteredIndex++;
+					}
+				}
+				else
+				{
+					if (referrer(WorkingList[i]).ToUpper() != value.ToUpper())
+					{
+						filteredList.Add(WorkingList[i]);
+						filteredIndex++;
+					}
 				}
 			}
 			WorkingList = filteredList.ToArray();
