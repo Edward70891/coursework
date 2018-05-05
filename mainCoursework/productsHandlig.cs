@@ -136,6 +136,8 @@ namespace mainCoursework
 		private defaultDataSetTableAdapters.productsTableAdapter adapter = new defaultDataSetTableAdapters.productsTableAdapter();
 		private product[] masterList;
 		private product[] WorkingList;
+		public enum sortType { name,band,stock,price }
+		public enum filterType { name,band,type }
 		public product[] list
 		{
 			get
@@ -207,24 +209,22 @@ namespace mainCoursework
 			WorkingList = masterList;
 		}
 		
-		public void sort(bool ascending, string sortType)
+		public void sort(bool ascending, sortType type)
 		{
-			switch (sortType)
+			switch (type)
 			{
-				case "price":
+				case sortType.price:
 					WorkingList = sortPrice(WorkingList, ascending);
 					break;
-				case "stock":
+				case sortType.stock:
 					WorkingList = sortStock(WorkingList, ascending);
 					break;
-				case "name":
+				case sortType.name:
 					WorkingList = sortName(WorkingList, ascending);
 					break;
-				case "band":
+				case sortType.band:
 					WorkingList = sortBand(WorkingList, ascending);
 					break;
-				default:
-					throw new System.ArgumentException("The sort type must be one of the specified values.");
 			}
 		}
 
@@ -487,13 +487,13 @@ namespace mainCoursework
 			return result;
 		}
 		
-		public void filter(string field, string value, bool whitelist)
+		public void filter(filterType field, string value, bool whitelist)
 		{
 			List<product> filteredList = new List<product>();
 			int filteredIndex = 0;
 			switch (field)
 			{
-				case "productName":
+				case filterType.name:
 					for (int i = 0; i < masterList.Length; i++)
 					{
 						if (whitelist)
@@ -513,9 +513,8 @@ namespace mainCoursework
 							}
 						}
 					}
-					WorkingList = filteredList.ToArray();
 					break;
-				case "band":
+				case filterType.band:
 					for (int i = 0; i < masterList.Length; i++)
 					{
 						if (whitelist)
@@ -535,10 +534,9 @@ namespace mainCoursework
 							}
 						}
 					}
-					WorkingList = filteredList.ToArray();
 					break;
 
-				case "type":
+				case filterType.type:
 					for (int i = 0; i < masterList.Length; i++)
 					{
 						if (whitelist)
@@ -558,11 +556,9 @@ namespace mainCoursework
 							}
 						}
 					}
-					WorkingList = filteredList.ToArray();
 					break;
-				default:
-					throw new ArgumentException("The filter field must be one of the specified values");
 			}
+			WorkingList = filteredList.ToArray();
 		}
 
 		public void removeOutOfStock()
