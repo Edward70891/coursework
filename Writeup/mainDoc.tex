@@ -852,7 +852,6 @@ public class customSecurity
     \newpage
     \subsubsection{Log In}
     \begin{lstlisting}[language=C]
-
 public partial class customerLogin : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -913,11 +912,10 @@ public partial class customerLogin : System.Web.UI.Page
     Within this method, I have used two nested if statements with boolean logic to check the inputs for validity.
     The first ensures that both input boxes are free of SQL characters with customSecurity.sanitizeCheck and returns the appropriate error message to the return box if not, while the second runs a query against the database:
     \begin{lstlisting}[language=SQL]
-
-        SELECT COUNT(*) AS Expr1
-        FROM customers
-        GROUP BY username, [password]
-        HAVING (username = ?) AND ([password] = ?)
+SELECT COUNT(*) AS Expr1
+FROM customers
+GROUP BY username, [password]
+HAVING (username = ?) AND ([password] = ?)
     \end{lstlisting}
     This query will return a DataRow type if an entry with matching credentials is found, and null if not.
     The boolean logic in the if statement checks if something was returned, and if it was it runs the code within it.
@@ -926,25 +924,23 @@ public partial class customerLogin : System.Web.UI.Page
     It will also log the user entering the site.
     On the employee page, lines 24 to 26 are replaced with:
     \begin{lstlisting}[language=C]
-
-        Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
-        if (Convert.ToBoolean(Session["userIsAdmin"]))
-        {
-            customLogging.newEntry("Admin " + attemptedName + " logged in");
-        }
-        else
-        {
-            customLogging.newEntry("Employee " + attemptedName + " logged in");
-        }
-        Server.Transfer("~/staffOverview.aspx", false);
+Session["userIsAdmin"] = Convert.ToBoolean(loginCheck);
+if (Convert.ToBoolean(Session["userIsAdmin"]))
+{
+    customLogging.newEntry("Admin " + attemptedName + " logged in");
+}
+else
+{
+    customLogging.newEntry("Employee " + attemptedName + " logged in");
+}
+Server.Transfer("~/staffOverview.aspx", false);
     \end{lstlisting}
     The changes this code introduces are that the return of the query is converted into a boolean with the default static class Convert - this works because the query run for that page is
     \begin{lstlisting}[language=SQL]
-
-        SELECT admin
-        FROM employees
-        GROUP BY username, [password], admin
-        HAVING (username = ?) AND ([password] = ?)
+SELECT admin
+FROM employees
+GROUP BY username, [password], admin
+HAVING (username = ?) AND ([password] = ?)
     \end{lstlisting}
     Which returns just the value of the admin field instead of the whole DataRow so the only value for Convert to operate on is the one we want.
     The resulting value is stored in the userIsAdmin session.
@@ -1961,6 +1957,7 @@ public void filter(filterType field, string value, bool whitelist)
         The sorting methods can now only be 95 lines without losing any functionality:
         \begin{lstlisting}[language=C]
 public void sort(bool ascending, string type)
+{
     Func<product, IComparable> referrer = null;
     switch (type)
     {
@@ -2048,7 +2045,7 @@ public void sort(bool ascending, string type)
         There are many changes in the above code.
         The first is that I have compacted all the sorting methods into one method, then nested it inside the "sort" method.
         The advantage of nesting is that the method no longer needs to be called with ascending because it already has access to it from it's parent method.
-        \textbf{Func<product, IComparable>} is the major breakthrough in this revision - this allows me to set a dynamic reference to any property (of a type which inherits from the interface IComparable) of product that I want.
+        \textbf{Func$<$product, IComparable$>$} is the major breakthrough in this revision - this allows me to set a dynamic reference to any property (of a type which inherits from the interface IComparable) of product that I want.
         I can set it to any property of product, then calling "referrer(product1).CompareTo(product2)" will return an integer; if it is 0 the two are equal, if above 0 product1's property is bigger than product2's and if below 0 it is smaller.
         Replacing the appropriate lines in the new quicksort function with this but replacing product1 and product2 with the items being compared makes the function perfectly generic and a good example of abstracted code.
         \begin{lstlisting}[language=C]
@@ -2091,7 +2088,7 @@ public void filter(string field, string value, bool whitelist)
     WorkingList = filteredList.ToArray();
 }
         \end{lstlisting}
-        I have overhauled the filtering logic as well to use a similar method with \textbf{Func<product, string>} which does the same as above but will only operate on properties that are of type string, which I can do because the filter class only needs to operate on strings.
+        I have overhauled the filtering logic as well to use a similar method with \textbf{Func$<$product, string$>$} which does the same as above but will only operate on properties that are of type string, which I can do because the filter class only needs to operate on strings.
     \end{enumerate}
     \newpage
     \subsubsection{Store Front Page}
@@ -2180,7 +2177,168 @@ protected void resetFilter_Click(object sender, EventArgs e)
     populatePage();
 }
     \end{lstlisting}
+    \paragraph{The Page}
+    The page contains a panel full of various controls for filtering and sorting the contents of the page and an empty panel in the content called productsDisplayPanel.
+    \paragraph{The Code}
+    The variables on this page are:
+    \begin{itemize}
+        \item \textbf{productsDisplayList} is the local productList instance.
+        It stores all the products which were in the database when the page was first loaded and contains all the logic and code which was detailed above.
+        \item \textbf{panels} is the array which will hold all the productPanels the page is currently operating on.
+        This does not store all the panels currently rendered on the page, as I cannot find a way to do that in C\# and ASP.NET.
+        The array that contains those is this.Controls[] which also holds the rest of the controls on the page.
+        \item \textbf{initialized} is a boolean value which just states if the page has already been loaded for the first time by the user.
+        It is used to ensure that the database is not access more than it has to be by ensuring that productsDisplayList is not initialized again every time the page refreshes.
+        This in turn ensures that productsDisplayList is consistent across page refreshes which is important to retain the sort and filter.
+    \end{itemize}
+    The methods within this page are as follows:
+    \begin{itemize}
+        \item \textbf{Page\_Load} here just checks if initialized is true.
+        If it is, it will just run populatePage() and if not it will instantiate a new instance of productsDisplayList, then run populatePage() and set initialized to true so this iteration does not trigger twice in a row.
+        \item \textbf{populatePage} generates all the needed controls and adds them to the Controls[] property of productsListPanel.
+        It starts by setting panels[] to the output of productsDisplayList.generateControls() which is detailed in the productsList documentation so panels is now just an array of productPanels.
+        It clears out the already existing controls in productsListPanel to make way for the new ones it is generating.
+        It runs a for loop which goes through each panel in panel because for this page only, we need a button to be generated with each panel which will take the user to the individual product view page; within the loop a button (detailsButton) is initialized.
+        The appropriate properties of the button are set:
+        \begin{itemize}
+            \item CssClass is set to "detailsButton" to ensure CSS styling is applied to it.
+            \item Text is set to "View" to clearly illustrate to the user what the button does.
+            \item ID is set to the name of the product appended with "DetailsLinkButton".
+            This might seem a little useless, but ASP.NET will throw exceptions if similar objects on the page have the same or no ID.
+            \item CommandArgument is set to the name of the product the panel is linked to.
+            This determines what parameter is passed to the function that runs when the button is clicked, so that the function of each detailsButton can be unique.
+        \end{itemize}
+        It instantiates a new EventHandler, which will catch when the button is clicked and execute a method, and points it towards the method detailsButton\_Click.
+        It adds the attribute "runat:server" to ensure the control functions as expected with other controls then adds the whole button to the Controls[] list of the whole productPanel that the for loop is currently examining.
+        Finally, it adds the whole productPanel to productsDisplayPanel.
+        \item \textbf{detailsButton\_Click} is a standard click event method.
+        It takes the sender which triggered the event and the arguments of the event contained in the EventArgs instance "e".
+        The method gets the button instance which sent it by filtering sender.
+        It sets the "productRedirectName" session to the command argument of the button (which as you can see above is the name of the product that button is linked to).
+        It then redirects the user to the productView page, which uses the session value to determine what product to show.
+        \item \textbf{startSortButton\_Click} is another standard click event.
+        startSort is a button in the panel containing all the sorting controls which applies the selected sort.
+        The method gets whether the user wants ascending or descending sort by checking which value of the dropdown box sortType is selected.
+        It then runs productsDisplayList.sort and passes it the selected value of sortField (which dictates what property to sort by) and the ascending bool it obtained earlier.
+        When the sort is done running on the list, it runs populatePage to refresh the page and show all the products in their new, sorted form.
+        \item \textbf{searchButton\_Click} is another button's click event.
+        It pulls the field to search into searchType from searchFieldDropdown and the searchText from searchBox (note that this does not need to be sanitized as it never runs on the database).
+        It determines whether or not the user wants a whitelisted search or a blacklisted search from the selected value of whitelistSelect.
+        It uses the filter() method of productsDisplayList to filter the list, then regenerates all the controls on the page using populatePage.
+        \item \textbf{resetFilter\_Click} is the final method for this page.
+        It is the button click event of the final button on the page which simply runs resetWorkingList on productsDisplayList to clear all sorts and filters, then runs populatePage to update the actual webpage.
+    \end{itemize}
+    \newpage
+    \subsubsection{Individual Product Page}
+    This is the page the user sees when they click the button labelled "View" on the store front page.
+    It contains a larger version of the image of the product and a description.
+    \begin{lstlisting}[language=C]
+product currentProduct;
+defaultDataSetTableAdapters.cartsTableAdapter cartsAdaptor = new defaultDataSetTableAdapters.cartsTableAdapter();
 
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (Convert.ToString(Session["productRedirectName"]) == null || Convert.ToString(Session["productRedirectName"]) == "")
+    {
+        Server.Transfer("~/products.aspx", false);
+    }
+    currentProduct = new product(Convert.ToString(Session["productRedirectName"]));
+    productPanel currentPanel = new productPanel(currentProduct);
+    currentPanel.CssClass = "fullProductPanel";
+    product.Controls.Add(toAdd);
+}
+
+protected void cartButton_Click(object sender, EventArgs e)
+{
+    if (Convert.ToString(Session["userType"]) != "customer")
+    {
+        returnLabel.Text = "You must log in to a customer account to have a cart!";
+    }
+    else
+    {
+        if (amountToAdd.Text != "0")
+        {
+            if (cartsAdaptor.checkExisting(Convert.ToString(Session["currentUser"]), currentProduct.productName) == null)
+            {
+                cartsAdaptor.insertProduct(Convert.ToString(Session["currentUser"]), currentProduct.productName, Convert.ToInt32(amountToAdd.Text));
+            }
+            else
+            {
+                cartsAdaptor.updateAmount(Convert.ToInt32(amountToAdd.Text), Convert.ToString(Session["currentUser"]), currentProduct.productName);
+            }
+            returnLabel.Text = amountToAdd.Text + " " + currentProduct.productName + "s added to your cart!";
+        }
+        else
+        {
+            returnLabel.Text = "You can't add 0 of something to your cart!";
+        }
+    }
+}
+    \end{lstlisting}
+    The page is contains a panel called "product" to drop the productPanel into, a textbox for them to enter the amount of the product they want to add to their cart and a button to actually add it to their cart.
+    The variables on the page are:
+    \begin{itemize}
+        \item \textbf{currentProduct} is the instance of product the page is basing itself off.
+        \item \textbf{cartsAdaptor} is the adaptor for the carts table, which the page needs because it needs to add products to the carts table.
+    \end{itemize}
+    The methods on the page are:
+    \begin{itemize}
+        \item \textbf{Page\_Load} contains code to initialize all the controls which need to be on the page for it to display the product effectively.
+        It first checks if the session "productRedirectName" has actually been assigned a value by the store front page, and if not, it redirects the user to the store front page because it can't display a without being instructed which one to show.
+        It uses the value of that session to instantiate a new product with the name of the product passed from the session to it's constructor.
+        It instantiates a productPanel using the product class and calls it "currentPanel".
+        It sets the CssClass property of the panel to "fullProductPanel" so that different styling is applied to it than those on the store front page.
+        Finally, it adds the panel to the panel on the page.
+        \item \textbf{cartButton\_Click} is the click event for the only button on the page, the "add to cart" button.
+        The method initially checks if the user that is currently logged in is a customer, as these are the only accounts that are allowed to have a cart.
+        It checks if the amount of the product they're trying to add is 0 and denies them if it is (no check is needed to ensure that the contents of the amountToAdd text box is actually a number because the "TextMode" property of the box is set to "number" so the page will not allow the user to type anything but numbers into it).
+        It then uses the adaptor's query checkExisting to check if the customer has already added that product to their cart.
+        checkExisting runs:
+        \begin{lstlisting}[language=SQL]
+SELECT COUNT(*) AS Expr1, [user], productName
+FROM carts
+GROUP BY [user], productName
+HAVING ([user] = ?) AND (productName = ?)
+        \end{lstlisting}
+        If there isn't that product in the user's cart, then the query insertProduct is used:
+        \begin{lstlisting}[language=SQL]
+INSERT INTO `carts` (`user`, `productName`, `amount`)
+VALUES (?, ?, ?)
+        \end{lstlisting}
+        in order to add it with the amount the user specified.
+        If the product is already in their cart, the query updateStock is run:
+        \begin{lstlisting}[language=SQL]
+UPDATE carts
+SET amount = amount + ?
+WHERE ([user] = ?) AND (productName = ?)
+        \end{lstlisting}
+        At all possible terminations of this process, the user is updated with the status of the operation using returnLabel.
+    \end{itemize}
+    \paragraph{Revision 29/04/18}
+    The huge set of nested if statements in the method "cartButton\_Click" is both difficult to understand and unnecessary.
+    I have overhauled them to be in series and just end the method when a failing condition is met.
+    \begin{lstlisting}[language=C]
+if (Convert.ToString(Session["userType"]) != "customer")
+{
+    returnLabel.Text = "You must log in to a customer account to have a cart!";
+    return;
+}
+if (amountToAdd.Text == "0")
+{
+    returnLabel.Text = "You can't add 0 of something to your cart!";
+    return;
+}
+
+if (cartsAdaptor.checkExisting(Convert.ToString(Session["currentUser"]), currentProduct.productName) == null)
+{
+    cartsAdaptor.insertProduct(Convert.ToString(Session["currentUser"]), currentProduct.productName, Convert.ToInt32(amountToAdd.Text));
+}
+else
+{
+    cartsAdaptor.updateAmount(Convert.ToInt32(amountToAdd.Text), Convert.ToString(Session["currentUser"]), currentProduct.productName);
+}
+returnLabel.Text = amountToAdd.Text + " " + currentProduct.productName + "s added to your cart!";
+    \end{lstlisting}
     \subsection{Validation}
     \subsection{Reviews}
     
