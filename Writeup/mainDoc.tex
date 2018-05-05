@@ -676,7 +676,7 @@
         \centering
         \includegraphics[width=\textwidth]{dataBaseScreen.png}
     \end{figure}
-    \subsection{Annotated Code}
+    \subsection{Annotated Code (Initial Solution)}
     \subsubsection{Preface}
     \paragraph{Code Structure}
     My project is a web application, with the web pages written in ASP.NET and the logic behind them in Visual C\#; as such, an optimal structure and organisation of the code is available.
@@ -1211,7 +1211,17 @@ public partial class customerLogin : System.Web.UI.Page
     \end{lstlisting}
     \begin{itemize}
         \item \textbf{adapter} is, as before, the adapter the productList will use to interface with the database.
-        \item \textbf{masterList} is one of two arrays of type product; this one stores the whole contents of the database table when the class is initialized
+        \item \textbf{masterList} is one of two arrays of type product; this one stores the whole contents of the database table when the class is initialized.
+        The class won't change the contents of this once it is initialized or it is specifically instructed to.
+        \item \textbf{workingList} is the "primary" product array; it is copied from the master list upon initialization then all filtering and sorting is applied to it.
+        The advantage of this method is that when the sort or filter needs to be reset, the database does not have to accessed twice which would make the application slower.
+        \item \textbf{list} is the property allowing outside access to the working list.
+        The master list is private with no property to prevent outside code from interfering with the contents of it because if it did, productList might not function correctly.
+    \end{itemize}
+    \paragraph{Basic Methods and Constructors}
+    The class has a large amount of constructor overloads to account for all possible situations which serve to make it more adaptible.
+    It can initialize using an array of products, an array of the names of products, a DataTable of products and, by default, from all the products in the table.
+    Many of these features may prove to be redundant later and I may not use some so it is unlikely all these construction methods will survive into the finished project.
     \begin{lstlisting}[language=C]
 		public void resetWorkingList()
 		{
@@ -1269,7 +1279,79 @@ public partial class customerLogin : System.Web.UI.Page
 			masterList = products;
 			WorkingList = masterList;
 		}
-
+    \end{lstlisting}
+    The constructors are, in the order they are laid out in the code:
+    \begin{enumerate}
+        \item The first constructor pulls the whole contents of the database into the class.
+        It uses the adaptor to get a DataTable (declared with the keyword "var" here, which sets the type to the appropriate one to store what it's being set to).
+        The master list is initialized as a blank array with the same length as there are rows in the datatable, so there are exactly the right amount of elements to store all currently registered products.
+        \item Uses an array of strings containing the names of the products that should be put into the master list.
+        This uses the constructor for the product class that takes a string containing the name of the product to initialize and generates a product for each entry in the string.
+        Letting each product initialize itself could prove to be a slow method as a database call must be made for each product which could create massive latency issues but I will review in testing.
+        \item Uses a premade DataTable passed to it on initialization to initialize each product in the list.
+        Works similarly to \#1 but doesn't create it's own table.
+        Having this constructor lets me run LINQ queries on the table in other objects to filter it, which can sometimes be more powerful than just using SQL and moreover can be checked and debugged inside Visual Studio effectively.
+    \end{enumerate}
+    \paragraph{Revision 24/04/18}
+    I have changed some of the constructors prior to testing because upon reading back through, some clearly won't work as they don't set the working list or actually initialize the master list at all.
+    I have added masterList initialization to the second and third constructors, and WorkingList intialization to the second constructor:
+    \begin{lstlisting}[language=C]
+        public productList()
+		{
+			var data = adapter.GetData();
+			int i = 0;
+			masterList = new product[data.Rows.Count];
+			foreach (DataRow row in data.Rows)
+			{
+				masterList[i] = new product(row);
+				i++;
+			}
+			WorkingList = masterList;
+		}
+		public productList(string[] productNames)
+		{
+			int i = 0;
+			masterList = new product[productNames.Length];
+			foreach (string str in productNames)
+			{
+				masterList[i] = new product(str);
+				i++;
+			}
+			WorkingList = masterList;
+		}
+		public productList(DataTable data)
+		{
+			int i = 0;
+			masterList = new product[data.Rows.Count];
+			foreach (DataRow row in data.Rows)
+			{
+				masterList[i] = new product(row);
+				i++;
+			}
+			WorkingList = masterList;
+		}
+		public productList(product[] products)
+		{
+			masterList = products;
+			WorkingList = masterList;
+		}
+    \end{lstlisting}
+    There are several basic methods which are included above the constructors, detailed here:
+    \begin{itemize}
+        \item \textbf{resetWorkingList} just discards the current workingList and sets it to the contents of the master list.
+        It is there for when sorting and filtering need to be cleared and removed.
+        \item \textbf{generateControls} generates an array of productPanels, one for each product in the working list and returns it.
+        \item \textbf{setWorkingList} exists purely so that outside classes can set the contents of the workingList.
+        This is largely just a contingency for the rare occasion where I may need to set the WorkingList outside the class but I suspect I will not need it and so it will also likely not make it into the final application.
+    \end{itemize}
+    \subsubsection{Filtering and Sorting}
+    Unfortunately, the following code is extremely long and so this section will be more difficult to follow.
+    The class contains extensive logic for filtering and sorting the contents of the workingList, primarily for the use of the storefront page (the code has been kept within the class without any web based dependencies in the event that I need to be able to use this logic on any other page).
+    The sheer length of this code is mostly due to a limitation of C\# which doesn't allow generics to filter what types they accept; if this wasn't the case I would be able to make a highly abstracted, generic quicksort function which all these methods could use but as it is I can't dictate what types the function would accept.
+    \\
+    All the logic is presented to outside code using only two methods, simply "sort" and "filter".
+    These methods use a switch to find what type of sort to apply and what field to apply it to; this keeps the outside appearance simple and interaction with the class understandable, letting the code within the class organise the implementation of quicksort and filtering.
+    \begin{lstlisting}[language=C]
 		public void sort(bool ascending, string sortType)
 		{
 			switch (sortType)

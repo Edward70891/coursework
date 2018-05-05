@@ -263,11 +263,13 @@ namespace mainCoursework
 		public productList(string[] productNames)
 		{
 			int i = 0;
+			masterList = new product[productNames.Length];
 			foreach (string str in productNames)
 			{
 				masterList[i] = new product(str);
 				i++;
 			}
+			WorkingList = masterList;
 		}
 		/// <summary>
 		/// Initialize the list with a datatable
@@ -276,6 +278,7 @@ namespace mainCoursework
 		public productList(DataTable data)
 		{
 			int i = 0;
+			masterList = new product[data.Rows.Count];
 			foreach (DataRow row in data.Rows)
 			{
 				masterList[i] = new product(row);
