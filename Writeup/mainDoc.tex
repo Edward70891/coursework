@@ -1344,13 +1344,15 @@ public partial class customerLogin : System.Web.UI.Page
         \item \textbf{setWorkingList} exists purely so that outside classes can set the contents of the workingList.
         This is largely just a contingency for the rare occasion where I may need to set the WorkingList outside the class but I suspect I will not need it and so it will also likely not make it into the final application.
     \end{itemize}
-    \subsubsection{Filtering and Sorting}
+    \newpage
+    \paragraph{Filtering and Sorting}
     Unfortunately, the following code is extremely long and so this section will be more difficult to follow.
     The class contains extensive logic for filtering and sorting the contents of the workingList, primarily for the use of the storefront page (the code has been kept within the class without any web based dependencies in the event that I need to be able to use this logic on any other page).
     The sheer length of this code is mostly due to a limitation of C\# which doesn't allow generics to filter what types they accept; if this wasn't the case I would be able to make a highly abstracted, generic quicksort function which all these methods could use but as it is I can't dictate what types the function would accept.
     \\
     All the logic is presented to outside code using only two methods, simply "sort" and "filter".
     These methods use a switch to find what type of sort to apply and what field to apply it to; this keeps the outside appearance simple and interaction with the class understandable, letting the code within the class organise the implementation of quicksort and filtering.
+    \paragraph{Sorting}
     \begin{lstlisting}[language=C]
 		public void sort(bool ascending, string sortType)
 		{
@@ -1631,7 +1633,30 @@ public partial class customerLogin : System.Web.UI.Page
 
 			return result;
 		}
-
+    \end{lstlisting}
+    I am going to explain the central method and genericize the four sort methods since they are identical, but compare different fields.
+    It should be noted that in order to compare strings, I have used the string.CompareTo() method, which returns 1 if the string provided comes before the string the method is called from in the alphabet.
+    \begin{itemize}
+        \item \textbf{sort} is the method which manages all the other methods.
+        It takes a boolean which dictates whether to sort by ascending or descending (true for ascending and false for descending) and a string which represent the sort type.
+        The string would do well to be replaced by an enumerator which would mean only a handful of options could be picked and enforced, as opposed to my current solution which just throws an exception if the contents of the string is not recognised as a sort type.
+        The body of this method is a switch which determines what to sort by, and calls the appropriate method to sort the working list.
+        \item \textbf{Individual Sorts} These are the four methods which actually contain the quicksort logic:
+        \begin{itemize}
+            \item sortPrice
+            \item sortStock
+            \item sortBand
+            \item sortName
+        \end{itemize}
+        Each method takes two parameters, the ascending/descending bool and the product[] list to be sorted.
+        The main method calls them using the bool that it itself was passed, and points them at the working list.
+        Each one contains an almost line-by-line accurate implementation of the quicksort algorithm I outlined in the algorithms section; with the addition of a check whether or not to sort by ascending inserted into the main comparison logic.
+        In other words, I have added an extra "else if" to check which list to add the current element to depending on the ascending bool.
+    \end{itemize}
+    \paragraph{Filtering}
+    The code for filtering is much shorter as all that is needed is a for loop that goes through each element and checks if it needs removing or not.
+    As such, there is only one filter function which, similarly to the sort() method, contains a switch which dictates what to filter by.
+    \begin{lstlisting}[language=C]
 		public void filter(string field, string value, bool whitelist)
 		{
 			List<product> filteredList = new List<product>();
@@ -1709,7 +1734,16 @@ public partial class customerLogin : System.Web.UI.Page
 					throw new ArgumentException("The filter field must be one of the specified values");
 			}
 		}
-
+    \end{lstlisting}
+    Within this code, there are multiple if statements apparently needlessly repeated since they all do essentially the same thing, just to different fields.
+    This is indeed an inefficient solution but there doesn't appear to be any alternative.
+    Revisions will probably follow.
+    \\
+    The \textbf{filter} method takes two strings, one for the field and one for the value to search for, and a boolean which dictates whether it it whitelisting or blacklisting (true for whitelist, false for blacklist).
+    It initializes a List class of type product and uses a switch to determine what code to execute, depending on the value of the field string passed to the method.
+    Within each case, a for loop runs which goes through element by element; within that for loop is an if statement checking whether or not we are whitelisting and within each of those code which adds the current value to the earlier initialized list depending on whether it matches the search or it doesn't (according to the whitelist/blacklist).
+    At the end of the for loop, the working list is set to the output of List.ToArray() which is explained earlier.
+    \begin{lstlisting}[language=C]
 		public void removeOutOfStock()
 		{
 			List<product> filteredList = new List<product>();
@@ -1726,6 +1760,8 @@ public partial class customerLogin : System.Web.UI.Page
 		}
     }
     \end{lstlisting}
+    This last piece of code is still designed for filtering but exists as it's own method because it is more convenient.
+    The method simply makes a new list and adds all the objects from the masterlist which are not out of stock using a for loop, converts it to an array and sets that to be the working list.
     \subsection{Validation}
     \subsection{Reviews}
     
