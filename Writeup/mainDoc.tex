@@ -656,7 +656,10 @@ endfunction
         \centering
     \end{figure}
     \paragraph{}
-
+    I decided on a muted colour scheme to match the idea of vinyl records for the website.
+    Note that the red text and elements in the image are labelling for the purpose of this document, and will not be present in the finished product.
+    There may also be objects at the bottom of the page containing things like copyright notices, contant information and disclaimers although I am as yet undecided and will consult the client.
+    
     \newpage
     \subsubsection{Employee Base Layout}
     \begin{figure}[h]
@@ -664,15 +667,12 @@ endfunction
         \centering
     \end{figure}
     \paragraph{}
-
-    \subsection{Test Data}
-    
-    
+    As before, the blue text and boxes are labels for the sake of illustration.
     \section{Iterative Development}
     \subsection{Data Base}
     Above, I described the contents of each table in the database.
     This section is here to provide a visualisation of the relationships between the tables with a screenshot of the Access relationships screen:
-    \begin{figure}
+    \begin{figure}[!h]
         \centering
         \includegraphics[width=\textwidth]{dataBaseScreen.png}
     \end{figure}
@@ -850,6 +850,108 @@ public class customSecurity
     Each table is shown in a box, with the adaptor (the containing object with all the user-defined queries in it) in an adjoining box below that
     Data relationships are shown with lines connecting the tables, data fields by rows in the table box and queries in the adaptor box.
     \newpage
+    \subsubsection{Customer Master Page}
+    There are two master pages on my project.
+    Each of them contains all the references needed for an ASP page, and some C\# code to supplement them.
+    The master customer page contains the navbar, which consists of static links with no code behind them but HTML and a label showing the login status of the current user, a placeholder panel for the content and an area under a horizontal rule which contains a button to sign them out (if they are signed in) and a button to redirect them to the employee side of the site if they are logged in as an employee.
+    The code behind this is:
+    \begin{lstlisting}[language=C]
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (Convert.ToString(Session["currentUser"]) == "")
+    {
+        usernameLabel.Text = "No user logged in";
+        signOut.Visible = false;
+        userProfileNavbar.Visible = false;
+    }
+    else
+    {
+        usernameLabel.Text = "Welcome,\n" + Session["currentUser"] + "!";
+        signOut.Visible = true;
+    }
+
+    if (Convert.ToString(Session["isLoggedIn"]) == "True")
+    {
+        loginNavbar.Visible = false;
+    }
+
+    if (Convert.ToString(Session["userType"]) != "employee")
+    {
+        employeeRedirect.Visible = false;
+    }
+}
+
+protected void signOut_Click(object sender, EventArgs e)
+{
+    Session["isLoggedIn"] = "False";
+    Session["currentUser"] = "";
+    Session["userIsAdmin"] = "False";
+    Session["userType"] = "";
+    customLogging.newEntry("User logged out");
+    Server.Transfer("~/default.aspx", false);
+}
+
+protected void employeeRedirect_Click(object sender, EventArgs e)
+{
+    Server.Transfer("~/staffOverview.aspx", false);
+}
+    \end{lstlisting}
+    \paragraph{Page\_Load} Determines whether to display various controls at the bottom of the page.
+    It first checks if a user is logged in by converting the currentUser session to a string and seeing if it is blank.
+    If it is, the label at the footer is set to show "No User Logged In", the sign out button is set to be invisible (and therefore uninteractable; there is no need to hide the employee redirect button because this is invisible by default) and an element on the navbar which would redirect the user to their profile is set to be invisible.
+    If not, the button is confirmed to be visible and the label is set to show the current user's name with a welcome message.
+    If the "isLoggedIn" session is set to true, the login link on the navbar is hidden.
+    If the "userType" session isn't marked as employee, the employee redirect button is set to be invisible.
+    \paragraph{signOut\_Click} is the click event for the sign out button.
+    It resets all the user-related sessions to their default state, logs the sign out and redirects the user to the home page.
+    \paragraph{employeeRedirect\_Click} just binds the employee redirect button to redirect the user to the employee page.
+    \newpage
+    \subsubsection{Employee Master Page}
+    The employee master page contains the navbar, the content placeholder and the footer with the sign out button on it just as the customer master does.
+    \begin{lstlisting}[language=C]
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (Convert.ToString(Session["userType"]) != "employee")
+    {
+        Server.Transfer("~/default.aspx", true);
+    }
+    if (Convert.ToString(Session["isLoggedIn"]) == "True")
+    {
+        loginNavbar.Visible = false;
+    }
+    usernameLabel.Text = "Welcome\n, employee " + Session["currentUser"] + "!";
+    signOut.Visible = true;
+}
+
+protected void signOut_Click(object sender, EventArgs e)
+{
+    Session["isLoggedIn"] = "False";
+    Session["currentUser"] = "";
+    Session["userIsAdmin"] = "False";
+    Session["userType"] = "";
+    customLogging.newEntry("User logged out");
+    Server.Transfer("~/default.aspx", false);
+}
+
+protected void employeeIn_Click(object sender, EventArgs e)
+{
+    Server.Transfer("~/employeeLogin.aspx", false);
+}
+
+protected void customerRedirect_Click(object sender, EventArgs e)
+{
+    Server.Transfer("~/default.aspx", false);
+}
+    \end{lstlisting}
+    \paragraph{Page\_Load} serves a similar purpose to on the customer page, checking sessions and performing the appropriate actions.
+    First and foremost, if the user isn't marked as an employee with userType, they are immediately redirected to the customer home page.
+    This prevents unauthorized access to the employee side of the website, so all page which inherit from this master page will be inaccessible to anyone not marked as an employee.
+    The username label is set to show a welcome message and the sign out button is set to be visible.
+    \paragraph{signOut\_Click} is the event method for when the sign out button is clicked.
+    It does exactly the same thing as the sign out button on the customer master page, clearing all sessions and redirecting the user to the customer home page.
+    \paragraph{employeeIn\_Click} just redirects the user to the employee login page.
+    \paragraph{customerRedirect\_Click} just redirects the user to the customer half of the site because this is difficult to access for an employee otherwise.
+    \newpage
     \subsubsection{Log In}
     \begin{lstlisting}[language=C]
 public partial class customerLogin : System.Web.UI.Page
@@ -902,13 +1004,17 @@ public partial class customerLogin : System.Web.UI.Page
     }
 }
     \end{lstlisting}
-    \paragraph{}There are two log in pages in my project, one for the customers and one for the employees; because the customer and employee tables are seperate, it is more convenient to seperate the logic for each table into two seperate pages/files.
+    \paragraph{The Page}
+    There are two log in pages in my project, one for the customers and one for the employees; because the customer and employee tables are seperate, it is more convenient to seperate the logic for each table into two seperate pages/files.
     In terms of appearance, the two pages are identical but for the inclusion of a button on the customer page which redirects the user to the customer register page.
     Otherwise, both pages contain a text box for the user name of the user and their password (customerUsernameBox and customerPasswordBox or equivalent), a submit credentials button (submitCustomerCredentialsButton or equivalent) and finally a button to redirect the user to the employee login or customer login as appropriate (employeeRedirect or equivalent).
-    \paragraph{Page\_Load} This page should not be accessible by people that are already logged in, as logging in again is unnecessary if they are already logged in and could cause unforeseen problems.
+    Both pages inherit from Customer.Master.
+    \paragraph{Page\_Load}
+    This page should not be accessible by people that are already logged in, as logging in again is unnecessary if they are already logged in and could cause unforeseen problems.
     This checks the session "isLoggedIn", and if it tagged as true then it redirects the user to the relevant homepage with the Server.Transfer method (this is used on almost all pages to redirect people - it's arguments are the path of the page to redirect to and whether to "preserve" the form it is currently loading, for my purposes this is always false).
     In the employee file, it will redirect to the employee homepage, which will then redirect to the customer homepage if it is a customer logged in.
-    \paragraph{submitCustomerCredentialsButton\_click} A method called when the submit button is clicked (ASP automatically generates blank methods linked to each button's onclick event, comprised of the name of the button followed by "\_click").
+    \paragraph{submitCustomerCredentialsButton\_click}
+    A method called when the submit button is clicked (ASP automatically generates blank methods linked to each button's onclick event, comprised of the name of the button followed by "\_click").
     Within this method, I have used two nested if statements with boolean logic to check the inputs for validity.
     The first ensures that both input boxes are free of SQL characters with customSecurity.sanitizeCheck and returns the appropriate error message to the return box if not, while the second runs a query against the database:
     \begin{lstlisting}[language=SQL]
@@ -2179,6 +2285,7 @@ protected void resetFilter_Click(object sender, EventArgs e)
     \end{lstlisting}
     \paragraph{The Page}
     The page contains a panel full of various controls for filtering and sorting the contents of the page and an empty panel in the content called productsDisplayPanel.
+    It inherits from Customer.Master.
     \paragraph{The Code}
     The variables on this page are:
     \begin{itemize}
@@ -2339,6 +2446,113 @@ else
 }
 returnLabel.Text = amountToAdd.Text + " " + currentProduct.productName + "s added to your cart!";
     \end{lstlisting}
+    \newpage
+    \subsubsection{Customer Registration}
+    This page is univesally accessible through a link on the customer log in page, as I mentioned in the documentation for that.
+    \begin{lstlisting}[language=C]
+private defaultDataSetTableAdapters.customersTableAdapter customersQueryTable = new defaultDataSetTableAdapters.customersTableAdapter();
+protected void Page_Load(object sender, EventArgs e)
+{
+
+}
+
+protected void registerButton_Click(object sender, EventArgs e)
+{
+    if (passwordBox.Text == confirmPasswordBox.Text)
+    {
+        int dump;
+        if (int.TryParse(phoneNumberBox.Text, out dump))
+        {
+            if (customSecurity.sanitizeCheck(new string[] { usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text }))
+            {
+                try
+                {
+                    customersQueryTable.newCustomer(usernameBox.Text, customSecurity.generateMD5(passwordBox.Text), address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+                    customLogging.newEntry("Someone registered the user " + usernameBox.Text);
+                    returnLabel.Text = "User " + usernameBox.Text + " created";
+                }
+                catch (Exception except)
+                {
+                    returnLabel.Text = "Registration failed, reason: " + except.Message;
+                }
+            }
+            else
+            {
+                returnLabel.Text = customSecurity.sanitizeErrorMessage;
+            }
+        }
+        else
+        {
+            phoneNumReturn.Text = "The phone number must be digits only!";
+        }
+    }
+    else
+    {
+        confirmPasswordBox.Text = "";
+        passwordBoxReturn.Text = "The passwords don't match!";
+    }
+}
+
+protected void confirmPasswordBox_TextChanged(object sender, EventArgs e)
+{
+    passwordsMatchCheck();
+}
+
+protected void passwordBox_TextChanged(object sender, EventArgs e)
+{
+    passwordsMatchCheck();
+}
+
+private void passwordsMatchCheck()
+{
+    if (passwordBox.Text != confirmPasswordBox.Text)
+    {
+        passwordBoxReturn.Text = "The passwords don't match!";
+    }
+}
+    \end{lstlisting}
+    \paragraph{The Page}
+    On the page there are text boxes for:
+    \begin{itemize}
+        \item Username
+        \item Password
+        \item Confimation of Password (to reduce the chances the user types the wrong password in since both boxes are set to not show their contents)
+        \item First Name
+        \item Surname
+        \item Address Line 1
+        \item Address Line 2
+        \item Town/City
+        \item Post Code
+        \item Phone Number
+    \end{itemize}
+    Additionally, there is a dropdown box for the user to pick a country from, two labels to show messages to the user and a button to submit the details ggiven.
+    \paragraph{The Code}
+    The only variable on the page is \textbf{customersQueryTable}, which serves the same purpose as adaptor on other pages.
+    It is the DataSet adaptor for the customers table in the database and manage all queries to be run on that table.
+    \\
+    The methods on the page are:
+    \begin{itemize}
+        \item \textbf{Page\_Load} serves no purpose in this page because nothing needs to happen on the page when it loads.
+        \item \textbf{registerButton\_Click} performs a series of checks on the contents of the boxes before inserting the information into the database using a set of if statements.
+        The checks it performs are:
+        \begin{itemize}
+            \item Whether the password box and confirm password boxes' contents match.
+            If they don't, the process is cancelled and the relevant return label shows an appropriate message.
+            \item If the phone number actually parses as an integer.
+            This is necessary because I can't set the text mode of the phone number text box to "number", because it will then remove 0s from the beginning and other related things.
+            \item A sanitize check with customSecurity.sanitizeCheck() to ensure all boxes are free of SQL sensitive characters.
+            All these boxes' contents will be inserted into the database, so this is necessary to prevent SQL injection.
+        \end{itemize}
+        Once all these checks are complete, a try-catch statement is used to run the necessary query on the database.
+        I enclosed the database query like this because when I wrote this I wasn't sure whether or not to expect any errors but I will likely revise it.
+        The query run is:
+        \begin{lstlisting}[language=SQL]
+INSERT INTO customers (username, [password], addressLine1, adressLine2, city, country, postCode, phoneNumber, forename, surname)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        \end{lstlisting}
+        This simply adds values to all the new required fields.
+        The creation is logged, and the return label is appropriately updated with a message.
+    \end{itemize}
     \subsection{Validation}
     \subsection{Reviews}
     

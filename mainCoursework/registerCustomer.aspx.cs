@@ -46,11 +46,11 @@ namespace mainCoursework
 					phoneNumReturn.Text = "The phone number must be digits only!";
 				}
 			}
-			//else
-			//{
-			//	confirmPasswordBox.Text = "";
-			//	passwordBoxReturn.Text = "The passwords don't match!";
-			//}
+			else
+			{
+				confirmPasswordBox.Text = "";
+				passwordBoxReturn.Text = "The passwords don't match!";
+			}
 		}
 
 		//The events that catch the text of either password box changing
