@@ -18,43 +18,33 @@ namespace mainCoursework
 
 		protected void registerButton_Click(object sender, EventArgs e)
 		{
-			if (passwordBox.Text == confirmPasswordBox.Text)
-			{
-				int dump;
-				if (int.TryParse(phoneNumberBox.Text, out dump))
-				{
-					if (customSecurity.sanitizeCheck(new string[] { usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text }))
-					{
-						try
-						{
-							customersQueryTable.newCustomer(usernameBox.Text, customSecurity.generateMD5(passwordBox.Text), address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
-							customLogging.newEntry("Someone registered the user " + usernameBox.Text);
-							returnLabel.Text = "User " + usernameBox.Text + " created";
-						}
-						catch (Exception except)
-						{
-							returnLabel.Text = "Registration failed, reason: " + except.Message;
-						}
-					}
-					else
-					{
-						returnLabel.Text = customSecurity.sanitizeErrorMessage;
-					}
-				}
-				else
-				{
-					phoneNumReturn.Text = "The phone number must be digits only!";
-				}
-			}
-			else
+			if (passwordBox.Text != confirmPasswordBox.Text)
 			{
 				confirmPasswordBox.Text = "";
 				passwordBoxReturn.Text = "The passwords don't match!";
+				return;
 			}
+
+			int dump;
+			if (!int.TryParse(phoneNumberBox.Text, out dump))
+			{
+				phoneNumReturn.Text = "The phone number must be digits only!";
+				return;
+			}
+
+			if(!customSecurity.sanitizeCheck(new string[] { usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text }))
+			{
+				returnLabel.Text = customSecurity.sanitizeErrorMessage;
+				return;
+			}
+			
+			customersQueryTable.newCustomer(usernameBox.Text, customSecurity.generateMD5(passwordBox.Text), address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+			customLogging.newEntry("Someone registered the user " + usernameBox.Text);
+			returnLabel.Text = "User " + usernameBox.Text + " created";
 		}
 
 		//The events that catch the text of either password box changing
-		protected void confirmPasswordBox_TextChanged(object sender, EventArgs e)
+			protected void confirmPasswordBox_TextChanged(object sender, EventArgs e)
 		{
 			passwordsMatchCheck();
 		}

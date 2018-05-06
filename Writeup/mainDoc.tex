@@ -2553,6 +2553,34 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         This simply adds values to all the new required fields.
         The creation is logged, and the return label is appropriately updated with a message.
     \end{itemize}
+    \paragraph{Revision 05/05/18}
+    I decided the horrendous set of nested if statements could easily be reorganised and that the try-catch statement could be removed since the code isn't likely to throw exceptions.
+    \textbf{registerButton\_Click} now contains:
+    \begin{lstlisting}[language=C]
+if (passwordBox.Text != confirmPasswordBox.Text)
+{
+    confirmPasswordBox.Text = "";
+    passwordBoxReturn.Text = "The passwords don't match!";
+    return;
+}
+
+int dump;
+if (!int.TryParse(phoneNumberBox.Text, out dump))
+{
+    phoneNumReturn.Text = "The phone number must be digits only!";
+    return;
+}
+
+if(!customSecurity.sanitizeCheck(new string[] { usernameBox.Text, passwordBox.Text, address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text }))
+{
+    returnLabel.Text = customSecurity.sanitizeErrorMessage;
+    return;
+}
+
+customersQueryTable.newCustomer(usernameBox.Text, customSecurity.generateMD5(passwordBox.Text), address1Box.Text, address2Box.Text, cityBox.Text, countryDropdown.SelectedValue, postcodeBox.Text, phoneNumberBox.Text, forenameBox.Text, surnameBox.Text);
+customLogging.newEntry("Someone registered the user " + usernameBox.Text);
+returnLabel.Text = "User " + usernameBox.Text + " created";
+    \end{lstlisting}
     \subsection{Validation}
     \subsection{Reviews}
     
