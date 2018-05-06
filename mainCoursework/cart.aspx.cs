@@ -70,7 +70,7 @@ namespace mainCoursework
 		{
 			foreach(cartItem current in cartArray)
 			{
-				productPanel panel = new productPanel(current.product.productInfo);
+				productPanel panel = new productPanel(current.product);
 				//Remove stockTag and descriptionTag; maybe this works?
 				panel.Controls.Remove(panel.Controls[3]);
 				panel.Controls.Remove(panel.Controls[3]); //Removing 3 again because the descriptionTag has fallen into the newly opened space
@@ -79,7 +79,7 @@ namespace mainCoursework
 				TextBox amountBox = new TextBox()
 				{
 					CssClass = "amountBox",
-					ID = current.product.productInfo.productName + "_CartAmountBox",
+					ID = current.product.productName + "_CartAmountBox",
 					Text = Convert.ToString(current.amount),
 					TextMode = TextBoxMode.Number,
 					AutoPostBack = true
@@ -91,9 +91,9 @@ namespace mainCoursework
 				Button removeButton = new Button()
 				{
 					CssClass = "removeButton",
-					ID = current.product.productInfo.productName + "_CartRemoveButton",
+					ID = current.product.productName + "_CartRemoveButton",
 					Text = "Remove",
-					CommandArgument = current.product.productInfo.productName
+					CommandArgument = current.product.productName
 				};
 				removeButton.Click += new EventHandler(removeButton_Click);
 				removeButton.Attributes.Add("runat", "server");
@@ -113,7 +113,7 @@ namespace mainCoursework
 			int index = 0;
 			foreach (cartItem current in cartArray)
 			{
-				if (current.product.productInfo.productName == productName)
+				if (current.product.productName == productName)
 				{
 					index = i;
 				}
@@ -135,7 +135,7 @@ namespace mainCoursework
 			int index = 0;
 			foreach(cartItem current in cartArray)
 			{
-				if (current.product.productInfo.productName == productName)
+				if (current.product.productName == productName)
 				{
 					index = i;
 					break;
@@ -165,10 +165,10 @@ namespace mainCoursework
 			//Check for each item that there is actually a sufficient amount of products in stock to make the purchase
 			foreach (cartItem current in cartArray)
 			{
-				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName));
+				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productName));
 				if (currentStock < current.amount)
 				{
-					returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productInfo.productName + " in stock!";
+					returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productName + " in stock!";
 					return;
 				}
 			}
@@ -177,8 +177,8 @@ namespace mainCoursework
 			//Insert a new order and update the stock for all the items in the cart
 			foreach (cartItem current in cartArray)
 			{
-				ordersAdaptor.newOrder(DateTime.Now, current.product.productInfo.price * current.amount, current.amount, Convert.ToString(Session["currentUser"]), current.product.productInfo.productName);
-				productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName)) - current.amount, current.product.productInfo.productName);
+				ordersAdaptor.newOrder(DateTime.Now, current.product.price * current.amount, current.amount, Convert.ToString(Session["currentUser"]), current.product.productName);
+				productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productName)) - current.amount, current.product.productName);
 			}
 			//Clear the cart table of the user's old cart, refresh the page and thank the user
 			cartsTableAdapter.deleteCart(Convert.ToString(Session["CurrentUser"]));

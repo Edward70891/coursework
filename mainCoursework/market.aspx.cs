@@ -66,9 +66,9 @@ namespace mainCoursework
 				//A button to add them to the stall list
 				Button addToStall = new Button()
 				{
-					ID = productsList.list[i].productInfo.productName + "AddToStall",
+					ID = productsList.list[i].productName + "AddToStall",
 					Text = "Add",
-					CommandArgument = productsList.list[i].productInfo.productName
+					CommandArgument = productsList.list[i].productName
 				};
 				addToStall.Click += new EventHandler(addToStall_Click);
 				addToStall.Attributes.Add("runat", "server");
@@ -111,7 +111,7 @@ namespace mainCoursework
 			//Generate the productPanel for all the items and add an amount text box to it with a text change event
 			foreach (marketItem current in takingItems)
 			{
-				productPanel panel = new productPanel(current.product.productInfo);
+				productPanel panel = new productPanel(current.product);
 				panel.ID = panel.ID + "Taking";
 				foreach (Control currentControl in panel.Controls)
 				{
@@ -122,7 +122,7 @@ namespace mainCoursework
 				}
 				TextBox amountBox = new TextBox()
 				{
-					ID = current.product.productInfo.productName + "_AmountBox",
+					ID = current.product.productName + "_AmountBox",
 					CssClass = "marketAmountBox",
 					Text = Convert.ToString(current.amount)
 				};
@@ -142,7 +142,7 @@ namespace mainCoursework
 			bool existing = false;
 			foreach (marketItem current in takingItems)
 			{
-				if (current.product.productInfo.productName == btn.CommandArgument)
+				if (current.product.productName == btn.CommandArgument)
 				{
 					existing = true;
 				}
@@ -172,7 +172,7 @@ namespace mainCoursework
 			int index = 0;
 			foreach (marketItem current in takingItems)
 			{
-				if (current.product.productInfo.productName == productName)
+				if (current.product.productName == productName)
 				{
 					break;
 				}
@@ -188,10 +188,10 @@ namespace mainCoursework
 			//Check that there's enough stock in the database to take that much to the stall and if there isn't, don't take anything out
 			foreach (marketItem current in takingItems)
 			{
-				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName));
+				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productName));
 				if (currentStock < current.amount)
 				{
-					returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productInfo.productName;
+					returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productName;
 					return;
 				}
 			}
@@ -200,9 +200,9 @@ namespace mainCoursework
 			foreach (marketItem current in takingItems)
 			{
 				//Insert a stall item
-				adaptor.newStallItem(current.product.productInfo.productName, current.amount, Convert.ToString(Session["currentUser"]));
+				adaptor.newStallItem(current.product.productName, current.amount, Convert.ToString(Session["currentUser"]));
 				//Subtract the stock from the products table
-				productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productInfo.productName)) - current.amount, current.product.productInfo.productName);
+				productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productName)) - current.amount, current.product.productName);
 			}
 			populatePage();
 		}
