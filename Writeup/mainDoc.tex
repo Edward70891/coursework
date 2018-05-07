@@ -1293,6 +1293,82 @@ public class productPanel : System.Web.UI.WebControls.Panel
         \item \textbf{descriptionTag} is a label which will hold the description of the product.
         It's Text property is set to the description of the product using info.
     \end{itemize}
+    \paragraph{Revision 29/04/18}
+    There are some issues with styling using the current layout.
+    I decided to create another panel to hold all the elements except the image so that I could apply styling to the positioning of the non-image elements together:
+    \begin{lstlisting}[language=C]
+public product info { get; }
+public productPanel(product productInfo)
+{
+    info = productInfo;
+
+    this.CssClass = "productDisplayPanel";
+    this.ID = info.productName + "Panel";
+
+    Image displayedImage = new Image()
+    {
+        CssClass = "productImage",
+        ID = info.productName + "ImageTag",
+        ImageUrl = "~/images/" + info.imagePath,
+        Height = 100,
+        Width = 100
+    };
+    displayedImage.Attributes.Add("runat", "server");
+    this.Controls.Add(displayedImage);
+
+    Panel textWrapper = new Panel()
+    {
+        CssClass = "textWrapper",
+        ID = info.productName + "TextWrapper"
+    };
+    textWrapper.Attributes.Add("runat", "server");
+
+    Label nameTag = new Label()
+    {
+        CssClass = "nameTag",
+        Text = info.displayName,
+        ID = info.productName + "NameTag"
+    };
+    nameTag.Attributes.Add("runat", "server");
+    textWrapper.Controls.Add(nameTag);
+
+    Label priceTag = new Label()
+    {
+        CssClass = "priceTag",
+        Text = "£" + commonClasses.common.formatPrice(info.price),
+        ID = info.productName + "PriceTag"
+    };
+    priceTag.Attributes.Add("runat", "server");
+    textWrapper.Controls.Add(priceTag);
+
+    Label stockTag = new Label()
+    {
+        CssClass = "stockTag",
+        ID = info.productName + "StockTag"
+    };
+    if (info.stock == 0)
+    {
+        stockTag.Text = "Out of stock";
+    }
+    else
+    {
+        stockTag.Text = Convert.ToString(info.stock) + " in stock";
+    }
+    stockTag.Attributes.Add("runat", "server");
+    textWrapper.Controls.Add(stockTag);
+
+    Label descriptionTag = new Label()
+    {
+        CssClass = "descriptionTag",
+        Text = Convert.ToString(info.description),
+        ID = info.productName + "DescriptionTag"
+    };
+    descriptionTag.Attributes.Add("runat", "server");
+    textWrapper.Controls.Add(descriptionTag);
+
+    this.Controls.Add(textWrapper);
+}
+    \end{lstlisting}
     \newpage
     \subsubsection{productList Class}
     This class contains all the logic for sorting, filtering and otherwise comparing products.
@@ -3327,9 +3403,61 @@ if (username == "master" || username == "Market")
     
     \section{Testing}
     \subsection{To Inform Development}
+    \subsubsection{Employee Login}
+    This page is relatively simple, and so I am expecting few problems.
+    The master account exists by default, as I manually added it and it is designed so that it cannot be removed or changed without manual intervention.
+    Once the project is complete, I will remove, disable or change the account's password.
+    The testing is as follows:
+    \begin{enumerate}
+        \item \textbf{SQL Injection}.
+        I tried a common SQL injection: "; DROP ALL TABLES; --" which would ordinarily delete all the tables in my database.
+        The application rejects the ";" so no SQL injection will work here.
+        Note that the yellow boxes indicate my browser has autofilled them according to my saved "master" and password combination.
+        This does not compromise testing.
+        \begin{figure}[h]
+            \includegraphics[height=3.5cm]{testing/empLogin1.png}
+            \centering
+        \end{figure}
+        \item \textbf{Logging in with incorrect credentials}.
+        I attempted a multitude of situations:
+        \begin{enumerate}
+            \item Using an existing username with a bad password.
+            \begin{figure}[H]
+                \includegraphics[height=3.5cm]{testing/empLogin2.png}
+                \centering
+            \end{figure}
+            \item Using a fictional username and password.
+            Note that the password box is blank here as it should be because I am using a different username so my browser does not attempt to correct me.
+            \begin{figure}[H]
+                \includegraphics[height=3.5cm]{testing/empLogin3.png}
+                \centering
+            \end{figure}
+            \item Leaving the password box blank with a known username.
+            \begin{figure}[H]
+                \includegraphics[height=3.5cm]{testing/empLogin4.png}
+                \centering
+            \end{figure}
+            \item Leaving the password box blank with a fictional username.
+            \begin{figure}[H]
+                \includegraphics[height=3.5cm]{testing/empLogin5.png}
+                \centering
+            \end{figure}
+            \item Leaving both boxes blank.
+            \begin{figure}[H]
+                \includegraphics[height=3.5cm]{testing/empLogin6.png}
+                \centering
+            \end{figure}
+        \end{enumerate}
+        \item \textbf{Correct Credentials}.
+        This works as expected, redirecting me to the employee homepage.
+    \end{enumerate}
+    \subsubsection{Customer Login}
+    This uses practically identical code to the employee login page, so I have kept testing brief.
+    \begin{enumerate}
+        \item \textbf{SQL Injection}
+    \end{enumerate}
     \subsubsection{Cart Page}
     The cart page employs a lot of untested logic, and so requires relatively extensive testing.
-    \paragraph{Initial Problems}
     \subsection{To Inform Evaluation}
     
     
