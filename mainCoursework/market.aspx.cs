@@ -120,6 +120,13 @@ namespace mainCoursework
 						currentControl.ID = currentControl.ID + "Taking";
 					}
 				}
+				foreach (Control currentControl in panel.Controls[1].Controls)
+				{
+					if (currentControl.ID != "" && currentControl.ID != null)
+					{
+						currentControl.ID = currentControl.ID + "Taking";
+					}
+				}
 				TextBox amountBox = new TextBox()
 				{
 					ID = current.product.productName + "_AmountBox",

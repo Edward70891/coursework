@@ -22,28 +22,43 @@ namespace mainCoursework
 		protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)
 		{
 			string productName = productsTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
-				//Runs if the delete button is pressed
-				//Checks if this is the second button press
-				if ((deletingProductsPersistent.deleting) && (productName == deletingProductsPersistent.product))
+			//Runs if the delete button is pressed
+			//Checks if this is the second button press
+			if ((deletingProductsPersistent.deleting) && (productName == deletingProductsPersistent.product))
+			{
+				//Returns that the product has been deleted
+				returnLabel.Text = "Product " + productName + " was deleted";
+				//Deletes the product and it's image, logs the action, posts the result to the box then clears it
+				System.IO.File.Delete(Server.MapPath("~/images/") + productName);
+				//Delete all the cart items of this product
+				using (var cartsAdaptor = new defaultDataSetTableAdapters.cartsTableAdapter())
 				{
-					//Returns that the product has been deleted
-					returnLabel.Text = "Product " + productName + " was deleted";
-					//Deletes the product and it's image, logs the action, posts the result to the box then clears it
-					System.IO.File.Delete(Server.MapPath("~/images/") + productName);
-					productQueryTable.deleteProduct(productName);
-					returnLabel.Text = "Product deleted";
-					customLogging.newEntry("The product " + productName + " was deleted");
-					productsTable.DataBind();
-					System.Threading.Thread.Sleep(2000);
-					returnLabel.Text = "";
+					cartsAdaptor.deleteProducts(productName);
 				}
-				else
+				//Delete all the market items of this product
+				using (var marketAdaptor = new defaultDataSetTableAdapters.marketTableAdapter())
 				{
-					//Runs on first click, warns and sets up second click using external class
-					returnLabel.Text = "Click again to delete - note that this cannot be undone!";
-					deletingProductsPersistent.deleting = true;
-					deletingProductsPersistent.product = productName;
+					marketAdaptor.deleteProducts(productName);
 				}
+				//Delete all the order items of this product
+				using (var ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter())
+				{
+					ordersAdaptor.removeProducts(productName);
+				}
+				productQueryTable.deleteProduct(productName);
+				returnLabel.Text = "Product deleted";
+				customLogging.newEntry("The product " + productName + " was deleted");
+				productsTable.DataBind();
+				System.Threading.Thread.Sleep(2000);
+				returnLabel.Text = "";
+			}
+			else
+			{
+				//Runs on first click, warns and sets up second click using external class
+				returnLabel.Text = "Click again to delete - note that this cannot be undone!";
+				deletingProductsPersistent.deleting = true;
+				deletingProductsPersistent.product = productName;
+			}
 		}
 
 		//Adding products
@@ -86,17 +101,21 @@ namespace mainCoursework
 				//Checks the user has selected a file
 				if (imageUpload.HasFile)
 				{
+					if (imageUpload.FileName.Substring(imageUpload.FileName.IndexOf(".")) != "png")
+					{
+						returnMessage.Text = "The image must be a PNG!";
+					}
 					try
 					{
-						string fileName = productName + imageUpload.FileName.Substring(imageUpload.FileName.IndexOf('.'));
-						imagePath = Server.MapPath("~/images/") + fileName;
-						imageUpload.SaveAs(imagePath);
+						string fileName = imageUpload.FileName;
+						imagePath = "~/images/" + fileName;
+						imageUpload.SaveAs(Server.MapPath(imagePath)); 
 					}
 					//Catches any exceptions that might occur and posts them; this is necessary because this procedure is likely to be error ridden
 					catch (Exception except)
 					{
 						returnMessage.Text = "File Upload failed with error " + except.Message + ", please contact a developer";
-						break;
+						return;
 					}
 				}
 				else

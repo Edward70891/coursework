@@ -30,10 +30,11 @@ textarea {
 	}
 }
 
-body{
+body {
 	background-color: #444444;
 	font-family: Arial, Helvetica, sans-serif;
 	color: white;
+	background-image: url(../images/bg.jpg);
 }
 
 .navbar-inverse, navbar-fixed-top, navbar {
