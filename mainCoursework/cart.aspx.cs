@@ -72,8 +72,8 @@ namespace mainCoursework
 			{
 				productPanel panel = new productPanel(current.product);
 				//Remove stockTag and descriptionTag; maybe this works?
-				panel.Controls.Remove(panel.Controls[3]);
-				panel.Controls.Remove(panel.Controls[3]); //Removing 3 again because the descriptionTag has fallen into the newly opened space
+				panel.Controls[1].Controls.Remove(panel.Controls[1].Controls[2]);
+				panel.Controls[1].Controls.Remove(panel.Controls[1].Controls[2]);
 
 				//Create a text box (user modifiable) to hold the amount of the product in the cart - if the amount is changed call an event instead of having a button
 				TextBox amountBox = new TextBox()

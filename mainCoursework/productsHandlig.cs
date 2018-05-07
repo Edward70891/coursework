@@ -226,8 +226,7 @@ namespace mainCoursework
 					break;
 			}
 			WorkingList = quicksort(WorkingList);
-
-
+			
 			product[] quicksort(product[] input)
 			{
 				if (input.Length <= 1)
