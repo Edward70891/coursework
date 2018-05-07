@@ -3454,7 +3454,12 @@ if (username == "master" || username == "Market")
     \subsubsection{Customer Login}
     This uses practically identical code to the employee login page, so I have kept testing brief.
     \begin{enumerate}
-        \item \textbf{SQL Injection}
+        \item \textbf{SQL Injection}.
+        I used the same string "; DROP ALL TABLES; --" to test this.
+        \begin{figure}[H]
+            \includegraphics[height=3.5cm]{testing/cusLogin1.png}
+            \centering
+        \end{figure}
     \end{enumerate}
     \subsubsection{Cart Page}
     The cart page employs a lot of untested logic, and so requires relatively extensive testing.
