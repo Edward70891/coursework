@@ -12,7 +12,6 @@ log.txt
 *.sln.docstates
 mainDoc.aux
 mainDoc.log
-mainDoc.pdf
 mainDoc.synctex.gz
 mainDoc.toc
 mainDoc.bbl
