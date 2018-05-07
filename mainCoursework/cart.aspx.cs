@@ -130,6 +130,7 @@ namespace mainCoursework
 			//Get the product name from the textbox that sent it
 			TextBox box = (TextBox)sender;
 			string productName = box.ID.Split('_')[0];
+			int newAmount = Convert.ToInt32(box.Text);
 			//Find the index of that product in the cart list
 			int i = 0;
 			int index = 0;
@@ -143,7 +144,8 @@ namespace mainCoursework
 				i++;
 			}
 			//Change the amount value
-			cartArray[index].amount = Convert.ToInt32(box.Text);
+			cartArray[index].amount = newAmount;
+			cartsTableAdapter.updateAmount(newAmount, Convert.ToString(Session["currentUser"]), productName);
 		}
 
 		protected void purchaseButton_Click(object sender, EventArgs e)

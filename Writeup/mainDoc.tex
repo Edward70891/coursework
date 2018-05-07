@@ -2581,6 +2581,371 @@ customersQueryTable.newCustomer(usernameBox.Text, customSecurity.generateMD5(pas
 customLogging.newEntry("Someone registered the user " + usernameBox.Text);
 returnLabel.Text = "User " + usernameBox.Text + " created";
     \end{lstlisting}
+    \newpage
+    \subsubsection{Cart Page}
+    This page shows the user what is in their cart, and gives them the option to edit it.
+    \begin{lstlisting}[language=C]
+struct cartItem
+{
+    public product product;
+    public int amount;
+}
+
+defaultDataSetTableAdapters.cartsTableAdapter cartsTableAdapter = new defaultDataSetTableAdapters.cartsTableAdapter();
+cartItem[] cartArray;
+
+protected void Page_Load(object sender, EventArgs e)
+{
+    populateList();
+    if (cartArray.Length == 0)
+    {
+        productsListPanel.Controls.Add
+            (
+                new Label()
+                {
+                    Text = "Your cart is empty!",
+                    CssClass = "cartEmptyMessage"
+                }
+            );
+        purchaseButton.Visible = false;
+    }
+    else
+    {
+        populatePage();
+        purchaseButton.Visible = true;
+    }
+}
+
+private void populateList()
+{
+    using (DataTable temp = cartsTableAdapter.getCart(Convert.ToString(Session["currentUser"])))
+    {
+        cartArray = new cartItem[temp.Rows.Count];
+        int i = 0;
+        foreach (DataRow row in temp.Rows)
+        {
+            cartArray[i].product = new product(Convert.ToString(row[2]));
+            cartArray[i].amount = Convert.ToInt32(row[3]);
+            i++;
+        }
+    }
+}
+
+private void populatePage()
+{
+    foreach(cartItem current in cartArray)
+    {
+        productPanel panel = new productPanel(current.product);
+        panel.Controls.Remove(panel.Controls[3]);
+        panel.Controls.Remove(panel.Controls[3]);
+
+        TextBox amountBox = new TextBox()
+        {
+            CssClass = "amountBox",
+            ID = current.product.productName + "_CartAmountBox",
+            Text = Convert.ToString(current.amount),
+            TextMode = TextBoxMode.Number,
+            AutoPostBack = true
+        };
+        amountBox.TextChanged += new EventHandler(amountBox_TextChanged);
+        panel.Controls.Add(amountBox);
+
+        Button removeButton = new Button()
+        {
+            CssClass = "removeButton",
+            ID = current.product.productName + "_CartRemoveButton",
+            Text = "Remove",
+            CommandArgument = current.product.productName
+        };
+        removeButton.Click += new EventHandler(removeButton_Click);
+        removeButton.Attributes.Add("runat", "server");
+        panel.Controls.Add(removeButton);
+
+        panel.CssClass = "cartProductDisplayPanel";
+        productsListPanel.Controls.Add(panel);
+    }
+}
+
+protected void removeButton_Click(object sender, EventArgs e)
+{
+    Button btn = (Button)sender;
+    int i = 0;
+    int index = 0;
+    foreach (cartItem current in cartArray)
+    {
+        if (current.product.productName == productName)
+        {
+            index = i;
+        }
+        i++;
+    }
+    var temp = new List<cartItem>(cartArray);
+    temp.RemoveAt(index);
+    cartArray = temp.ToArray();
+    populatePage();
+}
+
+protected void amountBox_TextChanged(object sender, EventArgs e)
+{
+    TextBox box = (TextBox)sender;
+    string productName = box.ID.Split('_')[0];
+    int i = 0;
+    int index = 0;
+    foreach(cartItem current in cartArray)
+    {
+        if (current.product.productName == productName)
+        {
+            index = i;
+            break;
+        }
+        i++;
+    }
+    cartArray[index].amount = Convert.ToInt32(box.Text);
+}
+
+protected void purchaseButton_Click(object sender, EventArgs e)
+{
+    makeOrder();
+}
+
+protected void makeOrder()
+{
+    var productsAdaptor = new defaultDataSetTableAdapters.productsTableAdapter();
+    var ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
+    if (Convert.ToString(Session["userType"]) != "customer")
+    {
+        returnLabel.Text = "You're not a registered customer so you can't make an order!";
+        return;
+    }
+    foreach (cartItem current in cartArray)
+    {
+        int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productName));
+        if (currentStock < current.amount)
+        {
+            returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productName + " in stock!";
+            return;
+        }
+    }
+    commonClasses.customLogging.newEntry("Customer " + Convert.ToString(Session["currentUser"]) + " checked out");
+    foreach (cartItem current in cartArray)
+    {
+        ordersAdaptor.newOrder(DateTime.Now, current.product.price * current.amount, current.amount, Convert.ToString(Session["currentUser"]), current.product.productName);
+        productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productName)) - current.amount, current.product.productName);
+    }
+    cartsTableAdapter.deleteCart(Convert.ToString(Session["CurrentUser"]));
+    populateList();
+    populatePage();
+    returnLabel.Text = "Thanks for your order!";
+}
+    \end{lstlisting}
+    \paragraph{The Page}
+    The page contains a panel to place all the programmatically generated panels into, a button for the user to purchase the contents of their cart and a label for returning messages to the user.
+    \paragraph{The Code}
+    The variables and properties in this page's C\# code are:
+    \begin{itemize}
+        \item \textbf{cartItem} is a customer structure which I have declared to help me store items in the cart for the purposes of the page.
+        Since productList doesn't contain functionality for multiple amounts of an item within the list and it's general design is that of showing the products in stock, not a seperate collection, I made this singularly for the purposes of this page.
+        It stores an instance of "product" and a integer representing the amount of that product.
+        It is intended to be used to create an array.
+        \item \textbf{cartsTableAdapter} is just an instance of the adaptor to hold queries which will need to be executed on the "carts" table in the database.
+        \item \textbf{cartArray} is the array of type cartItem which will serve as the local list of all the items in the user's cart.
+    \end{itemize}
+    The methods are:
+    \begin{itemize}
+        \item \textbf{Page\_Load} first runs populateList() to pull the relevant contents of the carts table into cartArray.
+        It then checks if the cartArray object is empty (ie. it's length is 0, meaning the user has no items in their cart).
+        If it is, a label is generated then added to the page to inform the user that there are no products in their cart.
+        If it isn't, populatePage() is run to generate all the elements which the page needs and the purchase button (which is invisible by default) is set to be visible.
+        \item \textbf{populateList} uses the query getCart in cartsTableAdapter to get a complete list of all the records in the table.
+        The query is a simple get all:
+        \begin{lstlisting}[language=SQL]
+SELECT ID, [user], productName, amount FROM carts
+        \end{lstlisting}
+        Once the method has the table, it initializes cartArray using the amount of rows in the table as the amount of elements to initialize, and an integer to serve as the index of the foreach loop it is about to run.
+        A for each loop is run which goes through each row in the DataTable and sets the next element in cartArray to match the correct columns for the name and the amount, using the name to initialize a new product.
+        \item \textbf{populatePage} is designed to create all the elements to be displayed on the page.
+        All the logic in the method is enclosed in a for each loop which goes through all the elements in cartArray and generates an augmented productPanel for them.
+        The code begins by intializing a new instance of productPanel which generates most of the needed elements by itself.
+        Immediately after initialization, the code removes the stockTag and descriptionTag because they are both not needed in the design of this page.
+        This is accomplished by removing the control at position 3 in the controls array of the productPanel instance twice - since the controls are adjacent, the descriptionTag falls into the place that the stockTag just occupied.
+        Then, a new TextBox is created to let the user change the amount of the product they have in their cart and the relevant properties set:
+        \begin{itemize}
+            \item CssClass is set to amountBox so that styling can be applied
+            \item ID is set to the product's name plus "\_CartAmountBox" as this is used later
+            \item Text is set to the amount registered of the product because this textbox should start with displaying the amount of the product which is in the cart
+            \item TextMode is set to be "number" because this will prevent users entering anything but digits, which is what we want for this box
+            \item AutoPostback is set to true; postback forces a page refresh and allows the textbox to trigger event handlers when the contents is changed and the return key is pressed
+        \end{itemize}
+        The new TextBox has a new EventHandler assigned to it which will trigger \textbf{amountBox\_TextChanged} when the text is changed.
+        The control is added to the controls of the current productPanel.
+        \\
+        A new button is instantiated to let the user remove something from their cart with the following properties:
+        \begin{itemize}
+            \item CssClass is set to "amountBox" to allow styling
+            \item ID is set to the name of the current product plus "\_CartRemoveButton" so that the control can be referred to later on
+            \item Text is set to remove to indicate the button's purpose to the user
+            \item The CommandArgument of the button is set to the name of the product so that the button functions per product
+        \end{itemize}
+        An EventHandler is added to the button's click hook and assigned the method "removeButton\_Click".
+        The attribute "runat:server" is added to the button so that it functions correctly within ASP.
+        The button is added to the panel's control list.
+        Finally, the panel itself has it's CssClass changed to "cartProductDisplayPanel" so that individual styling can be applied to it with no effect from the styling applied to productPanel by default and it is added to the panel on the page which is set aside for it.
+        \item \textbf{removeButton\_Click} runs when the remove button is clicked.
+        It gets the button which ran the method by filtering the sender by type "Button" and gets the name of the product whose remove button was clicked from the ID of the button (Ideally this would be taken from the command argument but at this time that doesn't seem to work) by splitting it using String.Split() at the "\_" character and taking the first part.
+        It uses a foreach loop with an externally managed index "i" to set the integer "index" to be the index of that panel within the array holding all the augmented productPanels by matching the names of each to the string it obtained from the button's ID.
+        It converts the cartArray to a list temporarily so that removing items is much easier, and removes the element at the previously found index.
+        The list is converted back to an array and set to cartArray, and populatePage() is run to show the new information on the page.
+        \item \textbf{amountBox\_TextChanged} runs when the value inside amountBox is changed and the return key is pressed.
+        As before, the method obtains the sender and the name of the product in question from the attributes of the sender by splitting the ID.
+        Again, a for each loop is run with a manual "i" to find the index of the product in cartArray.
+        Once these pieces of information are found, the .amount property of the correct element in cartArray is changed to the user's new desired amount.
+        \item \textbf{purchaseButton\_Click} effectively just runs makeOrder.
+        This is in it's own method because this is a dummy - if the project were to actually be deployed, then much different code would go here.
+        \item \textbf{makeOrder} begins by opening two new adaptors because access to the products table and the orders table are needed for the customer to actually purchase their items.
+        The method checks that the logged in user is actually a customer by checking that the "userType" session is "customer" and returns an appropriate message explaining that they cannot make an order if they aren't.
+        Then, a foreach loop is run to check that there is actually enough of each product in the cart in stock to satisfy the customer's order - an integer is obtained from the output of the getStock query:
+        \begin{lstlisting}[language=SQL]
+SELECT stock
+FROM products
+WHERE (productName = ?)
+        \end{lstlisting}
+        If the amount of the product the user is trying to buy is more than the amount of the product available, the operation is cancelled and the user is notified with the return label.
+        Once the above checks are complete, the purchase can be "made".
+        First, the purchase is logged - the names of the products bought/their amounts are not needed in the log since they are stored in the orders table.
+        Then, for each item in the cart, two queries are run - the newOrder query on the orders table:
+        \begin{lstlisting}[language=SQL]
+INSERT INTO `orders` (`datePlaced`, `spent`, `productAmount`, `customer`, `product`)
+VALUES (?, ?, ?, ?, ?)
+        \end{lstlisting}
+        Which creates a new order with the correct information which is calculated on the spot.
+        The other query is the updateStock query for the products table so that the correct amount of stock is removed to represent the customer's purchase:
+        \begin{lstlisting}[language=SQL]
+UPDATE products
+SET stock = ?
+WHERE (productName = ?)
+        \end{lstlisting}
+        Once these queries have finished for each product, the deleteCart query is run once on the cart table:
+        \begin{lstlisting}
+DELETE FROM carts
+WHERE ([user] = ?)
+        \end{lstlisting}
+        This just deletes all the cart entries for the user, since they have just purchased them all.
+        Finally, populateList is run to refresh the local list (to be blank), populatePage is run to clear the page of all the elements that were on it and the return label is set to display a thank you message.
+    \end{itemize}
+    \paragraph{Revision 07/05/18}
+    Upon re reading this code, I realize now that the amount box doesn't update the amount of the product in the carts table so if the page is refreshed, the new value will be lost.
+    I created the following query and called it updateAmount:
+    \begin{lstlisting}[language=SQL]
+UPDATE carts
+SET amount = amount + ?
+WHERE ([user] = ?) AND (productName = ?)
+    \end{lstlisting}
+    And added it to the \textbf{amountBox\_TextChanged} method, at the end:
+    \begin{lstlisting}[language=C]
+TextBox box = (TextBox)sender;
+string productName = box.ID.Split('_')[0];
+int newAmount = Convert.ToInt32(box.Text);
+int i = 0;
+int index = 0;
+foreach(cartItem current in cartArray)
+{
+    if (current.product.productName == productName)
+    {
+        index = i;
+        break;
+    }
+    i++;
+}
+cartArray[index].amount = newAmount;
+cartsTableAdapter.updateAmount(newAmount, Convert.ToString(Session["currentUser"]), productName);
+    \end{lstlisting}
+    \newpage
+    \subsubsection{Employee Registration}
+    The employee registration page is different to the customer registration page because the only people authorized to register a new administrator are administrators.
+    Employees may register other, normal employees but not administrators.
+    It inherits from the Employee.Master file, so it is only accessible to employees by default.
+    This, however, is not enough and so an additional check needs to be put in place for this page only, in Page\_Load.
+    \begin{lstlisting}[language=C]
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (Convert.ToString(Session["userIsAdmin"]) == "False")
+    {
+        adminCheckBox.Visible = false;
+    }
+    else
+    {
+        adminCheckBox.Visible = true;
+    }
+}
+
+protected void newUser_Click(object sender, EventArgs e)
+{
+    if (submittedPasswordBox.Text == submittedConfirmPasswordBox.Text)
+    {
+        if (customSecurity.sanitizeCheck(new string[] { submittedUsernameBox.Text, submittedPasswordBox.Text, forenameBox.Text, surnameBox.Text }))
+        {
+            if (submittedUsernameBox.Text != "master" || submittedUsernameBox.Text != "Market")
+            {
+                using (defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter())
+                {
+                    try
+                    {
+                        employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
+                        registerReturn.Text = "New employee created";
+                        customLogging.newEntry("Employee " + submittedUsernameBox.Text + " was created");
+                    }
+                    catch (Exception except)
+                    {
+                        registerReturn.Text = "Database operation failed with error " + except.Message;
+                    }
+                }
+            }
+            else
+            {
+                registerReturn.Text = "That is a reserved username!";
+            }
+        }
+        else
+        {
+            registerReturn.Text = customSecurity.sanitizeErrorMessage;
+        }
+    }
+    else
+    {
+        registerReturn.Text = "The passwords don't match!";
+        submittedConfirmPasswordBox.Text = "";
+    }
+}
+    \end{lstlisting}
+    \paragraph{The Page}
+    The page contains text boxes for:
+    \begin{itemize}
+        \item The desired Username
+        \item The desired password and another box to confirm it
+        \item The employee's forename
+        \item The employee's surname
+    \end{itemize}
+    Additionally, there is a checkbox to specify whether or not the new user should be an administrator, a button to submit the form and a label to show the user the result of the operation.
+    \paragraph{The Code}
+    There are no additional properties on the page.
+    The methods are:
+    \begin{itemize}
+        \item \textbf{Page\_Load} contains a similar check to the employee check present on Employee.Master, but it checks the "userIsAdmin" session instead of the "userType" session.
+        If the user is an admin, the administrator checkbox is made visible, and invisible if they are not.
+        \item \textbf{newUser\_Click} triggers when the new user button is clicked.
+        It contains a series of checks not dissimilar to those that the customer registration page performs.
+        The first checks that the two boxes contain the same amount and notifies the user if they don't.
+        The second uses customSecurity.sanitizeCheck to ensure there are no SQL-sensitive characters in the textboxes, and returns the standard error message if they are.
+        The third checks specifically checks if the username of the account that is being created is trying to be set to "master" or "Market".
+        Both of these are reserved for function within the program as master is the default administrator account which cannot be interfered with, and "Market" is the username I am using to reserve items for the market, detailed below.
+        Finally, a new adaptor is opened to the employees table and the new account is created with newEmployee:
+        \begin{lstlisting}[language=SQL]
+INSERT INTO employees (username, [password], admin, forename, surname)
+VALUES (?, ?, ?, ?, ?)
+        \end{lstlisting}
+        The return label shows an appropriate message and the creation of a new employee is logged.
+        The last-described logic is enclosed in a try-catch statement should any database errors occur.
+    \end{itemize}
     \subsection{Validation}
     \subsection{Reviews}
     

@@ -25,45 +25,36 @@ namespace mainCoursework
 
 		protected void newUser_Click(object sender, EventArgs e)
 		{
-			//Checks the password boxes are the same
-			if (submittedPasswordBox.Text == submittedConfirmPasswordBox.Text)
+			if (submittedPasswordBox.Text != submittedConfirmPasswordBox.Text)
 			{
-				//Checks there's no SQL related things in the boxes
-				if (customSecurity.sanitizeCheck(new string[] { submittedUsernameBox.Text, submittedPasswordBox.Text, forenameBox.Text, surnameBox.Text }))
-				{
-					if (submittedUsernameBox.Text != "master" || submittedUsernameBox.Text != "Market")
-					{
-						using (defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter())
-						{
-							try
-							{
-								//Creates the new user, logs the creation of the user and notifies the current user
-								employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
-								registerReturn.Text = "New employee created";
-								customLogging.newEntry("Employee " + submittedUsernameBox.Text + " was created");
-							}
-							//Catches errors (hopefully only database related) and posts them to the user
-							catch (Exception except)
-							{
-								registerReturn.Text = "Database operation failed with error " + except.Message;
-							}
-						}
-					}
-					else
-					{
-						registerReturn.Text = "That is a reserved username!";
-					}
-				}
-				else
-				{
-					registerReturn.Text = customSecurity.sanitizeErrorMessage;
-				}
-			}
-			else
-			{
-				//Notifies the user if the password fields don't match
 				registerReturn.Text = "The passwords don't match!";
 				submittedConfirmPasswordBox.Text = "";
+			}
+
+			if (!customSecurity.sanitizeCheck(new string[] { submittedUsernameBox.Text, submittedPasswordBox.Text, forenameBox.Text, surnameBox.Text }))
+			{
+				registerReturn.Text = customSecurity.sanitizeErrorMessage;
+			}
+
+			if (submittedUsernameBox.Text == "master" || submittedUsernameBox.Text == "Market")
+			{
+				registerReturn.Text = "That is a reserved username!";
+			}
+
+			using (defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter())
+			{
+				try
+				{
+					//Creates the new user, logs the creation of the user and notifies the current user
+					employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
+					registerReturn.Text = "New employee created";
+					customLogging.newEntry("Employee " + submittedUsernameBox.Text + " was created");
+				}
+				//Catches errors (hopefully only database related) and posts them to the user
+				catch (Exception except)
+				{
+					registerReturn.Text = "Database operation failed with error " + except.Message;
+				}
 			}
 		}
 	}
