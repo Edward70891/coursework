@@ -3266,7 +3266,7 @@ switch (type)
         throw new Exception();
 }
         \end{lstlisting}
-        Ideally, the default case would not be there but later code throws a build error citing that displayTable isn't assigned to (even though this is impossible) if I don't.
+        Ideally, the default case would not be there but later code throws a build error citing that displayTable isn't assigned to (even though this is impossible) if it isn't.
         \item Removed unnecessary sleep times.
         Initially I inserted these so I could clear error messages after a certain time but this is unnecessary and not in keeping with the rest of the application.
         \item I have, as in other places, reorganised the horrendously eye watering set of nested if statements inside changeUserPassword into a sequence of if statements which will disqualify the operation if triggered:
