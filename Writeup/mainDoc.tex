@@ -2946,6 +2946,381 @@ VALUES (?, ?, ?, ?, ?)
         The return label shows an appropriate message and the creation of a new employee is logged.
         The last-described logic is enclosed in a try-catch statement should any database errors occur.
     \end{itemize}
+    \paragraph{Revision 01/05/18}
+    As before, the series of nested if statements in \textbf{newUser\_Click} is an absurd solution here, and makes the code much more difficult to read.
+    I have amended as below:
+    \begin{lstlisting}[language=C]
+if (submittedPasswordBox.Text != submittedConfirmPasswordBox.Text)
+{
+    registerReturn.Text = "The passwords don't match!";
+    submittedConfirmPasswordBox.Text = "";
+}
+
+if (!customSecurity.sanitizeCheck(new string[] { submittedUsernameBox.Text, submittedPasswordBox.Text, forenameBox.Text, surnameBox.Text }))
+{
+    registerReturn.Text = customSecurity.sanitizeErrorMessage;
+}
+
+if (submittedUsernameBox.Text == "master" || submittedUsernameBox.Text == "Market")
+{
+    registerReturn.Text = "That is a reserved username!";
+}
+
+using (defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter())
+{
+    try
+    {
+        employeeQueryTable.newEmployee(submittedUsernameBox.Text, customSecurity.generateMD5(submittedPasswordBox.Text), adminCheckBox.Checked, forenameBox.Text, surnameBox.Text);
+        registerReturn.Text = "New employee created";
+        customLogging.newEntry("Employee " + submittedUsernameBox.Text + " was created");
+    }
+    catch (Exception except)
+    {
+        registerReturn.Text = "Database operation failed with error " + except.Message;
+    }
+}
+    \end{lstlisting}
+    \newpage
+    \subsubsection{User Management Page}
+    This page allows employees to see and change information and credentials of users (both employees and customers), and administrators to delete them.
+    It inherits from Employee.Master.
+    \begin{lstlisting}[language=C]
+defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter();
+defaultDataSetTableAdapters.customersTableAdapter customerQueryTable = new defaultDataSetTableAdapters.customersTableAdapter();
+
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (Convert.ToString(Session["userIsAdmin"]) == "False")
+    {
+        configControls.Visible = false;
+        employeesDisplayTable.Columns[4].Visible = false;
+        customersDisplayTable.Columns[3].Visible = false;
+    }
+    else
+    {
+        configControls.Visible = true;
+        employeesDisplayTable.Columns[4].Visible = true;
+        customersDisplayTable.Columns[3].Visible = true;
+    }
+}
+
+private string username;
+
+protected void employeesDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
+{
+    username = employeesDisplayTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
+    switch (e.CommandName)
+    {
+        case "deleteUser":
+            if (username == "master")
+            {
+                returnLabel.Text = "You can't delete the master admin account!";
+                deletingUsersPersistent.deleting = false;
+                deletingUsersPersistent.type = "";
+                break;
+            }
+            deleteUser(username, "Employee");
+            break;
+        case "changeUserPassword":
+            changeUserPassword(username, "Employee");
+            break;
+    }
+}
+
+protected void customersDisplayTable_RowCommand(object sender, GridViewCommandEventArgs e)
+{
+    username = customersDisplayTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
+    switch (e.CommandName)
+    {
+        case "deleteUser":
+            deleteUser(username, "Customer");
+            break;
+        case "changeUserPassword":
+            changeUserPassword(username, "Customer");
+            break;
+    }
+}
+
+static class deletingUsersPersistent
+{
+    public static string username;
+    public static bool deleting;
+    public static string type;
+}
+
+protected void deleteUser(string username, string type)
+{
+    GridView displayTable;
+    if (type == "Employee")
+    {
+        displayTable = employeesDisplayTable;
+    }
+    else if (type == "Customer")
+    {
+        displayTable = customersDisplayTable;
+    }
+    else
+    {
+        throw new Exception();
+    }
+
+    if ((deletingUsersPersistent.deleting) && (username == deletingUsersPersistent.username) && deletingUsersPersistent.type == type)
+    {
+        returnLabel.Text = type + " account " + deletingUsersPersistent.username + " was deleted";
+        deletingUsersPersistent.deleting = false;
+        deletingUsersPersistent.type = "";
+        if (type == "Employee")
+        {
+            employeeQueryTable.deleteUser(username);
+        }
+        else
+        {
+            customerQueryTable.deleteUser(username);
+        }
+        customLogging.newEntry(type + " " + username + " was deleted");
+        displayTable.DataBind();
+        System.Threading.Thread.Sleep(750);
+        returnLabel.Text = "";
+    }
+    else
+    {
+        returnLabel.Text = "Click again to delete - note that this cannot be undone!";
+        deletingUsersPersistent.deleting = true;
+        deletingUsersPersistent.username = username;
+        deletingUsersPersistent.type = type;
+    }
+}
+
+protected void changeUserPassword(string username, string type)
+{
+    GridView displayTable;
+    if (type == "Employee")
+    {
+        displayTable = employeesDisplayTable;
+    }
+    else if (type == "Customer")
+    {
+        displayTable = employeesDisplayTable;
+    }
+    else
+    {
+        throw new Exception();
+    }
+
+    returnLabel.Text = "";
+    deletingUsersPersistent.deleting = false;
+    if (customSecurity.sanitizeCheck(new string[] { passwordBox.Text }))
+    {
+        if (passwordBox.Text != "" || confirmPassword.Text != "")
+        {
+            if (passwordBox.Text == confirmPassword.Text)
+            {
+                if (type == "Employee")
+                {
+                    employeeQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
+                }
+                else
+                {
+                    customerQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
+                }
+                customLogging.newEntry(type + " " + username + "'s password changed");
+                returnLabel.Text = type + " " + username + "'s password was changed to '" + passwordBox.Text + "'.";
+            }
+            else
+            {
+                returnLabel.Text = "The passwords do not match!";
+                System.Threading.Thread.Sleep(750);
+                returnLabel.Text = "";
+            }
+        }
+        else
+        {
+            returnLabel.Text = "You must fill both boxes!";
+            System.Threading.Thread.Sleep(750);
+            returnLabel.Text = "";
+        }
+    }
+    else
+    {
+        returnLabel.Text = customSecurity.sanitizeErrorMessage;
+    }
+}
+
+protected void registerRedirect_Click(object sender, EventArgs e)
+{
+    Server.Transfer("~/registerEmployee.aspx", false);
+}
+
+protected void newCustomerButton_Click(object sender, EventArgs e)
+{
+    Server.Transfer("~/registerCustomer.aspx", false);
+}
+    \end{lstlisting}
+    \paragraph{The Page}
+    On this page, there are two ASP.NET GridView elements.
+    These are rendered tables which show the contents of a databound source on the page.
+    Many different types of databound sources exist but the one I am using for both these GridViews is my database.
+    \paragraph{}
+    The first GridView is linked to the employees table, and shows usernames, full names and whether they are an administrator or not.
+    Additionally, it has a column that contains two buttons in each row; one is the delete button for that account and the other will change the password.
+    These buttons have the username of the employee row they are on bound to them as a command argument, and are linked with an eventhandler automatically to the same method.
+    The CommandName attribute of each is how they much be differentiated between, they are set to "deleteUser" and "changeUserPassword" respectively.
+    Following this GridView is a button which simply redirects to the employee registration page.
+    \paragraph{}
+    The other GridView is linked to the customers table.
+    It shows the customers' usernames and full names in addition an identical set of buttons to those described above, which are both bound to a different method.
+    Underneath the GridView is a button which redirects to the customer registration page.
+    \paragraph{}
+    Below these controls are two text boxes where the administrator can enter the password they wish to change an account's to; the extra one is for confirmation.
+    Finally, there is a label to return messages to the user.
+    \paragraph{The Code}
+    The properties and variables on this page are:
+    \begin{itemize}
+        \item \textbf{employeeQueryTable} is an adaptor for the queries registered to the employee table.
+        \item \textbf{customerQueryTable} is an adaptor for the queries registered to the customer table.
+        \item \textbf{username} is a string to hold the username of the username in question between methods.
+        \item \textbf{deletingUsersPersistent} is a static class which holds the information about users between executions of the method which carries it out.
+        Since I wanted the additional security against user mistakes of making them click the button to delete twice, the method must be executed twice and be aware when it is being executed a second time in a row.
+        Hence, I created a static class which cannot be instantiated, only referred to, to hold information that would inform that method.
+        It holds the username and the type of the user in question and a bool that determines whether they are on their "second click".
+    \end{itemize}
+    The methods on the page are:
+    \begin{itemize}
+        \item \textbf{Page\_Load} in this instance determines whether or not to show the controls for changing and deleting accounts.
+        If the user is marked as an admin by the "userIsAdmin" session, then the columns containing the buttons and the elements at the bottom of the page (which are in a panel called "configControls") are set to be visible.
+        If not, they are set to be invisible.
+        \item \textbf{employeesDisplayTable\_RowCommand} is called when a RowCommand is triggered on the GridView showing employees.
+        This only occurs when one of the buttons within the table is clicked.
+        First, the method gets the username of the user the command is called upon; it does this by taking the CommandArgument of the button and using it as the index of a row in the GridView, then finding the value stored in the first cell (the username cell).
+        It then uses a switch to determine which button was clicked according to it's CommandName.
+        If the user is trying to delete an employee, the methods checks with an if statement if they are trying to delete the master account by examining the username variable previously set - if they are, they are informed with the return label that they cannot and the deletingUsersPersistent class is reset to it's default state.
+        If not, deleteUser() is run.
+        Should the user be trying to change a password, the switch runs changeUserPassword with the correct parameters.
+        \item \textbf{customersDisplayTable\_RowCommand} is called when a RowCommand is triggered in the GridView corresponding to the customers table.
+        It serves a similar purpose to "employeesDisplayTable\_RowCommand", pulling the username of the customer in question into "username" in exactly the same way as it does in the employees GridView.
+        A similar switch is run, but there is no check for sensitive usernames.
+        \item \textbf{deleteUser} is called by both RowCommand methods when the user is trying to delete an account.
+        It determines which type of user to delete with the parameters it is passed, which should only be "Employee" or "Customer" - if they aren't, a new exception is thrown.
+        \\
+        An if statement determines if the user is clicking the delete button for the first time or the second.
+        This is checked by examining the values of the deleting, username and type properties of deletingUsersPersistent - if they match the current conditions, code is run to delete the account.
+        If not, the return label shows a warning that the user is about to delete an account if they click a second time.
+        The contents of deletingUsersPersistent are set to the current conditions.
+        Should the user click a second time and start the account deletion process, the return label is updated with an appropriate message.
+        The deletingUsersPersistent class is set to it's default state, and the relevant query is run.
+        If an employee is being deleted, deleteUser is run from the correct adaptor:
+        \begin{lstlisting}[language=SQL]
+DELETE FROM `employees` WHERE ((`username` = ?))
+        \end{lstlisting}
+        If a customer is being deleted, deleteUser is run from the customer adaptor:
+        \begin{lstlisting}[language=SQL]
+DELETE FROM `customers` WHERE ((`username` = ?))
+        \end{lstlisting}
+        Both of these queries are run using the username in deletingUsersPersistent.
+        The deletion is logged, the table is refreshed using DataBind(), a pause is initiated and the message is cleared.
+        \item \textbf{changeUserPassword} runs when either RowCommand calls it.
+        Similarly to deleteUser, it finds the correct GridView with the parameter it is passed.
+        The contents of the return label is cleared, and deletingUsersPersistent.deleting is set to false so one cannot click to delete someone, click change password then click to delete that person again and actually delete them without warning.
+        Then, a series of checks are performed:
+        \begin{enumerate}
+            \item customSecurity.sanitizeCheck is called on both password boxes and the standard error displayed if the check is failed.
+            \item Both password boxes are confirmed to actually contain text
+            \item The password boxes' contents are confirmed to match
+        \end{enumerate}
+        The appropriate query is run.
+        If an employee is the subject of the change, changePassword is run from the employees query table:
+        \begin{lstlisting}[language=SQL]
+UPDATE employees
+SET [password] = ?
+WHERE (username = ?)
+        \end{lstlisting}
+        If a customer is the subject of the password change, changePassword is run from the customers tables adaptor:
+        \begin{lstlisting}[language=SQL]
+UPDATE customers
+SET [password] = ?
+WHERE (username = ?)
+        \end{lstlisting}
+        The change is logged and the return label is updated with the appropriate text.
+        \item \textbf{registerRedirect\_Click} and \textbf{newCustomerButton\_Click} redirect to the employee and customer registration pages respectively.
+    \end{itemize}
+    \paragraph{Revision 05/05/18}
+    This code is extremely messy.
+    I have made multiple changes:
+    \begin{enumerate}
+        \item I have made the "type" variable passed into deleteUser and changeUserPassword an enumerator, which means the two options are enforced and a switch can be used in each:
+        \begin{lstlisting}[language=C]
+private enum userType { employee,customer }
+        \end{lstlisting}
+        And changed the contents of both mentioned methods appropriately, at the beginning where a reference to the appropriate GridView is set:
+        \begin{lstlisting}[language=C]
+GridView displayTable;
+switch (type)
+{
+    case userType.customer:
+        displayTable = customersDisplayTable;
+        break;
+    case userType.employee:
+        displayTable = employeesDisplayTable;
+        break;
+    default:
+        throw new Exception();
+}
+        \end{lstlisting}
+        Ideally, the default case would not be there but later code throws a build error citing that displayTable isn't assigned to (even though this is impossible) if I don't.
+        \item Removed unnecessary sleep times.
+        Initially I inserted these so I could clear error messages after a certain time but this is unnecessary and not in keeping with the rest of the application.
+        \item I have, as in other places, reorganised the horrendously eye watering set of nested if statements inside changeUserPassword into a sequence of if statements which will disqualify the operation if triggered:
+        \begin{lstlisting}[language=C]
+GridView displayTable;
+switch (type)
+{
+    case userType.customer:
+        displayTable = customersDisplayTable;
+        break;
+    case userType.employee:
+        displayTable = employeesDisplayTable;
+        break;
+    default:
+        throw new Exception();
+}
+
+returnLabel.Text = "";
+deletingUsersPersistent.deleting = false;
+
+if (passwordBox.Text == "" || confirmPassword.Text == "")
+{
+    returnLabel.Text = "You must fill both boxes!";
+    return;
+}
+
+if (passwordBox.Text != confirmPassword.Text)
+{
+    returnLabel.Text = "The passwords do not match!";
+    return;
+}
+
+if (type == userType.employee)
+{
+    employeeQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
+}
+else
+{
+    customerQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
+}
+customLogging.newEntry(type + " " + username + "'s password changed");
+returnLabel.Text = type + " " + username + "'s password was changed to '" + passwordBox.Text + "'.";
+        \end{lstlisting}
+        \item I have added "Market" to the reserved usernames check in deleteUser and updated the error message:
+        \begin{lstlisting}[language=C]
+if (username == "master" || username == "Market")
+{
+    returnLabel.Text = "You can't delete this account!";
+    deletingUsersPersistent.deleting = false;
+    deletingUsersPersistent.type = userType.customer;
+    break;
+}
+        \end{lstlisting}
+    \end{enumerate}
     \subsection{Validation}
     \subsection{Reviews}
     

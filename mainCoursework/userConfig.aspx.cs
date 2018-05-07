@@ -13,6 +13,16 @@ namespace mainCoursework
 		defaultDataSetTableAdapters.employeesTableAdapter employeeQueryTable = new defaultDataSetTableAdapters.employeesTableAdapter();
 		defaultDataSetTableAdapters.customersTableAdapter customerQueryTable = new defaultDataSetTableAdapters.customersTableAdapter();
 
+		protected enum userType { employee,customer }
+
+		//Custom class for storing deletion data outside the button_click event to facilitate clicking twice to delete
+		static class deletingUsersPersistent
+		{
+			public static string username;
+			public static bool deleting;
+			public static userType type;
+		}
+
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//Checks if they're an admin and if they're not, hides the password changing and account deleting elements
@@ -41,18 +51,18 @@ namespace mainCoursework
 				//If they're trying to delete something
 				case "deleteUser":
 					//Checks if they're trying to delete the master account
-					if (username == "master")
+					if (username == "master" || username == "Market")
 					{
-						returnLabel.Text = "You can't delete the master admin account!";
+						returnLabel.Text = "You can't delete this account!";
 						deletingUsersPersistent.deleting = false;
-						deletingUsersPersistent.type = "";
+						deletingUsersPersistent.type = userType.customer;
 						break;
 					}
-					deleteUser(username, "Employee");
+					deleteUser(username, userType.employee);
 					break;
 				//Runs if the user is trying to change a password
 				case "changeUserPassword":
-					changeUserPassword(username, "Employee");
+					changeUserPassword(username, userType.employee);
 					break;
 			}
 		}
@@ -65,21 +75,13 @@ namespace mainCoursework
 			{
 				//If they're trying to delete something
 				case "deleteUser":
-					deleteUser(username, "Customer");
+					deleteUser(username, userType.customer);
 					break;
 				//Runs if the user is trying to change a password
 				case "changeUserPassword":
-					changeUserPassword(username, "Customer");
+					changeUserPassword(username, userType.customer);
 					break;
 			}
-		}
-
-		//Custom class for storing deletion data outside the button_click event to facilitate clicking twice to delete
-		static class deletingUsersPersistent
-		{
-			public static string username;
-			public static bool deleting;
-			public static string type;
 		}
 
 		/// <summary>
@@ -87,22 +89,20 @@ namespace mainCoursework
 		/// </summary>
 		/// <param name="username">The username of the person to be deleted</param>
 		/// <param name="type">"Customer" or "Employee"</param>
-		protected void deleteUser(string username, string type)
+		protected void deleteUser(string username, userType type)
 		{
 			//Make a reference to the correct gridview according to type
 			GridView displayTable;
-			if (type == "Employee")
+			switch (type)
 			{
-				displayTable = employeesDisplayTable;
-			}
-			else if (type == "Customer")
-			{
-				displayTable = customersDisplayTable;
-			}
-			//Throw an exception if the type is not "Customer" or "Employee"
-			else
-			{
-				throw new Exception();
+				case userType.customer:
+					displayTable = customersDisplayTable;
+					break;
+				case userType.employee:
+					displayTable = employeesDisplayTable;
+					break;
+				default:
+					throw new Exception();
 			}
 
 			if ((deletingUsersPersistent.deleting) && (username == deletingUsersPersistent.username) && deletingUsersPersistent.type == type)
@@ -110,9 +110,8 @@ namespace mainCoursework
 				//If this is the second click on the same entry, post that the user was deleted
 				returnLabel.Text = type + " account " + deletingUsersPersistent.username + " was deleted";
 				deletingUsersPersistent.deleting = false;
-				deletingUsersPersistent.type = "";
 				//Delete the user
-				if (type == "Employee")
+				if (type == userType.employee)
 				{
 					employeeQueryTable.deleteUser(username);
 				}
@@ -136,66 +135,48 @@ namespace mainCoursework
 			}
 		}
 
-		protected void changeUserPassword(string username, string type)
+		protected void changeUserPassword(string username, userType type)
 		{
 			//Make a reference to the correct gridview for commands
 			GridView displayTable;
-			if (type == "Employee")
+			switch (type)
 			{
-				displayTable = employeesDisplayTable;
-			}
-			else if (type == "Customer")
-			{
-				displayTable = employeesDisplayTable;
-			}
-			else
-			{
-				throw new Exception();
+				case userType.customer:
+					displayTable = customersDisplayTable;
+					break;
+				case userType.employee:
+					displayTable = employeesDisplayTable;
+					break;
+				default:
+					throw new Exception();
 			}
 
 			returnLabel.Text = "";
 			//Disables second click coding
 			deletingUsersPersistent.deleting = false;
-			//Checks there is a value entered in the box
-			if (customSecurity.sanitizeCheck(new string[] { passwordBox.Text }))
+
+			if (passwordBox.Text == "" || confirmPassword.Text == "")
 			{
-				if (passwordBox.Text != "" || confirmPassword.Text != "")
-				{
-					if (passwordBox.Text == confirmPassword.Text)
-					{
-						//Changes the password in the DB
-						if (type == "Employee")
-						{
-							employeeQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
-						}
-						else
-						{
-							customerQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
-						}
-						//Posts that the password has been changed and logs it
-						customLogging.newEntry(type + " " + username + "'s password changed");
-						returnLabel.Text = type + " " + username + "'s password was changed to '" + passwordBox.Text + "'.";
-					}
-					else
-					{
-						//Runs if the passwords don't match, notifies the user
-						returnLabel.Text = "The passwords do not match!";
-						System.Threading.Thread.Sleep(750);
-						returnLabel.Text = "";
-					}
-				}
-				else
-				{
-					//Prompts the user to fill the box
-					returnLabel.Text = "You must fill both boxes!";
-					System.Threading.Thread.Sleep(750);
-					returnLabel.Text = "";
-				}
+				returnLabel.Text = "You must fill both boxes!";
+				return;
+			}
+
+			if (passwordBox.Text != confirmPassword.Text)
+			{
+				returnLabel.Text = "The passwords do not match!";
+				return;
+			}
+
+			if (type == userType.employee)
+			{
+				employeeQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
 			}
 			else
 			{
-				returnLabel.Text = customSecurity.sanitizeErrorMessage;
+				customerQueryTable.changePassword(customSecurity.generateMD5(passwordBox.Text), username);
 			}
+			customLogging.newEntry(type + " " + username + "'s password changed");
+			returnLabel.Text = type + " " + username + "'s password was changed to '" + passwordBox.Text + "'.";
 		}
 
 		protected void registerRedirect_Click(object sender, EventArgs e)
