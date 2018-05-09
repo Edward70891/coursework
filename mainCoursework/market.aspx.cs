@@ -211,6 +211,7 @@ namespace mainCoursework
 				//Subtract the stock from the products table
 				productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productName)) - current.amount, current.product.productName);
 			}
+			returnLabel.Text = "Changes successfully applied";
 			populatePage();
 		}
 

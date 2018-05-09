@@ -21,6 +21,10 @@ namespace mainCoursework
 
 		protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)
 		{
+			if(e.CommandName != "deleteProduct")
+			{
+				return;
+			}
 			string productName = productsTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
 			//Runs if the delete button is pressed
 			//Checks if this is the second button press

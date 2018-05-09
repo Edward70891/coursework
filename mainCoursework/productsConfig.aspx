@@ -4,11 +4,12 @@
 		Products<br />
 		<asp:GridView ID="productsTable" runat="server" AutoGenerateColumns="False" DataKeyNames="productName" DataSourceID="productsDataSource" EmptyDataText="There are no products in the database." onrowcommand="productsTable_RowCommand">
 			<Columns>
-				<asp:BoundField DataField="productName" HeaderText="Name" />
-				<asp:BoundField DataField="price" HeaderText="Price" SortExpression="price" />
+				<asp:CommandField ButtonType="Button" ShowEditButton="True" />
+				<asp:BoundField DataField="productName" HeaderText="Name" ReadOnly="True" />
+				<asp:BoundField DataField="price" HeaderText="Price (£)" SortExpression="price" />
 				<asp:BoundField DataField="stock" HeaderText="Stock" SortExpression="stock" />
-				<asp:BoundField DataField="productType" HeaderText="Type" SortExpression="productType" />
-				<asp:BoundField DataField="creator" HeaderText="Created By" SortExpression="creator" />
+				<asp:BoundField DataField="productType" HeaderText="Type" SortExpression="productType" ReadOnly="True" />
+				<asp:BoundField DataField="creator" HeaderText="Created By" SortExpression="creator" ReadOnly="True" />
 				<asp:TemplateField>
 					<ItemTemplate>
 						<asp:Button ID="deleteButton" ButtonType="Button" CommandName="deleteProduct" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" Text="Delete" runat="server" />
