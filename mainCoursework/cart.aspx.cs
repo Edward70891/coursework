@@ -68,6 +68,7 @@ namespace mainCoursework
 		//Generate all the needed productPanels and modify them as needed
 		private void populatePage()
 		{
+			int i = 0;
 			foreach(cartItem current in cartArray)
 			{
 				productPanel panel = new productPanel(current.product);
@@ -93,7 +94,7 @@ namespace mainCoursework
 					CssClass = "removeButton",
 					ID = current.product.productName + "_CartRemoveButton",
 					Text = "Remove",
-					CommandArgument = current.product.productName
+					CommandArgument = Convert.ToString(i)
 				};
 				removeButton.Click += new EventHandler(removeButton_Click);
 				removeButton.Attributes.Add("runat", "server");
@@ -101,6 +102,8 @@ namespace mainCoursework
 
 				panel.CssClass = "cartProductDisplayPanel";
 				productsListPanel.Controls.Add(panel);
+
+				i++;
 			}
 		}
 
@@ -109,18 +112,8 @@ namespace mainCoursework
 			Button btn = (Button)sender;
 			string productName = btn.CommandArgument;
 			//Find the index of that product in the cart list
-			int i = 0;
-			int index = 0;
-			foreach (cartItem current in cartArray)
-			{
-				if (current.product.productName == productName)
-				{
-					index = i;
-				}
-				i++;
-			}
 			var temp = new List<cartItem>(cartArray);
-			temp.RemoveAt(index);
+			temp.RemoveAt(Convert.ToInt32(btn.CommandArgument));
 			cartArray = temp.ToArray();
 			populatePage();
 		}
@@ -167,7 +160,7 @@ namespace mainCoursework
 			//Check for each item that there is actually a sufficient amount of products in stock to make the purchase
 			foreach (cartItem current in cartArray)
 			{
-				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productName));
+				int currentStock = current.product.stock;
 				if (currentStock < current.amount)
 				{
 					returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productName + " in stock!";
@@ -180,7 +173,7 @@ namespace mainCoursework
 			foreach (cartItem current in cartArray)
 			{
 				ordersAdaptor.newOrder(DateTime.Now, current.product.price * current.amount, current.amount, Convert.ToString(Session["currentUser"]), current.product.productName);
-				productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productName)) - current.amount, current.product.productName);
+				productsAdaptor.updateStock(current.product.stock - current.amount, current.product.productName);
 			}
 			//Clear the cart table of the user's old cart, refresh the page and thank the user
 			cartsTableAdapter.deleteCart(Convert.ToString(Session["CurrentUser"]));

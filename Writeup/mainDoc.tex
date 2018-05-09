@@ -4307,6 +4307,52 @@ returnLabel.Text = amountToAdd.Text + " " + currentProduct.displayName + "s adde
             \includegraphics{testing/cart1.png}
             \centering
         \end{figure}
+        This is as the page is intended to appear.
+        \item Removing an item from the cart with the remove button.
+        The item is not removed.
+        After reviewing the code on the page and finding no obvious problems, I deduced that the issue probably lay with the method I used to find the relevant product in the removeButton\_Click method:
+        \begin{lstlisting}[language=C]
+Button btn = (Button)sender;
+string productName = btn.CommandArgument;
+int i = 0;
+int index = 0;
+foreach (cartItem current in cartArray)
+{
+    if (current.product.productName == productName)
+    {
+        index = i;
+    }
+    i++;
+}
+var temp = new List<cartItem>(cartArray);
+temp.RemoveAt(index);
+cartArray = temp.ToArray();
+populatePage();
+        \end{lstlisting}
+        The solution of searching through the array element by element is not efficient, quick or reliable.
+        As a replacement for this, I changed the CommandArgument of the button to be the index of the product in cartArray and then used that in the method:
+        \begin{lstlisting}[language=C]
+Button btn = (Button)sender;
+string productName = btn.CommandArgument;
+//Find the index of that product in the cart list
+var temp = new List<cartItem>(cartArray);
+temp.RemoveAt(Convert.ToInt32(btn.CommandArgument));
+cartArray = temp.ToArray();
+populatePage();
+        \end{lstlisting}
+        After running this code, I tried the test again and the product was removed.
+        \item Changing a product's amount within the cart.
+        After changing the number in the box and pressing "return", the amount of the item recorded in the database is changed and the text box value changes.
+        \item Checking out.
+        \begin{figure}[H]
+            \includegraphics{testing/cart2.png}
+            \centering
+        \end{figure}
+        The correct values are added to the database:
+        \begin{figure}[H]
+            \includegraphics{testing/cart3.png}
+            \centering
+        \end{figure}
     \end{enumerate}
     \newpage
     \subsection{Customer Registration}
