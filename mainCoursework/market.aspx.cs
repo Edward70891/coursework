@@ -186,7 +186,7 @@ namespace mainCoursework
 			//Check that there's enough stock in the database to take that much to the stall and if there isn't, don't take anything out
 			foreach (marketItem current in takingItems)
 			{
-				int reserved = Convert.ToInt32(adaptor.getReserved(current.product.productName));
+				int reserved = Convert.ToInt32(adaptor.getReserved(current.product.productName)[0][0]);
 				int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productName));
 				if (currentStock + reserved < current.amount)
 				{

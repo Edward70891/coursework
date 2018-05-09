@@ -4403,6 +4403,28 @@ populatePage();
             \centering
         \end{figure}
         The page loads as expected.
+        \item Changing an employee password:
+        \begin{figure}[H]
+            \includegraphics{testing/userConfig2.png}
+            \centering
+        \end{figure}
+        The change is successful, and reflected in the database:
+        \begin{figure}[H]
+            \includegraphics{testing/userConfig3.png}
+            \centering
+        \end{figure}
+        \item Changing a customer password:
+        \begin{figure}[H]
+            \includegraphics{testing/userConfig4.png}
+            \centering
+        \end{figure}
+        Success.
+        \item Deleting a user:
+        \begin{figure}[H]
+            \includegraphics{testing/userConfig5.png}
+            \centering
+        \end{figure}
+        employee1 is deleted, as requested.
     \end{enumerate}
     \newpage
     \subsection{Product Management Page}
@@ -4476,17 +4498,134 @@ catch (OleDbException)
     \end{enumerate}
     \subsection{Market Page}
     \begin{enumerate}
-        \item
-    \end{enumerate}
-    \newpage
-    \subsection{Market End Page}
-    \begin{enumerate}
-        \item
+        \item Loading the page.
+        \begin{figure}[H]
+            \includegraphics{testing/market1.png}
+            \centering
+        \end{figure}
+        The page loads successfully.
+        \item Adding a product to the market.
+        \begin{figure}[H]
+            \includegraphics{testing/market2.png}
+            \centering
+        \end{figure}
+        The product is added.
+        \item Changing a product's amount.
+        \begin{figure}[H]
+            \includegraphics{testing/market3.png}
+            \centering
+        \end{figure}
+        \item Applying the changes.
+        An exception is thrown:
+        \begin{figure}[H]
+            \includegraphics{testing/market4.png}
+            \centering
+        \end{figure}
+        The cause of this is that the output of the query is not being interpreted correctly.
+        The query outputs a marketDataTable type, whereas I want an integer.
+        Changing the code to this selects the first row's column, ie. the only result that can be returned:
+        \begin{lstlisting}[language=C]
+int reserved = Convert.ToInt32(adaptor.getReserved(current.product.productName)[0][0]);
+        \end{lstlisting}
+        Allows the products to be successfully added to the market reservation.
     \end{enumerate}
     
     \section{Evaluation}
-    \subsection{Usability Features}
-    \subsection{Evaluation}
-    I think I have 
-    \subsection{Maintenance}
+    \subsection{Success Criteria}
+    \begin{enumerate}
+        \item \textit{Write a web application that holds information about orders, customers, products and employees.}
+        I have accomplished this - my application stores adequate information about all these entities.
+        \item \textit{The web application must show users the appropriate data for their role in using the program; products data to customers, managerial data to employees, all data to administrators.}
+        I have accomplished this.
+        My application shows customers product information without problem, in their carts and in the store front.
+        Employees are shown managerial data on the product and user configuration pages.
+        \item \textit{The web application must allow customers to create their own credential combinations which they must use to identify themselves when interacting with the web application.}
+        I have accomplished this.
+        The customer registration and customer login pages facilitate this to the letter.
+        \item \textit{The web application must allow customers to select products they would like to buy and purchase them. 
+        Furthermore, it must provide them adequate data to make this decision on.}
+        I have accomplished this within reason.
+        The application provides a wealth of information to customers, including price, images and descriptions.
+        It allows customers to select products to add to their cart, and includes a dummy purchase method which would be swapped out for a real one should the software solution be deployed.
+        \item \textit{The web application must allow employees to view and edit information stored in the application which they are permitted to. They may view:}
+        \begin{itemize}
+        \item \textit{All data related to all products}
+        They can see this on the product registration page.
+        \item \textit{All data related to placed orders}
+        I have not accomplished this.
+        At the time of finishing this project as best I could after foolishly leaving it for months upon end, I have not constructed a page which allows this.
+        More fool me.
+        \item \textit{The usernames of all registered customers}
+        They may view this, and more.
+        \end{itemize}
+        \textit{They may edit:}
+        \begin{itemize}
+        \item \textit{The stock value of all products}
+        They can do this on the product management page.
+        \item \textit{The passwords of registered customers}
+        They can also do this on the product management page.
+        \end{itemize}
+        \item \textit{The web application must allow administrators to view and edit information stored in the application which is likely to be necessary. They may view:}
+        \begin{itemize}
+        \item \textit{All data related to all products}
+        They can on the product management page.
+        \item \textit{All data related to placed orders}
+        I have failed in this criterion for the reasons described above; no page exists to allow administrators to view this information.
+        \item \textit{The usernames and personal data of all registered customers}
+        This is viewable on the user management page.
+        \item \textit{The usernames and personal data of all registered employees}
+        This is viewable on the user management page.
+        \item \textit{The background logs kept by the application}
+        This is viewable in the log.txt file maintained by customLogging.
+        \end{itemize}
+        \textit{They may add:}
+        \begin{itemize}
+        \item \textit{Employee accounts}
+        This has a dedicated page for it's purpose.
+        \item \textit{Products}
+        This can be done on the products management page.
+        \end{itemize}
+        \textit{They may delete:}
+        \begin{itemize}
+        \item \textit{Customer accounts}
+        This can be done on the user management page.
+        \item \textit{Employee accounts}
+        This can be done on the user management page.
+        \item \textit{Products}
+        This may be carried out on the product management page.
+        \end{itemize}
+        \item \textit{The web application should show employees helpful data on sales, including but not limited to:}
+        None of these criteria were succesfully met.
+        A solution for this was half - completed, but was never brought to functionality.
+        \begin{itemize}
+        \item \textit{Sales per week}
+        \item \textit{Sales per month}
+        \item \textit{Sales per year}
+        \item \textit{Sales per customer}
+        \end{itemize}
+        \item \textit{It should also be able to show not just sales volume but total income for all of the above. It should display these data in a graphical visualisation which allows quick and easy interpretation of the data.}
+        This was also not completed.
+        Graphing in ASP.NET proved too lengthy and complicated a task for the limited time I restricted myself to, in the end.
+        \item \textit{The web application should provide a facility for helping employees manage sales in person.
+        This facility should be able to track what products the employee has taken with them and "reserve" them from the main inventory.
+        It should be able to record what was sold at the end of the event as specially marked orders, and return all unsold "reserved" items to the main inventory.}
+        I have accomplished this; the combination of market and market end pages meets this requirement head on.
+        \item \textit{All the above should be accomplished such that it is hard enough for outside hostile elements to access sensitive data to allow the client to be confident that the service won't breach the Data Protection Act 1998.}
+        The primary way I have addressed this criterion is hashing passwords in the database.
+        The database is an MS Access database, so the ability to encrypt is available freely and would require very little modification in the program.
+    \end{enumerate}
+    \subsection{Final Evaluation}
+    \paragraph{}
+    In conclusion, I think I have mostly succeeded in my task.
+    \paragraph{}
+    I have met most of the success criteria, and while all the data may not be presented in the absolute best visual style, that which is there at all is understandable and legible.
+    The client's needs have mostly been met; they can manage all their information from one website and a functional storefront is included in that.
+    However, not all data is freely accessible as orders data never got a solution for viewing implemented.
+    If necessary, the database can be accessed manually to obtain the data, but this is not an efficient solution and so the fact orders are essentially invisible is a large blow to the functionality of my application.
+    \paragraph{}
+    The client was specific about wanting cleanly presented order data.
+    This was also, never completed.
+    As a result, one of the clients' primary needs is not fulfilled and as such the functionality of the application is reduced further.
+    \paragraph{}
+    In spite of these points however, most of the success criteria were indeed met and the website functions well without any immediately obvious bugs, so I would still maintain that I just managed to meet the clients needs satisfactorily.
 \end{document}
