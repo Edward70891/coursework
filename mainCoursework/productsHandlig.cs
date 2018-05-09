@@ -70,7 +70,7 @@ namespace mainCoursework
 			{
 				CssClass = "productImage",
 				ID = info.productName + "ImageTag",
-				ImageUrl = "~/images/" + info.imagePath,
+				ImageUrl = info.imagePath,
 				Height = 100,
 				Width = 100
 			};

@@ -2,7 +2,8 @@
 
 <%@ Register Assembly="mainCoursework" Namespace="mainCoursework" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server" CssClass="content">
-	<asp:Panel ID="sortingControls" runat="server">
+	<div style="display:inline-block">
+	<asp:Panel ID="sortingControls" runat="server" style="border:thin;border-color:grey;margin-left:2px">
 		Sort By:
 		<br />
 		<asp:DropDownList ID="sortField" runat="server">
@@ -20,7 +21,7 @@
 		<asp:Button ID="startSortButton" runat="server" OnClick="startSortButton_Click" Text="Sort" />
 	</asp:Panel>
 
-	<asp:Panel ID="filteringControls" runat="server">
+	<asp:Panel ID="filteringControls" runat="server" style="border:thin;border-color:grey;margin-left:2px">
 		Filter by:
 		<br />
 		<asp:DropDownList ID="searchFieldDropdown" runat="server">
@@ -40,7 +41,6 @@
 
 
 		</asp:RadioButtonList>
-	</asp:Panel>
 
 	<asp:Panel ID="coastersOrClocksPanel" runat="server">
 		Show Only:
@@ -53,6 +53,8 @@
 		</asp:DropDownList>
 		<asp:Button ID="coasterClockButton" runat="server" Text="Apply" OnClick="coasterClockButton_Click" />
 	</asp:Panel>
+	</asp:Panel>
+	</div>
 	<asp:Button ID="resetFilter" runat="server" Text="Reset Filter" OnClick="resetFilter_Click" />
 	<asp:Panel ID="productsListPanel" runat="server"></asp:Panel>
 	</asp:Content>
