@@ -51,7 +51,7 @@ namespace mainCoursework
 			{
 				cartsAdaptor.updateAmount(Convert.ToInt32(amountToAdd.Text), Convert.ToString(Session["currentUser"]), currentProduct.productName);
 			}
-			returnLabel.Text = amountToAdd.Text + " " + currentProduct.productName + "s added to your cart!";
+			returnLabel.Text = amountToAdd.Text + " " + currentProduct.displayName + "s added to your cart!";
 		}
 	}
 }

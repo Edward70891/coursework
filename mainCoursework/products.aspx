@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Customer.Master" AutoEventWireup="true" CodeBehind="products.aspx.cs" Inherits="mainCoursework.products1" %>
 
 <%@ Register Assembly="mainCoursework" Namespace="mainCoursework" TagPrefix="cc1" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server" CssClass="content">
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 	<div style="display:inline-block">
 	<asp:Panel ID="sortingControls" runat="server" style="border:thin;border-color:grey;margin-left:2px">
 		Sort By:
@@ -34,12 +34,8 @@
 		<asp:Button ID="searchButton" runat="server" Text="Filter" OnClick="searchButton_Click" />
 		<br />
 		<asp:RadioButtonList ID="whitelistSelect" runat="server">
-
-
-			<asp:ListItem Value="true">White List</asp:ListItem>
+			<asp:ListItem Value="true" Selected="True">White List</asp:ListItem>
 			<asp:ListItem Value="false">Black List</asp:ListItem>
-
-
 		</asp:RadioButtonList>
 
 	<asp:Panel ID="coastersOrClocksPanel" runat="server">

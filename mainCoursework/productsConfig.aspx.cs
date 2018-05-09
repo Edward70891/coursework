@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Globalization;
 using System.Web.UI;
+using System.IO;
 using commonClasses;
 using System.Web.UI.WebControls;
 
@@ -33,7 +34,11 @@ namespace mainCoursework
 				//Returns that the product has been deleted
 				returnLabel.Text = "Product " + productName + " was deleted";
 				//Deletes the product and it's image, logs the action, posts the result to the box then clears it
-				System.IO.File.Delete(Server.MapPath("~/images/") + productName);
+				try
+				{
+					System.IO.File.Delete(Server.MapPath("~/images/") + productName);
+				}
+				catch { }
 				//Delete all the cart items of this product
 				using (var cartsAdaptor = new defaultDataSetTableAdapters.cartsTableAdapter())
 				{
@@ -102,7 +107,8 @@ namespace mainCoursework
 			//Checks the user has selected a file
 			if (imageUpload.HasFile)
 			{
-				if (imageUpload.FileName.Substring(imageUpload.FileName.IndexOf(".")) != "png")
+				var extension = Path.GetExtension(imageUpload.FileName).ToLower();
+				if (extension != ".png")
 				{
 					returnMessage.Text = "The image must be a PNG!";
 					return;
@@ -127,8 +133,16 @@ namespace mainCoursework
 			}
 
 			//Returns the the product has been created then creates it and logs it and refreshes the table
+			try
+			{
+				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
+			}
+			catch (OleDbException)
+			{
+				returnMessage.Text = "There's already an item like this one!";
+				return;
+			}
 			returnMessage.Text = "Product created named " + productName + ", priced at £" + common.formatPrice(price) + " and displayed as " + displayName + errorAppend;
-			productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
 			customLogging.newEntry("The product " + productName + " was created");
 			productsTable.DataBind();
 		}

@@ -14,8 +14,8 @@ namespace mainCoursework
 		//The product list that will be displayed on the page
 		defaultDataSetTableAdapters.marketTableAdapter adaptor = new defaultDataSetTableAdapters.marketTableAdapter();
 		
-		public static marketItem[] takingItems = new marketItem[0];
-		public static productList productsList;
+		protected static marketItem[] takingItems = new marketItem[0];
+		protected static productList productsList;
 
 		protected void Page_Load(object sender, EventArgs e)
 		{

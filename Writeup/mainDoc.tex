@@ -388,7 +388,7 @@
     \paragraph{User Authentication}
     This is key to ensuring the function of the application remains organised and track able.
     All major actions will be logged and tagged with the user that made them, which will help with identification of problems both in full operation, where administrators can trace problems to their source and find the perpetrator, and in development, where I can trace more obscure issues and help myself keep track of what I have done in debugging.
-    \begin{figure}[h]
+    \begin{figure}[H]
     \includegraphics[width=\textwidth]{loginSystem.png}
     \centering
     \end{figure}
@@ -399,7 +399,7 @@
     \paragraph{Store Main Area}
     This page/area represents the forefront of the website as it is presented to the customer, and thus must be "slick" and comprehensive.
     According to my research, I have planned out filtering and sorting features within the page.
-    \begin{figure}[h]
+    \begin{figure}[H]
     \includegraphics[width=\textwidth]{storefrontMain.png}
     \centering
     \end{figure}
@@ -411,7 +411,7 @@
     It will show a set of images and a written, plain text description.
     Customers will be able to add a given amount of a product to their "cart" there.
     It is \textit{imperative} that the information displayed on this page is plentiful, and very legible.
-    \begin{figure}[h]
+    \begin{figure}[H]
     \includegraphics[width=\textwidth]{productPage.png}
     \centering
     \end{figure}
@@ -430,7 +430,7 @@
     \item The user's delivery address
     \end{itemize}
     After poring over these, I produced the following method.
-    \begin{figure}[h]
+    \begin{figure}[H]
     \includegraphics[width=\textwidth]{cartPage.png}
     \centering
     \end{figure}
@@ -441,7 +441,7 @@
     \paragraph{Physical Market Management Page}
     This page will be where the employee interacts with all features related to managing stock at third party events.
     Tt's appearance could quickly get confusing, so careful UI design is important.
-    \begin{figure}[h]
+    \begin{figure}[H]
     \includegraphics[scale=0.6]{physicalMarket.png}
     \centering
     \end{figure}
@@ -651,7 +651,7 @@ endfunction
     \end{itemize}
     \newpage
     \subsubsection{Customer Base Layout}
-    \begin{figure}[h]
+    \begin{figure}[H]
         \includegraphics[width=\textwidth]{customerBasic.png}
         \centering
     \end{figure}
@@ -662,7 +662,7 @@ endfunction
     
     \newpage
     \subsubsection{Employee Base Layout}
-    \begin{figure}[h]
+    \begin{figure}[H]
         \includegraphics[width=\textwidth]{employeeBasic.png}
         \centering
     \end{figure}
@@ -843,7 +843,7 @@ public class customSecurity
     I have constructed one central DataSet which holds all my tables and several queries for each.
     The SQL query statements will be shown and annotated as they are used.
     The full dataset is shown below:
-    \begin{figure}[h]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=\textwidth]{defaultDataSet.png}
     \end{figure}
@@ -3250,7 +3250,7 @@ protected void newCustomerButton_Click(object sender, EventArgs e)
     Below these controls are two text boxes where the administrator can enter the password they wish to change an account's to; the extra one is for confirmation.
     Finally, there is a label to return messages to the user.
     Ultimately, the page looks like this:
-    \begin{figure}[h]
+    \begin{figure}[H]
         \includegraphics{userConfigPage.png}
         \centering
     \end{figure}
@@ -3548,17 +3548,17 @@ static class deletingProductsPersistent
     \paragraph{The Page}
     The page contains a single GridView, which is marked as editable.
     This means a small button appears at the side which, when clicked, allows the user to change the stock and price values of a product:
-    \begin{figure}[h]
+    \begin{figure}[H]
         \includegraphics{productsConfigTable.png}
         \centering
     \end{figure}
-    \begin{figure}[h]
+    \begin{figure}[H]
         \includegraphics{productsConfigEditing.png}
         \centering
     \end{figure}
     Additionally, the page contains a set of controls forming a form for adding products.
     These are mostly textboxes, with an image upload dialog and a dropdown to dictate whether the product is an image or a clock.
-    \begin{figure}[h]
+    \begin{figure}[H]
         \includegraphics{productForm.png}
         \centering
     \end{figure}
@@ -4070,7 +4070,6 @@ protected void drawControls()
 
 protected void applyButton_Click(object sender, EventArgs e)
 {
-    //Create a soldItems array and populate it with the relevant data
     marketItem[] soldItems = new marketItem[takenItems.Length];
     for (int i = 0; i < takenItems.Length; i++)
     {
@@ -4157,8 +4156,7 @@ protected void applyButton_Click(object sender, EventArgs e)
         The methods getTakingItems and drawControls are run to refresh the page.
     \end{itemize}
     \section{Testing}
-    \subsection{To Inform Development}
-    \subsubsection{Employee Login}
+    \subsection{Employee Login}
     This page is relatively simple, and so I am expecting few problems.
     The master account exists by default, as I manually added it and it is designed so that it cannot be removed or changed without manual intervention.
     Once the project is complete, I will remove, disable or change the account's password.
@@ -4169,7 +4167,7 @@ protected void applyButton_Click(object sender, EventArgs e)
         The application rejects the ";" so no SQL injection will work here.
         Note that the yellow boxes indicate my browser has autofilled them according to my saved "master" and password combination.
         This does not compromise testing.
-        \begin{figure}[h]
+        \begin{figure}[H]
             \includegraphics[height=3.5cm]{testing/empLogin1.png}
             \centering
         \end{figure}
@@ -4206,7 +4204,8 @@ protected void applyButton_Click(object sender, EventArgs e)
         \item \textbf{Correct Credentials}.
         This works as expected, redirecting me to the employee homepage.
     \end{enumerate}
-    \subsubsection{Customer Login}
+    \newpage
+    \subsection{Customer Login}
     This uses practically identical code to the employee login page, so I have kept testing brief.
     \begin{enumerate}
         \item \textbf{SQL Injection}.
@@ -4225,12 +4224,171 @@ protected void applyButton_Click(object sender, EventArgs e)
         I entered the sample customer credentials I created ("customer" and "password").
         The site behaved as expected, and redirected me to the default page.
     \end{enumerate}
-    \subsubsection{Cart Page}
-    The cart page employs a lot of untested logic, and so requires relatively extensive testing.
-    \subsection{To Inform Evaluation}
+    \newpage
+    \subsection{Store Front Page}
+    The testing for this page will be primarily sorting and filtering.
+    \begin{enumerate}
+        \item Searching for a specific product.
+        I searched for a specific product's name using the filter box with the mode set to "name":
+        \begin{figure}[H]
+            \includegraphics{testing/products1.png}
+            \centering
+        \end{figure}
+        And the program threw the following exception:
+        \begin{figure}[H]
+            \includegraphics{testing/products2.png}
+            \centering
+        \end{figure}
+        Initially, I thought there were inconsistencies in the arrangements of the data being pulled from the filter controls, specifically the whitelistSelect radio buttons.
+        As it turned out, I hadn't selected whether to whitelist or blacklist and so I changed the radio buttons to have the whitelist option selected by default:
+        \begin{lstlisting}[language=HTML]
+<asp:RadioButtonList ID="whitelistSelect" runat="server">
+    <asp:ListItem Value="true" Selected="True">White List</asp:ListItem>
+    <asp:ListItem Value="false">Black List</asp:ListItem>
+</asp:RadioButtonList>
+        \end{lstlisting}
+        Now, running the test again, only the apple coaster was displayed in the list.
+        \item Sorting the list by name ascending:
+        \begin{figure}[H]
+            \includegraphics{testing/products3.png}
+            \centering
+        \end{figure}
+        The products are sorted satisfactorily.
+        \item Sorting the list by price descending:
+        \begin{figure}[H]
+            \includegraphics{testing/products4.png}
+            \centering
+        \end{figure}
+        The list is sorted correctly, and in very quick time.
+    \end{enumerate}
+    \newpage
+    \subsection{Individual Product Page}
+
+    \begin{enumerate}
+        \item Loading the page.
+        \begin{figure}[H]
+            \includegraphics{testing/product1.png}
+            \centering
+        \end{figure}
+        The page loads correctly.
+        \item Adding items when not logged in.
+        \begin{figure}[H]
+            \includegraphics{testing/product2.png}
+            \centering
+        \end{figure}
+        The correct message is shown and no action is taken.
+        \item Adding 10 items to the cart.
+        \begin{figure}[H]
+            \includegraphics{testing/product3.png}
+            \centering
+        \end{figure}
+        It works, but shows the productName instead of the displayName.
+        This is dissatisfactory, so I inspected the code behind the page and pinpointed this:
+        \begin{lstlisting}[language=C]
+returnLabel.Text = amountToAdd.Text + " " + currentProduct.productName + "s added to your cart!";
+        \end{lstlisting}
+        And corrected it to this:
+        \begin{lstlisting}[language=C]
+returnLabel.Text = amountToAdd.Text + " " + currentProduct.displayName + "s added to your cart!";
+        \end{lstlisting}
+        Which gave this result:
+        \begin{figure}[H]
+            \includegraphics{testing/product4.png}
+            \centering
+        \end{figure}
+        This is corrected.
+    \end{enumerate}
+    \newpage
+    \subsection{Cart Page}
+    All the relevant tests are performed with two items already added to the cart.
+    \begin{enumerate}
+        \item Loading the page.
+        \begin{figure}[H]
+            \includegraphics{testing/cart1.png}
+            \centering
+        \end{figure}
+    \end{enumerate}
+    \newpage
+    \subsection{Customer Registration}
+    \newpage
+    \subsection{Employee Registration}
+    \newpage
+    \subsection{User Management Page}
+    \newpage
+    \subsection{Product Management Page}
+    \begin{enumerate}
+        \item Adding an item with all fields filled and an image.
+        \begin{figure}[H]
+            \includegraphics{testing/productManagement1.png}
+            \centering
+        \end{figure}
+        The page returns an error saying the image is not a .png file despite this not being true.
+        I inspected the code to find the culprit and dug up this if statement:
+        \begin{lstlisting}[language=C]
+if (imageUpload.FileName.Substring(imageUpload.FileName.IndexOf(".")) != "png")
+        \end{lstlisting}
+        The method I have used here is rather redundant because string manipulation based on the "dot" of the file is unreliable as a file name can have multiple "." characters in it.
+        After some research, the Path.GetExtension method was brought to my attention and I decided to use this for the check instead of my own logic:
+        \begin{lstlisting}[language=C]
+if (Path.GetExtension(imageUpload.FileName).ToLower() != ".png")
+        \end{lstlisting}
+        And the addition of this to the page's preliminary inclusions:
+        \begin{lstlisting}[language=C]
+using System.IO;
+        \end{lstlisting}
+        I tried the test again, to find:
+        \begin{figure}[H]
+            \includegraphics{testing/productManagement2.png}
+            \centering
+        \end{figure}
+        \item Adding an item without an image.
+        \begin{figure}[H]
+            \includegraphics{testing/productManagement3.png}
+            \centering
+        \end{figure}
+        \item Adding an item which already exists.
+        I have this item currently in the database:
+        \begin{figure}[H]
+            \includegraphics{testing/productManagement4.png}
+            \centering
+        \end{figure}
+        And tried to add an identical product.
+        This exception was thrown:
+        \begin{figure}[H]
+            \includegraphics{testing/productManagement5.png}
+            \centering
+        \end{figure}
+        I hadn't compensated for people adding products which already existed.
+        Since the exception thrown here is very specific, it is safe to wrap the offending code in a try-catch statement without risk of catching other exceptions:
+        \begin{lstlisting}[language=C]
+try
+{
+    productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
+}
+catch (OleDbException)
+{
+    returnLabel.Text = "There's already an item like this one!";
+    return;
+}
+        \end{lstlisting}
+        Now, when trying to add a duplicate product:
+        \begin{figure}[H]
+            \includegraphics{testing/productManagement6.png}
+            \centering
+        \end{figure}
+        \item Deleting a product.
+        After clicking once:
+        \begin{figure}[H]
+            \includegraphics{testing/productManagement7.png}
+            \centering
+        \end{figure}
+        After clicking twice, the product is removed.
+    \end{enumerate}
+    \subsection{Market Page}
+    \newpage
+    \subsection{Market End Page}
     
     \section{Evaluation}
-    \subsection{Testing}
     \subsection{Usability Features}
     \subsection{Evaluation}
     I think I have 
