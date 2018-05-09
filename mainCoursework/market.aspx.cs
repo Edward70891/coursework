@@ -9,15 +9,6 @@ using System.Data;
 
 namespace mainCoursework
 {
-	/// <summary>
-	/// A custom market item with an amount attached
-	/// </summary>
-	public struct marketItem
-	{
-		public product product;
-		public int amount;
-	}
-	
 	public partial class market : System.Web.UI.Page
 	{
 		//The product list that will be displayed on the page
@@ -219,6 +210,12 @@ namespace mainCoursework
 		{
 			//Send the user to the market end page
 			Server.Transfer("~/marketEnd.aspx", false);
+		}
+
+		public struct marketItem
+		{
+			public product product;
+			public int amount;
 		}
 	}
 }

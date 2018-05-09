@@ -49,3 +49,37 @@ body {
 	color: red !important;
 	font-weight: bold;
 }
+
+/* Product Panel CSS */
+.productPanel {
+	font-family: Arial, Helvetica, sans-serif;
+	border: 5px solid grey;
+	width: 1px;
+	margin: auto;
+}
+
+.displayedImage {
+	float: left;
+}
+
+.textWrapper {
+	float: right;
+}
+
+.nameTag {
+	font-size: large;
+	font-weight: bold;
+	float: left;
+}
+
+.priceTag {
+	float: left;
+}
+
+.detailsButton {
+	float: right;
+}
+
+.stockTag {
+	float: right;
+}

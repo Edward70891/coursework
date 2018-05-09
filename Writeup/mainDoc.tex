@@ -3249,6 +3249,11 @@ protected void newCustomerButton_Click(object sender, EventArgs e)
     \paragraph{}
     Below these controls are two text boxes where the administrator can enter the password they wish to change an account's to; the extra one is for confirmation.
     Finally, there is a label to return messages to the user.
+    Ultimately, the page looks like this:
+    \begin{figure}[h]
+        \includegraphics{userConfigPage.png}
+        \centering
+    \end{figure}
     \paragraph{The Code}
     The properties and variables on this page are:
     \begin{itemize}
@@ -3397,10 +3402,609 @@ if (username == "master" || username == "Market")
 }
         \end{lstlisting}
     \end{enumerate}
-    \subsection{Validation}
-    \subsection{Reviews}
-    
-    
+    \newpage
+    \subsubsection{Product Management/Configuration}
+    The product management page allows employees to create new products and edit the stock and prices of existing ones.
+    \begin{lstlisting}[language=C]
+private defaultDataSetTableAdapters.productsTableAdapter productQueryTable = new defaultDataSetTableAdapters.productsTableAdapter();
+
+protected void Page_Load(object sender, EventArgs e)
+{
+
+}
+
+protected void productsTable_RowCommand(object sender, GridViewCommandEventArgs e)
+{
+    if(e.CommandName != "deleteProduct")
+    {
+        return;
+    }
+    string productName = productsTable.Rows[Convert.ToInt32(e.CommandArgument)].Cells[0].Text;
+    if ((deletingProductsPersistent.deleting) && (productName == deletingProductsPersistent.product))
+    {
+        returnLabel.Text = "Product " + productName + " was deleted";
+        System.IO.File.Delete(Server.MapPath("~/images/") + productName);
+        using (var cartsAdaptor = new defaultDataSetTableAdapters.cartsTableAdapter())
+        {
+            cartsAdaptor.deleteProducts(productName);
+        }
+        using (var marketAdaptor = new defaultDataSetTableAdapters.marketTableAdapter())
+        {
+            marketAdaptor.deleteProducts(productName);
+        }
+        using (var ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter())
+        {
+            ordersAdaptor.removeProducts(productName);
+        }
+        productQueryTable.deleteProduct(productName);
+        returnLabel.Text = "Product deleted";
+        customLogging.newEntry("The product " + productName + " was deleted");
+        productsTable.DataBind();
+        System.Threading.Thread.Sleep(2000);
+        returnLabel.Text = "";
+    }
+    else
+    {
+        returnLabel.Text = "Click again to delete - note that this cannot be undone!";
+        deletingProductsPersistent.deleting = true;
+        deletingProductsPersistent.product = productName;
+    }
+}
+
+protected void productAddButton_Click(object sender, EventArgs e)
+{
+    do
+    {
+        string errorAppend = "";
+
+        if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
+        {
+            returnMessage.Text = customSecurity.sanitizeErrorMessage;
+            break;
+        }
+
+        string displayName = productNameBox.Text;
+        string productName = displayName;
+        string imagePath;
+        TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
+        productName = cultInfo.ToTitleCase(productName);
+        productName = productName.Replace(" ", "");
+        productName = char.ToLower(productName[0]) + productName.Substring(1);
+        if (productName.All(Char.IsLetterOrDigit) == false)
+        {
+            returnMessage.Text = "Please only use numbers and letters in the product name!";
+            break;
+        }
+
+        if (!priceValid(productPrice.Text))
+        {
+            returnMessage.Text = "Invalid price format";
+            break;
+        }
+        decimal price = Convert.ToDecimal(productPrice.Text);
+
+        if (imageUpload.HasFile)
+        {
+            if (imageUpload.FileName.Substring(imageUpload.FileName.IndexOf(".")) != "png")
+            {
+                returnMessage.Text = "The image must be a PNG!";
+            }
+            try
+            {
+                string fileName = imageUpload.FileName;
+                imagePath = "~/images/" + fileName;
+                imageUpload.SaveAs(Server.MapPath(imagePath)); 
+            }
+            catch (Exception except)
+            {
+                returnMessage.Text = "File Upload failed with error " + except.Message + ", please contact a developer";
+                return;
+            }
+        }
+        else
+        {
+            errorAppend = " with no image";
+            imagePath = "NONE";
+        }
+
+        returnMessage.Text = "Product created named " + productName + ", priced at £" + common.formatPrice(price) + " and displayed as " + displayName + errorAppend;
+        productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
+        customLogging.newEntry("The product " + productName + " was created");
+        productsTable.DataBind();
+    } while (false);
+}
+
+private static bool priceValid(string input)
+{
+    string noPoint = input.Replace(".", "");
+    foreach (char c in noPoint)
+    {
+        if (!char.IsDigit(c))
+        {
+            return false;
+        }
+    }
+    try
+    {
+        string decimalPlaces = input.Substring(input.IndexOf('.') + 1);
+        if (decimalPlaces.Length > 2)
+        {
+            return false;
+        }
+        return true;
+    }
+    catch
+    {
+        return true;
+    }
+}
+
+static class deletingProductsPersistent
+{
+    public static string product;
+    public static bool deleting;
+}
+    \end{lstlisting}
+    \paragraph{The Page}
+    The page contains a single GridView, which is marked as editable.
+    This means a small button appears at the side which, when clicked, allows the user to change the stock and price values of a product:
+    \begin{figure}[h]
+        \includegraphics{productsConfigTable.png}
+        \centering
+    \end{figure}
+    \begin{figure}[h]
+        \includegraphics{productsConfigEditing.png}
+        \centering
+    \end{figure}
+    Additionally, the page contains a set of controls forming a form for adding products.
+    These are mostly textboxes, with an image upload dialog and a dropdown to dictate whether the product is an image or a clock.
+    \begin{figure}[h]
+        \includegraphics{productForm.png}
+        \centering
+    \end{figure}
+    \paragraph{The Code}
+    The only properties on this page are:
+    \begin{itemize}
+        \item \textbf{productQueryTable}, which is a loval instance of the table adaptor for queries on the product table.
+        \item \textbf{deletingProductsPersistent} is a static class which serves an identical purpose as the one in the user configuration page.
+        It enables the "click twice to delete" functionality.
+    \end{itemize}
+    I have declared it in the root of the class because it is used in multiple methods.
+    The methods in the code are as follows:
+    \begin{itemize}
+        \item \textbf{Page\_Load} does not serve any purpose on this page.
+        \item \textbf{productsTable\_RowCommand}, like on the users configuration page, is called when a button is pressed inside a template field (ie. button column) in the GridView on the page (called productsTable).
+        It starts with an if statement checking if the command name is not "deleteProduct" - this is needed because this table is set to be editable; when the edit button is pressed, this method is run as part of the function of the Edit button but because I have added custom code to it, it would run that code and delete the product if the button were pressed twice - this if statement prevents that from executing if the command is not labelled as a delete command.
+        It does not need to check anything else about the RowCommand because it will only be executed intentionally when the user wants to delete a product.
+        \\
+        The method gets the name of the product in question using the CommandArgument of the RowCommand (which is set to be the index of the row of the table in the ASP code) as the index of a row, and getting the value of the first cell of that row.
+        In this cell will be the product name, as it is laid out in the table.
+        Before deletion commences, the deleting and product attributes of deletingProductsPersistent are checked to ensure this is the second click on the delete button.
+        If they aren't as expected, then they are set to the current conditions, and an appropriate message is shown to the user.
+        The method is ended.
+        \\
+        The first step of the deletion is to run System.IO.File.Delete to remove the image of the product from the directory it's in; the directory is obtained by using Server.MapPath to get the actual path of the "~/images" folder and appending it with the name of the product so it points to a specific file.
+        Three queries are then run to keep referential integrity of the database enforced:
+        \begin{enumerate}
+            \item cartsAdaptor.deleteProducts removes all the instances of the product which is being deleted from user carts.
+            This also ensures users cannot purchase products which no longer exist.
+            \begin{lstlisting}[language=SQL]
+DELETE FROM carts
+WHERE (productName = ?)
+            \end{lstlisting}
+            \item marketAdaptor.deleteProducts removes all instances of the product being deleted from the physical markets records.
+            This step is not strictly necessary as the client should enforce this in the real world before deleting the product from the application, but it still enforces referential integrity.
+            Since the client should do this, problems shouldn't arise with products which are still on sale being deleted.
+            \begin{lstlisting}[language=SQL]
+DELETE FROM market
+WHERE (productName = ?)
+            \end{lstlisting}
+            \item ordersAdaptor.removeProducts removes all instances of the product from the orders table.
+            This is not a good solution to this problem: the integrity of the database's references must be enforced but deleting past orders sabotages data and will show inconsistencies in sales.
+            Therefore, this needs revision which I will address later.
+            \begin{lstlisting}[language=SQL]
+DELETE FROM orders
+WHERE (product = ?)
+            \end{lstlisting}
+        \end{enumerate}
+        The final query productQueryTable.deleteProduct deletes the product itself from the products table:
+        \begin{lstlisting}[language=SQL]
+DELETE FROM `products`
+WHERE ((`productName` = ?))
+        \end{lstlisting}
+        The return label is updated appropriately and the deletion is logged.
+        productsTable.DataBind is run to refresh the contents of productsTable to show the deletion.
+        \item \textbf{productAddButton\_Click} is run when the add button is clicked.
+        It consists of a do loop which is ended with a "while (false)", meaning it will only be run once.
+        I did this because it allows me to perform checks and break the loop if any of them fail.
+        A string called errorAppend is initialized to contain any extensions to log messages.
+        The first check is customSecurity.sanitizeCheck, as with all database-related operations in the application.
+        If it is failed it, as usual, displays the standard error message and breaks the loop.
+        The needed variables are declared (displayName, productName and imagePath).
+        displayName and productName are both set to the contents of the product name textbox.
+        All the characters in productName are check to be letters or digits with the IsLetterOrDigit method of the Char class.
+        If any of them aren't, the user is notified and the operation broken.
+        priceValid is run on the price box to ensure it is in the appropriate format for the price.
+        The price variable is set to the value of the price box.
+        The uploaded image is checked in multiple ways:
+        \begin{enumerate}
+            \item If there isn't a file selected in the dialog, set the image path as being "NONE" and errorAppend is set to " with no image" so that the log will reflect this.
+            \item If the image given isn't a PNG file, the page rejects the image and notifies the user.
+            \item The image is attempted to be uploaded.
+            This portion of the code is enclosed in a try - catch statement because I have little experience with image management in .NET and so am expecting errors during development.
+        \end{enumerate}
+        The image is uploaded by getting the file name of the image and appending it to "~/images" so when it is displayed the control looks in the images folder in the root directory.
+        Finally, the image is actually saved using the SaveAs method of the image upload dialog; the path it is given is generated by giving the image path variable to the method Server.MapPath which will return a full directory string for the image.
+        \\
+        The return label is updated to inform the user that the operation was successful, and a query is run to store the products and all it's information in the database:
+        \begin{lstlisting}[language=SQL]
+INSERT INTO products
+(productName, stock, price, displayName, productType, creator, [image], [band], description)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        \end{lstlisting}
+        The creation is logged and productsTable is refreshed with DataBind to reflect the creation.
+        \item \textbf{priceValid} exists to check if the given number is valud as a price in GBP.
+        A variable is created which holds the price without the decimal point to check if it is all digits, which is carried out for each character in the string using char.IsDigit().
+        If this check or any other is failed, "false" is returned.
+        The digits left of "." are obtained using substring, and the length of the resulting string is checked.
+        If there are more than 2, the check is failed.
+        If there aren't any, an exception will be thrown which will be caught by the try catch statement and true will be returned.
+        If all these checks are passed, true is returned.
+    \end{itemize}
+    \paragraph{Revision 21/04/18}
+    I have made some changes to the code:
+    \begin{enumerate}
+        \item I have removed the do-while loop in productAddButton\_Click and replaced all the break statements with return.
+        This solution was essentially redundant as the whole code block was encompassed in a method which could just be broken with "return".
+        \begin{lstlisting}[language=C]
+string errorAppend = "";
+
+if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
+{
+    returnMessage.Text = customSecurity.sanitizeErrorMessage;
+    return;
+}
+
+string displayName = productNameBox.Text;
+string productName = displayName;
+string imagePath;
+TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
+productName = cultInfo.ToTitleCase(productName);
+productName = productName.Replace(" ", "");
+productName = char.ToLower(productName[0]) + productName.Substring(1);
+if (productName.All(Char.IsLetterOrDigit) == false)
+{
+    returnMessage.Text = "Please only use numbers and letters in the product name!";
+    return;
+}
+
+if (!priceValid(productPrice.Text))
+{
+    returnMessage.Text = "Invalid price format";
+    return;
+}
+decimal price = Convert.ToDecimal(productPrice.Text);
+
+if (imageUpload.HasFile)
+{
+    if (imageUpload.FileName.Substring(imageUpload.FileName.IndexOf(".")) != "png")
+    {
+        returnMessage.Text = "The image must be a PNG!";
+        return;
+    }
+    try
+    {
+        string fileName = imageUpload.FileName;
+        imagePath = "~/images/" + fileName;
+        imageUpload.SaveAs(Server.MapPath(imagePath)); 
+    }
+    catch (Exception except)
+    {
+        returnMessage.Text = "File Upload failed with error " + except.Message + ", please contact a developer";
+        return;
+    }
+}
+else
+{
+    errorAppend = " with no image";
+    imagePath = "NONE";
+}
+
+returnMessage.Text = "Product created named " + productName + ", priced at £" + common.formatPrice(price) + " and displayed as " + displayName + errorAppend;
+productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
+customLogging.newEntry("The product " + productName + " was created");
+productsTable.DataBind();
+        \end{lstlisting}
+        \item Replaced the foreach loop in priceValid with a .All function so that less iteration is needed:
+        \begin{lstlisting}[language=C]
+if(!noPoint.All(Char.IsDigit))
+{
+    return false;
+}
+        \end{lstlisting}
+    \end{enumerate}
+    \newpage
+    \subsubsection{Market}
+    The market page is used by employees to manage what products they are taking to physical markets.
+    The page inherits from Employee.Master and therefore is inaccessible by ordinary users.
+    \begin{lstlisting}[language=C]
+defaultDataSetTableAdapters.marketTableAdapter adaptor = new defaultDataSetTableAdapters.marketTableAdapter();
+
+public static marketItem[] takingItems = new marketItem[0];
+public static productList productsList;
+
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (Convert.ToInt32(Session["marketInitialized"]) == 1)
+    {
+        populatePage();
+    }
+    else
+    {
+        productsList = new productList();
+        takingItems = new marketItem[0];
+        populatePage();
+        Session["marketInitialized"] = 1;
+    }
+}
+
+private void populatePage()
+{
+    populateMainPanel();
+    populateTakingPanel();
+}
+
+private void populateMainPanel()
+{
+    var controlSet = productsList.generateControls();
+    productsListPanel.Controls.Clear();
+    int i = 0;
+    foreach (productPanel current in controlSet)
+    {
+        Button addToStall = new Button()
+        {
+            ID = productsList.list[i].productName + "AddToStall",
+            Text = "Add",
+            CommandArgument = productsList.list[i].productName
+        };
+        addToStall.Click += new EventHandler(addToStall_Click);
+        addToStall.Attributes.Add("runat", "server");
+        current.Controls.Add(addToStall);
+        productsListPanel.Controls.Add(current);
+        i++;
+    }
+}
+
+private void populateTakingPanel()
+{
+    var data = adaptor.getStallItems(Convert.ToString(Session["currentUser"]));
+    List<marketItem> tempList = new List<marketItem>();
+    foreach (DataRow current in data)
+    {
+        marketItem tempItem = new marketItem();
+        tempItem.product = new product(Convert.ToString(current[1]));
+        tempItem.amount = Convert.ToInt32(current[2]);
+        tempList.Add(tempItem);
+    }
+    takingItems = common.appendArray(takingItems, tempList.ToArray());
+    generateTakingControls();
+}
+
+private void generateTakingControls()
+{
+    takingPanel.Controls.Clear();
+    foreach (marketItem current in takingItems)
+    {
+        productPanel panel = new productPanel(current.product);
+        panel.ID = panel.ID + "Taking";
+        foreach (Control currentControl in panel.Controls)
+        {
+            if (currentControl.ID != "" && currentControl.ID != null)
+            {
+                currentControl.ID = currentControl.ID + "Taking";
+            }
+        }
+        foreach (Control currentControl in panel.Controls[1].Controls)
+        {
+            if (currentControl.ID != "" && currentControl.ID != null)
+            {
+                currentControl.ID = currentControl.ID + "Taking";
+            }
+        }
+        TextBox amountBox = new TextBox()
+        {
+            ID = current.product.productName + "_AmountBox",
+            CssClass = "marketAmountBox",
+            Text = Convert.ToString(current.amount)
+        };
+        amountBox.TextChanged += new EventHandler(amountBox_TextChanged);
+        amountBox.Attributes.Add("runat", "server");
+        panel.Controls.Add(amountBox);
+        takingPanel.Controls.Add(panel);
+    }
+}
+
+private void addToStall_Click(object sender, EventArgs e)
+{
+    Button btn = (Button)sender;
+    bool existing = false;
+    foreach (marketItem current in takingItems)
+    {
+        if (current.product.productName == btn.CommandArgument)
+        {
+            existing = true;
+        }
+    }
+    if (existing)
+    {
+        returnLabel.Text = "You've already got that product in your taking list, please update it's amount or remove it!";
+    }
+    else
+    {
+        marketItem newItem = new marketItem();
+        newItem.amount = 1;
+        newItem.product = new product(btn.CommandArgument);
+        takingItems = common.appendArray(takingItems, newItem);
+        generateTakingControls();
+    }
+}
+
+private void amountBox_TextChanged(object sender, EventArgs e)
+{
+    TextBox box = (TextBox)sender;
+    string productName = box.ID.Split('_')[0];
+    int index = 0;
+    foreach (marketItem current in takingItems)
+    {
+        if (current.product.productName == productName)
+        {
+            break;
+        }
+        index++;
+    }
+    takingItems[index].amount = Convert.ToInt32(box.Text);
+}
+
+protected void applyButton_Click(object sender, EventArgs e)
+{
+    defaultDataSetTableAdapters.productsTableAdapter productsAdaptor = new defaultDataSetTableAdapters.productsTableAdapter();
+    foreach (marketItem current in takingItems)
+    {
+        int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productName));
+        if (currentStock < current.amount)
+        {
+            returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productName;
+            return;
+        }
+    }
+    adaptor.deleteStall(Convert.ToString(Session["currentUser"]));
+    foreach (marketItem current in takingItems)
+    {
+        adaptor.newStallItem(current.product.productName, current.amount, Convert.ToString(Session["currentUser"]));
+        productsAdaptor.updateStock(Convert.ToInt32(productsAdaptor.getStock(current.product.productName)) - current.amount, current.product.productName);
+    }
+    returnLabel.Text = "Changes successfully applied";
+    populatePage();
+}
+
+protected void endStallButton_Click(object sender, EventArgs e)
+{
+    Server.Transfer("~/marketEnd.aspx", false);
+}
+
+public struct marketItem
+{
+    public product product;
+    public int amount;
+}
+    \end{lstlisting}
+    \paragraph{The Page}
+    The page holds two panels for products.
+    The first is for an exhaustive list of all the products in the database (productsListPanel), the second is for a list of all the products the employee has selected to take with them to the market (takingPanel).
+    Furthermore, there are two buttons to apply the changes to the market and to end the stall and record sales made.
+    As usual, a return label is included.
+    \paragraph{The Code}
+    The properties and variables on this page are:
+    \begin{itemize}
+        \item \textbf{adaptor} is a instance of the market table query adaptor.
+        \item \textbf{marketItem} is a custom structure designed to allow a list of products to be made with amounts attached.
+        It is functionally identical to cartItem, having product "product" and integer "amount" properties.
+        \item \textbf{takingItems} is an array of marketItem which represents all the items the user is taking with them on the physical market.
+        It is initialized as an empty array so that AppendArray can be run on it.
+        \item \textbf{productsList} is a vanilla instance of productList to display all the items in the database.
+    \end{itemize}
+    The methods in the code are:
+    \begin{itemize}
+        \item \textbf{Page\_Load} here checks if the market has been initialized with the unique session "marketInitialized", stored as a 1 or a 0.
+        If it has already been initialized, only populatePage is run to save processing power and time.
+        If not, productsList is initialized as a vanilla productList and takingItems is initialized as a blank array of marketItems.
+        populatePage is run and the session is set to "1" to indicate that the page has been initialized already.
+        \item \textbf{populatePage} is essentially just a method to bind together populateMainPanel and populateTakingPanel.
+        It simply runs them both.
+        \item \textbf{populateMainPanel} fills the panel which should show all the available items in the first panel on the page.
+        It creates a variable with the context-sensitive keyword "var" to hold all the panels generated by productsList.generateControls then clears the controls which are already in the panel on the page.
+        A foreach loop is run with an external index tracked to run through all the productPanels in the controlSet variable described above.
+        A new button is made, given a unique ID generated with the product's name, labelled with "Add" and given a CommandArgument of the product's name.
+        A new EventHandler is initialized and assigned to the new button to run "addToStall\_Click" when the button is clicked.
+        The "runat:server" attribute is added so the button functions correctly and the button is added to the current productPanel.
+        The current productPanel is added to the controls list of the panel waiting for it on the page with Controls.Add.
+        This process is repeated for all productPanels in the array.
+        \item \textbf{populateTakingPanel} fills the second panel with all the items the user is taking.
+        It runs the getStallItems query into the variable data (a DataTable):
+        \begin{lstlisting}[language=SQL]
+SELECT productName, amount
+FROM market
+WHERE (employee = ?)
+        \end{lstlisting}
+        To obtain all the items the current employee is taking to market.
+        It creates a new list called "tempList" to hold all the items after they are processed.
+        A foreach loop is run for each row in the DataTable (ie. each type of item the employee is taking)
+        Within the loop, a new marketItem is instantiated, it's product property set to a new product instance generated using the name of the product gotten from the first cell in the row, it's amount set with the second cell in the row and it is added to the temporary list of marketItems.
+        The contents of tempList are appended to the existing takingItems array, and generateTakingControls is run.
+        \item \textbf{generateTakingControls} creates all the controls and productPanels needed to show in the bottom panel to display what the user is taking with them to market.
+        It starts by clearing the existing controls out of the panel to start with a clean slate, and runs through each item in takingItems.
+        A new productPanel is instantiated and "Taking" appended to it's ID.
+        All of the controls within that productPanel have their IDs appended with this so that ASP.NET doesn't throw exceptions based on different things having the same IDs (which will happen otherwise since we are making new copies of productPanels to add to the bottom main panel which would otherwise be entirely identical (in terms of IDs) to those in the top).
+        Foreach loops are used for this purpose.
+        The first foreach loop runs through all the controls in the whole panel and appends all those whose IDs aren't blank with "Taking".
+        The second foreach loop runs through all the controls in the textWrapper panel within the productPanel (control index 1) and does exactly the same thing.
+        \\
+        A new textbox is created and it's ID generated with the name of the product appended with "\_AmountBox"; the underscore is there so the the product the textbox refers to can be easily identified in "amountBox\_TextChanged".
+        \item \textbf{addToStall\_Click} runs when the add to stall button is clicked.
+        It gets the button which called it by filtering it's sender by type button.
+        It creates a boolean to determine whether or not the product the user is clicking on is already in their taking list and assigns it false by default.
+        A foreach loop runs through each marketItem in takingItems and sets existing to true if any of their names match that of the product the user is trying to add.
+        An if statement checks the boolean, cancels the operation and returns an error if the user is trying to add something they are already taking.
+        If they are adding a new product, a new marketItem is initialized, it's amount set to 1 to start with and it's product set to a new instance of product generated with the correct name.
+        takingItems is appended with the item, and generateTakingControls is run to reflect the addition.
+        \item \textbf{amountBox\_TextChanged} runs when the return key is pressed within one of the amount text boxes for the products the user is taking with them.
+        It gets the sender by filtering sender by type TextBox and gets the name of the product in question using the text before the underscore in it's ID.
+        It uses a foreach loop with an externally managed index to find the relevant item in takingItems by breaking when it finds the correct marketItem.
+        The amount property of the marketItem in takingItems at the index of the foreach loop when it broke is changed appropriately.
+        \item \textbf{applyButton\_Click} runs when the apply button is clicked.
+        It opens a new instance of the products table adaptor to run queries on that table from.
+        A foreach loop runs through all the item types the user is taking and checks if the amounts are more than the available stock using getStock:
+        \begin{lstlisting}[language=SQL]
+SELECT stock
+FROM products
+WHERE (productName = ?)
+        \end{lstlisting}
+        If any of them are trying to take more than available then an error message is shown and the operation is cancelled before any changes are made.
+        If not, the database table is cleared of the stall in order to readd it.
+        This is a terrible method of updating the table, but at the time this code was written I was pressed for time.
+        Another foreach loop is run through all the items in takingItems and for each one two queries are run; newStallItem on the market table to add the item back:
+        \begin{lstlisting}[language=SQL]
+INSERT INTO `market` (`productName`, `amount`, `employee`) VALUES (?, ?, ?)
+        \end{lstlisting}
+        And updateStock on the products table to subtract the amount the employee is taking from the current stock.
+        \begin{lstlisting}[language=SQL]
+UPDATE products
+SET stock = ?
+WHERE (productName = ?)
+        \end{lstlisting}
+        Finally, the return label is updated with an appropriate message and populatePage is run to reflect the changes.
+        \item \textbf{endStallButton\_Click} runs whenm the button to end the stall is clicked.
+        It redirects the user to marketEnd.aspx to manage the sales made.
+    \end{itemize}
+    \paragraph{Revision 01/05/18}
+    I realised that the code checking the stock amount in applyButton\_Click wasn't performing the correct task.
+    As-is, it was checking the amout against the non-reserved stock which meant it wasn't accounting for the stock already reserved in the table.
+    I have amended the contents of the first foreach loop in that method to the following:
+    \begin{lstlisting}[language=C]
+int reserved = Convert.ToInt32(adaptor.getReserved(current.product.productName));
+int currentStock = Convert.ToInt32(productsAdaptor.getStock(current.product.productName));
+if (currentStock + reserved < current.amount)
+{
+    returnLabel.Text = "Sorry, we only have " + currentStock + " of " + current.product.productName;
+    return;
+}
+    \end{lstlisting}
+    The query "getReserved" contains:
+    \begin{lstlisting}[language=SQL]
+SELECT amount
+FROM market
+WHERE (productName = ?)
+    \end{lstlisting}
     \section{Testing}
     \subsection{To Inform Development}
     \subsubsection{Employee Login}
@@ -3474,10 +4078,10 @@ if (username == "master" || username == "Market")
     The cart page employs a lot of untested logic, and so requires relatively extensive testing.
     \subsection{To Inform Evaluation}
     
-    
     \section{Evaluation}
     \subsection{Testing}
     \subsection{Usability Features}
     \subsection{Evaluation}
+    I think I have 
     \subsection{Maintenance}
 \end{document}

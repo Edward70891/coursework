@@ -68,72 +68,69 @@ namespace mainCoursework
 		//Adding products
 		protected void productAddButton_Click(object sender, EventArgs e)
 		{
-			//A dowhile loop that is broken at the end if conditions are met or prematurely if conditions are not met
-			do
+			string errorAppend = "";
+
+			//Check that the inputs are all full and have no SQL sensitive characters in them
+			if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
 			{
-				string errorAppend = "";
+				returnMessage.Text = customSecurity.sanitizeErrorMessage;
+				return;
+			}
 
-				//Check that the inputs are all full and have no SQL sensitive characters in them
-				if (customSecurity.sanitizeCheck(new string[] { productNameBox.Text, productPrice.Text, bandBox.Text, descriptionBox.Text }) != true)
-				{
-					returnMessage.Text = customSecurity.sanitizeErrorMessage;
-					break;
-				}
+			//Check and format the name for both display and storage/reference purposes
+			string displayName = productNameBox.Text;
+			string productName = displayName;
+			string imagePath;
+			TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
+			productName = cultInfo.ToTitleCase(productName);
+			productName = productName.Replace(" ", "");
+			productName = char.ToLower(productName[0]) + productName.Substring(1);
+			if (productName.All(Char.IsLetterOrDigit) == false)
+			{
+				returnMessage.Text = "Please only use numbers and letters in the product name!";
+				return;
+			}
 
-				//Check and format the name for both display and storage/reference purposes
-				string displayName = productNameBox.Text;
-				string productName = displayName;
-				string imagePath;
-				TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
-				productName = cultInfo.ToTitleCase(productName);
-				productName = productName.Replace(" ", "");
-				productName = char.ToLower(productName[0]) + productName.Substring(1);
-				if (productName.All(Char.IsLetterOrDigit) == false)
-				{
-					returnMessage.Text = "Please only use numbers and letters in the product name!";
-					break;
-				}
+			//Check and format the price to ensure 2dp accuracy and only digits content
+			if (!priceValid(productPrice.Text))
+			{
+				returnMessage.Text = "Invalid price format";
+				return;
+			}
+			decimal price = Convert.ToDecimal(productPrice.Text);
 
-				//Check and format the price to ensure 2dp accuracy and only digits content
-				if (!priceValid(productPrice.Text))
+			//Checks the user has selected a file
+			if (imageUpload.HasFile)
+			{
+				if (imageUpload.FileName.Substring(imageUpload.FileName.IndexOf(".")) != "png")
 				{
-					returnMessage.Text = "Invalid price format";
-					break;
+					returnMessage.Text = "The image must be a PNG!";
+					return;
 				}
-				decimal price = Convert.ToDecimal(productPrice.Text);
+				try
+				{
+					string fileName = imageUpload.FileName;
+					imagePath = "~/images/" + fileName;
+					imageUpload.SaveAs(Server.MapPath(imagePath)); 
+				}
+				//Catches any exceptions that might occur and posts them; this is necessary because this procedure is likely to be error ridden
+				catch (Exception except)
+				{
+					returnMessage.Text = "File Upload failed with error " + except.Message + ", please contact a developer";
+					return;
+				}
+			}
+			else
+			{
+				errorAppend = " with no image";
+				imagePath = "NONE";
+			}
 
-				//Checks the user has selected a file
-				if (imageUpload.HasFile)
-				{
-					if (imageUpload.FileName.Substring(imageUpload.FileName.IndexOf(".")) != "png")
-					{
-						returnMessage.Text = "The image must be a PNG!";
-					}
-					try
-					{
-						string fileName = imageUpload.FileName;
-						imagePath = "~/images/" + fileName;
-						imageUpload.SaveAs(Server.MapPath(imagePath)); 
-					}
-					//Catches any exceptions that might occur and posts them; this is necessary because this procedure is likely to be error ridden
-					catch (Exception except)
-					{
-						returnMessage.Text = "File Upload failed with error " + except.Message + ", please contact a developer";
-						return;
-					}
-				}
-				else
-				{
-					errorAppend = " with no image";
-					imagePath = "NONE";
-				}
-
-				//Returns the the product has been created then creates it and logs it and refreshes the table
-				returnMessage.Text = "Product created named " + productName + ", priced at £" + common.formatPrice(price) + " and displayed as " + displayName + errorAppend;
-				productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
-				customLogging.newEntry("The product " + productName + " was created");
-				productsTable.DataBind();
-			} while (false);
+			//Returns the the product has been created then creates it and logs it and refreshes the table
+			returnMessage.Text = "Product created named " + productName + ", priced at £" + common.formatPrice(price) + " and displayed as " + displayName + errorAppend;
+			productQueryTable.newProduct(productName, 0, Convert.ToDecimal(price), displayName, typeDropdown.SelectedValue, Convert.ToString(Session["currentUser"]), imagePath, bandBox.Text, descriptionBox.Text);
+			customLogging.newEntry("The product " + productName + " was created");
+			productsTable.DataBind();
 		}
 
 		private static bool priceValid(string input)
@@ -141,12 +138,9 @@ namespace mainCoursework
 			//Make a new string without the decimal point
 			string noPoint = input.Replace(".", "");
 			//Check if that string contains any non-digit characters
-			foreach (char c in noPoint)
+			if(!noPoint.All(Char.IsDigit))
 			{
-				if (!char.IsDigit(c))
-				{
-					return false;
-				}
+				return false;
 			}
 			//Check how many decimal places there are, and return false if there are more than 2
 			try
