@@ -38,8 +38,6 @@ namespace mainCoursework {
         
         private global::System.Data.DataRelation relationemployeesproducts;
         
-        private global::System.Data.DataRelation relationcustomersorders;
-        
         private global::System.Data.DataRelation relationproductsorders;
         
         private global::System.Data.DataRelation relationcustomerscarts;
@@ -329,7 +327,6 @@ namespace mainCoursework {
                 }
             }
             this.relationemployeesproducts = this.Relations["employeesproducts"];
-            this.relationcustomersorders = this.Relations["customersorders"];
             this.relationproductsorders = this.Relations["productsorders"];
             this.relationcustomerscarts = this.Relations["customerscarts"];
             this.relationproductscarts = this.Relations["productscarts"];
@@ -361,10 +358,6 @@ namespace mainCoursework {
                         this.tableemployees.usernameColumn}, new global::System.Data.DataColumn[] {
                         this.tableproducts.creatorColumn}, false);
             this.Relations.Add(this.relationemployeesproducts);
-            this.relationcustomersorders = new global::System.Data.DataRelation("customersorders", new global::System.Data.DataColumn[] {
-                        this.tablecustomers.usernameColumn}, new global::System.Data.DataColumn[] {
-                        this.tableorders.customerColumn}, false);
-            this.Relations.Add(this.relationcustomersorders);
             this.relationproductsorders = new global::System.Data.DataRelation("productsorders", new global::System.Data.DataColumn[] {
                         this.tableproducts.productNameColumn}, new global::System.Data.DataColumn[] {
                         this.tableorders.productColumn}, false);
@@ -1724,18 +1717,15 @@ namespace mainCoursework {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public ordersRow AddordersRow(System.DateTime datePlaced, decimal spent, int productAmount, customersRow parentcustomersRowBycustomersorders, productsRow parentproductsRowByproductsorders) {
+            public ordersRow AddordersRow(System.DateTime datePlaced, decimal spent, int productAmount, string customer, productsRow parentproductsRowByproductsorders) {
                 ordersRow rowordersRow = ((ordersRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         datePlaced,
                         spent,
                         productAmount,
-                        null,
+                        customer,
                         null};
-                if ((parentcustomersRowBycustomersorders != null)) {
-                    columnValuesArray[4] = parentcustomersRowBycustomersorders[0];
-                }
                 if ((parentproductsRowByproductsorders != null)) {
                     columnValuesArray[5] = parentproductsRowByproductsorders[0];
                 }
@@ -2827,17 +2817,6 @@ namespace mainCoursework {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public ordersRow[] GetordersRows() {
-                if ((this.Table.ChildRelations["customersorders"] == null)) {
-                    return new ordersRow[0];
-                }
-                else {
-                    return ((ordersRow[])(base.GetChildRows(this.Table.ChildRelations["customersorders"])));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public cartsRow[] GetcartsRows() {
                 if ((this.Table.ChildRelations["customerscarts"] == null)) {
                     return new cartsRow[0];
@@ -3404,17 +3383,6 @@ namespace mainCoursework {
                 }
                 set {
                     this[this.tableorders.productColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public customersRow customersRow {
-                get {
-                    return ((customersRow)(this.GetParentRow(this.Table.ParentRelations["customersorders"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["customersorders"]);
                 }
             }
             
@@ -6982,7 +6950,7 @@ namespace mainCoursework.defaultDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.OleDb.OleDbCommand[6];
+            this._commandCollection = new global::System.Data.OleDb.OleDbCommand[7];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT ID, productName, amount, employee FROM market";
@@ -7015,6 +6983,12 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             this._commandCollection[5].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("productName", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "productName", global::System.Data.DataRowVersion.Current, false, null));
             this._commandCollection[5].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("amount", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "amount", global::System.Data.DataRowVersion.Current, false, null));
             this._commandCollection[5].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("employee", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "employee", global::System.Data.DataRowVersion.Current, false, null));
+            this._commandCollection[6] = new global::System.Data.OleDb.OleDbCommand();
+            this._commandCollection[6].Connection = this.Connection;
+            this._commandCollection[6].CommandText = "DELETE FROM market\r\nWHERE        (productName = ?) AND (employee = ?)";
+            this._commandCollection[6].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[6].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("productName", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "productName", global::System.Data.DataRowVersion.Original, false, null));
+            this._commandCollection[6].Parameters.Add(new global::System.Data.OleDb.OleDbParameter("employee", global::System.Data.OleDb.OleDbType.WChar, 255, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "employee", global::System.Data.DataRowVersion.Original, false, null));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -7286,6 +7260,41 @@ namespace mainCoursework.defaultDataSetTableAdapters {
             }
             else {
                 command.Parameters[2].Value = ((string)(employee));
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, false)]
+        public virtual int removeListing(string productName, string employee) {
+            global::System.Data.OleDb.OleDbCommand command = this.CommandCollection[6];
+            if ((productName == null)) {
+                command.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[0].Value = ((string)(productName));
+            }
+            if ((employee == null)) {
+                command.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[1].Value = ((string)(employee));
             }
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 

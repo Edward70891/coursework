@@ -3622,6 +3622,10 @@ WHERE ((`productName` = ?))
         If it is failed it, as usual, displays the standard error message and breaks the loop.
         The needed variables are declared (displayName, productName and imagePath).
         displayName and productName are both set to the contents of the product name textbox.
+        \\
+        In order to convert the displayName to camel case to be used as the product name, a new variable of type TextInfo is created, called "cultInfo" and assigned as the TextInfo property of a CultureInfo for english.
+        This variable can recognize space-separated words in a string and uses this in the ToTitleCase method I call; thus capitalising the first letters of all the words in the product name.
+        Next, spaces are removed and char.ToLower is called on the first character of the string to make it lowercase.
         All the characters in productName are check to be letters or digits with the IsLetterOrDigit method of the Char class.
         If any of them aren't, the user is notified and the operation broken.
         priceValid is run on the price box to ensure it is in the appropriate format for the price.
@@ -4005,6 +4009,153 @@ SELECT amount
 FROM market
 WHERE (productName = ?)
     \end{lstlisting}
+    \newpage
+    \subsubsection{Market End}
+    Employees are taken here when they click the "End Stall" button on the market page.
+    They enter the amount of each product they sold and record it with the button.
+    The page inherits from Employee.Master so it is inaccessible to customers.
+    \begin{lstlisting}[language=C]
+protected struct marketItem
+{
+    public product product;
+    public int amount;
+}
+
+marketItem[] takenItems = new marketItem[0];
+defaultDataSetTableAdapters.marketTableAdapter marketAdaptor = new defaultDataSetTableAdapters.marketTableAdapter();
+
+protected void Page_Load(object sender, EventArgs e)
+{
+    getTakingItems();
+    drawControls();
+}
+
+protected void getTakingItems()
+{
+    var data = marketAdaptor.getStallItems(Convert.ToString(Session["currentUser"]));
+    foreach (DataRow current in data)
+    {
+        var tempItem = new marketItem();
+        tempItem.product = new product(Convert.ToString(current[0]));
+        tempItem.amount = Convert.ToInt32(current[1]);
+        takenItems = common.appendArray(takenItems, tempItem);
+    }
+}
+
+protected void drawControls()
+{
+    foreach (marketItem current in takenItems)
+    {
+        productPanel panel = new productPanel(current.product);
+        Label takenLabel = new Label()
+        {
+            ID = current.product.productName + "AmountTakenLabel",
+            CssClass = "amountTakenLabel",
+            Text = current.amount + " Taken"
+        };
+        takenLabel.Attributes.Add("runat", "server");
+        panel.Controls[1].Controls.Add(takenLabel);
+        TextBox amountSold = new TextBox()
+        {
+            ID = current.product.productName + "AmountSoldBox",
+            CssClass = "amountSoldBox",
+            TextMode = TextBoxMode.Number,
+            Text = "0"
+        };
+        amountSold.Attributes.Add("runat", "server");
+        panel.Controls[1].Controls.Add(amountSold);
+        productsBox.Controls.Add(panel);
+    }
+}
+
+protected void applyButton_Click(object sender, EventArgs e)
+{
+    //Create a soldItems array and populate it with the relevant data
+    marketItem[] soldItems = new marketItem[takenItems.Length];
+    for (int i = 0; i < takenItems.Length; i++)
+    {
+        soldItems[i].product = takenItems[i].product;
+        TextBox amountBox = (TextBox)productsBox.Controls[i].FindControl(takenItems[i].product.productName + "AmountSoldBox");
+        soldItems[i].amount = Convert.ToInt32(amountBox.Text);
+        if (soldItems[i].amount > takenItems[i].amount)
+        {
+            returnLabel.Text = "You can't have sold more items than you took!";
+            return;
+        }
+    }
+
+    decimal profit = 0;
+    int totalSold = 0;
+    defaultDataSetTableAdapters.productsTableAdapter productsAdaptor = new defaultDataSetTableAdapters.productsTableAdapter();
+    defaultDataSetTableAdapters.ordersTableAdapter ordersAdaptor = new defaultDataSetTableAdapters.ordersTableAdapter();
+    for (int i = 0; i < takenItems.Length; i++)
+    {
+        string currentName = takenItems[i].product.productName;
+        int stockChange = takenItems[i].amount - soldItems[i].amount;
+        int currentStock = soldItems[i].product.stock;
+        
+        productsAdaptor.updateStock(currentStock + stockChange, currentName);
+
+        decimal spent = soldItems[i].product.price * soldItems[i].amount;
+        ordersAdaptor.newOrder(DateTime.Now, spent, soldItems[i].amount, "Market", soldItems[i].product.productName);
+
+        marketAdaptor.removeListing(soldItems[i].product.productName, Convert.ToString(Session["currentUser"]));
+
+        profit += spent;
+        totalSold += soldItems[i].amount;
+    }
+
+    returnLabel.Text = "Congratulations on making " + profit + "!";
+    customLogging.newEntry("Employee " + Convert.ToString(Session["currentUser"] + " sold " + totalSold + " products."));
+    getTakingItems();
+    drawControls();
+}
+    \end{lstlisting}
+    \paragraph{The Page}
+    The page contains a panel (productsBox) for holding all the productPanels the page generates, a button to finalize the stall sales and a return label for error messages.
+    \paragraph{The Code}
+    The properties and variables on this page are:
+    \begin{itemize}
+        \item \textbf{marketItem} is a direct clone of the marketItem present on the market page.
+        \item \textbf{takenItems} is an array of marketItem to store all the items the users has taken out to market.
+        It serves much the same purpose as the similar array on the market page.
+        \item \textbf{marketAdaptor} is a local instance of the query table adaptor for the market table.
+    \end{itemize}
+    The methods on the page are:
+    \begin{itemize}
+        \item \textbf{Page\_Load} on this page just calls the loading methods, getTakingItems and drawControls.
+        \item \textbf{getTakingItems} accesses the database to get all the items the employee has taken the market and populates takenItems.
+        It uses the getStallItems query from the market table to get a DataTable containing all the items the employee has out, with the "currentUser" session as the query term.
+        A foreach loop is run for every row in the datatable; it creates a temporary marketItem to create with the data in the row.
+        The product property is set to a new product initialized with the value in the first cell (the name) and the amount is assigned to the 2nd cell of the row (the amount), then the item is added to the takenItems array.
+        \item \textbf{drawControls} generates all the panels to show what the user has taken to market in the productsBox.
+        It goes through each marketItem in takenItems and instantiates a new productPanel for each.
+        A new label to show how many they originally took is created and the relevant properties set, the "runat:server" attribute assigned and added to the panel's textWrapper panel.
+        A new textbox is created to allow the user to input how many of the item they sold, and the relevant properties of it set.
+        The amount is set to 0 by default.
+        The "runat:server" attribute is added to it and it is added to the panel.
+        Finally, the whole panel is added to the productsBox.
+        \item \textbf{applyButton\_Click} runs when the apply button is clicked.
+        It stores all the new data in the database.
+        First, it creates a new array of marketItem to represent the items which have been sold.
+        It then populates this using a for loop which goes through all the items in takenItems and copies the product property across to the corresponding soldItem.
+        The amountBox is retrieved by using Controls.FindControl and giving the expected ID of the textbox based on how the ID is assigned in drawControls.
+        Using the text in the textbox, the amount of the soldItem is set.
+        A check is performed for each one that the employee isn't claiming to have sold more items than they took out - if they are, they are informed so and the operation is cancelled by returning the method early.
+        \\
+        New variables to store the total profit and the number of products sold are declared.
+        Adaptors are opened for the products table and the orders table.
+        Another for loop is run which goes through all the items in soldItems and takenItems and performs the necessary database operations.
+        The name of the product is pulled into a string for convenience, along with the change in stock (ie. the amount taken minus the amount sold) and the current stock is taken from the product property of the current soldItem.
+        The updateStock query is run on the products table in order to add back any stock which wasn't sold.
+        A decimal to represent how much was spent is created and set to the amount sold multiplied by the price of the product.
+        The newOrder query is run to record the sale in the orders table.
+        The customer column is set to "Market" to show that the sale was made at market (as shown before, no customers can be called "Market").
+        The two variables created earlier are added to and the process repeats for the next item.
+        \\
+        When the for loop has finished running,the returnLabel is updated with a congratulatory message and the salse are logged.
+        The methods getTakingItems and drawControls are run to refresh the page.
+    \end{itemize}
     \section{Testing}
     \subsection{To Inform Development}
     \subsubsection{Employee Login}
